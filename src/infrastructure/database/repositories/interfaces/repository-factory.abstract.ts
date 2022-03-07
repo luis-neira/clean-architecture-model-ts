@@ -1,7 +1,5 @@
 import * as constants from '../../../../config/constants';
 
-import { IEntityGateway } from '../../../../core/use-cases/interfaces';
-
 type RepositoryMakerByDialect<T> = Record<string, () => T>;
 
 export default abstract class RepositoryFactory<T> {

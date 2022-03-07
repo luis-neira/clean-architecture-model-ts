@@ -7,10 +7,6 @@ export {
   IOrdersGateway,
   IImagesGateway,
   EntityGatewayDictionary,
-  IItemsGateway,
-  ICustomersGateway,
-  IPurchaseOrdersGateway,
-  IOrderItemsGateway
 } from './i-entity-gateway';
 export {
   IUserDetails,

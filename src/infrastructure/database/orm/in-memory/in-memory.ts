@@ -1,29 +1,14 @@
-type ModelName =
-  | 'User'
-  | 'Product'
-  | 'Order'
-  | 'Item'
-  | 'Customer'
-  | 'Purchase_Order'
-  | 'Order_Item';
+type ModelName = 'User' | 'Product' | 'Order';
 
 export class InMemoryDatabase {
   private _users: any[];
   private _products: any[];
   private _orders: any[];
-  private _items: any[];
-  private _customer: any[];
-  private _purchaseOrder: any[];
-  private _orderItem: any[];
 
   public constructor() {
     this._users = [];
     this._products = [];
     this._orders = [];
-    this._items = [];
-    this._customer = [];
-    this._purchaseOrder = [];
-    this._orderItem = [];
 
     Object.seal(this);
   }
@@ -40,11 +25,7 @@ export class InMemoryDatabase {
     const modelsDictionary = {
       User: this._users,
       Product: this._products,
-      Order: this._orders,
-      Item: this._items,
-      Customer: this._customer,
-      Purchase_Order: this._purchaseOrder,
-      Order_Item: this._orderItem
+      Order: this._orders
     };
 
     if (name in modelsDictionary) {
