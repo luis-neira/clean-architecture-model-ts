@@ -1,25 +1,25 @@
 import { GetOrdersUseCase } from '../../../core/use-cases/management';
-import { CreateOrderPresenter } from '../../presenters/ingram';
+import { GetOrdersPresenter } from '../../presenters/management';
 
 import { IPurchaseOrdersGateway } from '../../../core/use-cases/interfaces';
 import { IHttpRequestModel, IResponder } from '../interfaces';
 
 export default class GetOrdersController {
   private ordersRepository: IPurchaseOrdersGateway;
-  private createOrderPresenter: CreateOrderPresenter;
+  private getOrdersPresenter: GetOrdersPresenter;
 
   public constructor(
     ordersRepository: IPurchaseOrdersGateway,
     createdResponder: IResponder
   ) {
     this.ordersRepository = ordersRepository;
-    this.createOrderPresenter = new CreateOrderPresenter(createdResponder);
+    this.getOrdersPresenter = new GetOrdersPresenter(createdResponder);
   }
 
   async processRequest(req: IHttpRequestModel): Promise<void> {
     const getOrdersUseCase = new GetOrdersUseCase(
       this.ordersRepository,
-      this.createOrderPresenter
+      this.getOrdersPresenter
     );
 
     await getOrdersUseCase.execute();

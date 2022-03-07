@@ -7,14 +7,6 @@ export {
   IOrdersGateway,
   IImagesGateway,
   EntityGatewayDictionary,
-  ICredentialsGateway,
-  IIngramProductsGateway,
-  IngramCategories,
-  IngramItemFormats,
-  IIngramProductPricesGateway,
-  IIngramItemNotFound,
-  IIngramOrdersGateway,
-  IIngramOrderStatusGateway,
   IItemsGateway,
   ICustomersGateway,
   IPurchaseOrdersGateway,
@@ -48,22 +40,3 @@ export {
   IGetImageByIdRequestModel,
   IUpdateOrCreateImageRequestModel
 } from './image-request-models';
-export {
-  Email,
-  Password,
-  IAuthDetails,
-  IAuthIgramRequestModel
-} from './auth-request-models';
-export {
-  IGetProductsRequestModel,
-  IGetProductPriceByIdRequestModel
-} from './ingram-product-request-models';
-export {
-  ICreateIngramOrderRequestModel,
-  ILineItem
-} from './ingram-order-request.model';
-export {
-  IGetIngramOrderStatusRequestModel,
-  IOrderStatusCredentials
-} from './ingram-order-status-request.model';
-// export { IIngramGateway } from './i-ingram-gateway';

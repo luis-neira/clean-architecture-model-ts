@@ -15,16 +15,3 @@ export const resourceName = {
   ORDERS: 'orders',
   IMAGES: 'images'
 };
-
-// Ingram API Inventory categories
-export const INGRAM_GAMES = 'games';
-export const INGRAM_MOVIES = 'movies';
-export const INGRAM_AUDIO = 'audio';
-export const INGRAM_ELECTRONICS = 'electronics';
-export const INGRAM_ACCESSORIES = 'accessories';
-
-// Ingram API Inventory item-format
-export const INGRAM_DVD = 'dvd';
-export const INGRAM_BLURAY = 'bluray';
-export const INGRAM_CD = 'cd';
-export const INGRAM_LP = 'lp';
