@@ -10,7 +10,7 @@ This is my attempt at creating a RESTful API implementing Uncle Bob Martin's cle
 * Database Repositories
     * In-memory
     * Sequelize
-        * Mariadb 
+        * MariaDB
 * External Services
     * jsonplaceholder (example)
 
