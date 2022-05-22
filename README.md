@@ -3,8 +3,10 @@
 version: 'v2.0.0'
 
 ## Description
-This is my attempt to implement Uncle Bob's clean architecture in TypeScript. This version follows proper RESTful architecture.
-* Runs on port 5000
+This is my attempt at creating a RESTful API implementing Uncle Bob Martin's clean architecture in TypeScript. I do not use any third pary packages for inversion of control, like InversifyJS. I use dependency injection in order to mantain a one-way flow of dependecy. I also use interfaces to satisfy Bob Martin's requirement of "use case ouput/input ports", which are then implemented by their use cases.
+
+* Web Delivery Mechanism
+    * Express.js
 * Database Repositories
     * In-memory
     * Sequelize
@@ -93,6 +95,8 @@ In the `.env` file, update the following environment variables for sequelize to 
 * DB_PASSWORD
 * DB_HOST
 * DB_PORT
+* PORT
+    * (Defaults to 3000)
 
 #### 3. Start the server
 To run in production mode where code is transpiled into a `dist` folder and run directly in `node`:
