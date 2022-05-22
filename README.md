@@ -1,4 +1,4 @@
-# Clean Architecture Model TS
+# Clean Architecture API in TypeScript
 
 version: 'v2.0.0'
 
