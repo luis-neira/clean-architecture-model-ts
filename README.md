@@ -73,7 +73,7 @@ These are the routes this API uses:
 
 #### Prerequisites
 * Node.js
-* Typescript
+* TypeScript
 * MariaDB
 
 
