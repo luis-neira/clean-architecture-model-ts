@@ -1,4 +1,4 @@
-# Clean Architecture API in TypeScript
+# Node.js Clean Architecture RESTful API in TypeScript
 
 version: 'v2.0.0'
 
