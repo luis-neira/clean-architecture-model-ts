@@ -74,8 +74,7 @@ These are the routes this API uses:
 #### Prerequisites
 * Node.js
 * Typescript
-* Sequelize
-* Mariadb
+* MariaDB
 
 
 #### 1. Clone the repo and install dependencies
