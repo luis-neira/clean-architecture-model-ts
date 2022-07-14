@@ -3,7 +3,7 @@
 version: 'v2.0.0'
 
 ## Description
-This is my attempt at creating a RESTful API implementing Uncle Bob Martin's clean architecture in TypeScript. I do not use any third party packages for inversion of control, like InversifyJS. I use dependency injection in order to maintain a one-way flow of dependency. I also use interfaces to satisfy Bob Martin's requirement of "use case output/input ports", which are then implemented by their use cases.
+This is my demo of a RESTful API implementing Robert Martin's clean architecture in TypeScript. I do not use any third party packages for inversion of control, like InversifyJS. I use dependency injection in order to maintain a one-way flow of dependency. I also use interfaces to satisfy Bob Martin's requirement of "use case output/input ports", which are then implemented by their use cases.
 
 * Web Delivery Mechanism
     * Express.js
