@@ -25,16 +25,16 @@ export default class AddUserController {
   public async processRequest(req: IHttpRequestModel): Promise<void> {
     const requestModelCandidate: IAddUserRequestModel = req.body;
 
-    const requestValidatedOrError = await this.validation.validate(
+    const requestValidated = await this.validation.validate(
       requestModelCandidate
     );
 
-    if (requestValidatedOrError.isFailure) {
-      throw requestValidatedOrError;
+    if (requestValidated.isFailure) {
+      throw requestValidated;
     }
 
     const useCaseRequestModel: IAddUserRequestModel =
-      requestValidatedOrError.getValue();
+      requestValidated.getValue();
 
     const addUserUseCase = new AddUserUseCase(
       this.usersRepository,
