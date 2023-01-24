@@ -1,10 +1,7 @@
 import { Model, ModelCtor, Sequelize } from 'sequelize';
 
 import { User } from '../../../../../core/entities';
-import {
-  IUsersGateway,
-  IUserDetails
-} from '../../../../../core/use-cases/interfaces';
+import { IUsersGateway } from '../../../../../core/use-cases/interfaces';
 
 import { DatabaseRepository } from '../../interfaces';
 import CreateUserMapper from '../../../../mappers/user/create-user.map'
