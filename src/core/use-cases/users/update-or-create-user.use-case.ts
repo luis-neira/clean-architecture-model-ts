@@ -33,12 +33,10 @@ export default class UpdateOrCreateUserUseCase
       const foundUser = await this.usersRepository.findOne(id);
 
       if (foundUser === null) {
-        if (userDetails.name === undefined)
+        if (userDetails.firstName === undefined)
           throw new ValueNotFoundError("'name' is required");
         if (userDetails.lastName === undefined)
           throw new ValueNotFoundError("'lastName' is required");
-        if (userDetails.gender === undefined)
-          throw new ValueNotFoundError("'gender' is required");
         if (userDetails.meta === undefined)
           throw new ValueNotFoundError("'meta' is required");
 
