@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 interface IUserAttributes {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   meta: JSON;
@@ -13,7 +13,7 @@ class User
   extends Model<IUserAttributes, IUserCreationAttributes>
   implements IUserAttributes
 {
-  public id!: number;
+  public id!: string;
   public firstName!: string;
   public lastName!: string;
   public meta!: JSON;
