@@ -23,20 +23,15 @@ export default class DeleteUserController {
   }
 
   async processRequest(req: IHttpRequestModel): Promise<void> {
-    const requestModelCandidate: IDeleteUserRequestModel = {
-      id: req.params.id
-    };
+    const requestValidated = await this.validation.validate<IDeleteUserRequestModel>({
+        id: req.params.id
+      });
 
-    const requestValidatedOrError = await this.validation.validate(
-      requestModelCandidate
-    );
-
-    if (requestValidatedOrError.isFailure) {
-      throw requestValidatedOrError;
+    if (requestValidated.isFailure) {
+      throw requestValidated;
     }
 
-    const useCaseRequestModel: IDeleteUserRequestModel =
-      requestValidatedOrError.getValue();
+    const useCaseRequestModel = requestValidated.getValue()!;
 
     const deleteUserUseCase = new DeleteUserUseCase(
       this.usersRepository,

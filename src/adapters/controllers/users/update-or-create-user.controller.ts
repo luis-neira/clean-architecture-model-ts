@@ -25,21 +25,16 @@ export default class UpdateOrCreateUserController {
   }
 
   public async processRequest(req: IHttpRequestModel): Promise<void> {
-    const requestModelCandidate: IUpdateOrCreateUserRequestModel = {
-      id: req.params.id,
-      userDetails: req.body
-    };
+    const requestValidated = await this.validation.validate<IUpdateOrCreateUserRequestModel>({
+        id: req.params.id,
+        userDetails: req.body
+      });
 
-    const requestValidatedOrError = await this.validation.validate(
-      requestModelCandidate
-    );
-
-    if (requestValidatedOrError.isFailure) {
-      throw requestValidatedOrError;
+    if (requestValidated.isFailure) {
+      throw requestValidated;
     }
 
-    const useCaseRequestModel: IUpdateOrCreateUserRequestModel =
-      requestValidatedOrError.getValue();
+    const useCaseRequestModel = requestValidated.getValue()!;
 
     const updateOrCreateUserUseCase = new UpdateOrCreateUserUseCase(
       this.usersRepository,

@@ -12,13 +12,13 @@ export class JoiValidator implements IValidator {
     this.schema = schema;
   }
 
-  public async validate(payload: Record<string, any>): Promise<Result> {
+  public async validate<T>(payload: Record<string, any>): Promise<Result<T>> {
     try {
-      const value = await this.schema.validateAsync(payload, {
+      const value: T = await this.schema.validateAsync(payload, {
         abortEarly: true
       });
 
-      return Result.ok(value);
+      return Result.ok<T>(value);
     } catch (err: any) {
       const error: joiError = err;
 

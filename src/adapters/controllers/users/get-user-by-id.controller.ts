@@ -23,20 +23,15 @@ export default class GetUserByIdController {
   }
 
   async processRequest(req: IHttpRequestModel): Promise<void> {
-    const requestModelCandidate: IGetUserByIdRequestModel = {
-      id: req.params.id
-    };
+    const requestValidated = await this.validation.validate<IGetUserByIdRequestModel>({
+        id: req.params.id
+      });
 
-    const requestValidatedOrError = await this.validation.validate(
-      requestModelCandidate
-    );
-
-    if (requestValidatedOrError.isFailure) {
-      throw requestValidatedOrError;
+    if (requestValidated.isFailure) {
+      throw requestValidated;
     }
 
-    const useCaseRequestModel: IGetUserByIdRequestModel =
-      requestValidatedOrError.getValue();
+    const useCaseRequestModel = requestValidated.getValue()!;
 
     const getUserByIdUseCase = new GetUserByIdUseCase(
       this.usersRepository,
