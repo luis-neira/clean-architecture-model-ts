@@ -3,10 +3,11 @@ interface IUserID {
 }
 
 export interface IUserDetails {
-  name: string;
+  firstName: string;
   lastName: string;
-  gender: number;
-  meta: any;
+  meta: {
+    [key: string]: any
+  };
 }
 
 export interface IAddUserRequestModel extends IUserDetails {}

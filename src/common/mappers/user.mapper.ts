@@ -6,9 +6,8 @@ export default class UserMap {
   public static toDTO(user: User) {
     return {
       id: user.id,
-      name: user.name,
+      firstName: user.firstName,
       lastName: user.lastName,
-      gender: user.gender,
       meta: user.meta
     };
   }
@@ -16,9 +15,8 @@ export default class UserMap {
   public static toPersistence(user: any) {
     return {
       id: user.id,
-      name: user.name,
+      firstName: user.firstName,
       lastName: user.lastName,
-      gender: user.gender,
       meta: user.meta
     };
   }
@@ -26,9 +24,8 @@ export default class UserMap {
   public static toDomain(raw: any) {
     return User.create(
       {
-        name: raw.name,
+        firstName: raw.firstName,
         lastName: raw.lastName,
-        gender: raw.gender,
         meta: raw.meta
       },
       raw.id
