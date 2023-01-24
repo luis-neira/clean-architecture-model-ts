@@ -12,6 +12,7 @@ export default class UsersRepositoryFactory extends RepositoryFactory<IEntityGat
 
     const usersRepositoryMakerByDialect = {
       [dbDialects.MARIA_DB]: () => new UsersRepositorySequelize(),
+      [dbDialects.POSTGRES]: () => new UsersRepositorySequelize(),
       [dbDialects.IN_MEMORY]: () => new UsersRepositoryInMemory()
     };
 

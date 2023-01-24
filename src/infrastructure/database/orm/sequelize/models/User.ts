@@ -2,9 +2,8 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 interface IUserAttributes {
   id: number;
-  name: string;
+  firstName: string;
   lastName: string;
-  gender: number;
   meta: JSON;
 }
 
@@ -15,9 +14,8 @@ class User
   implements IUserAttributes
 {
   public id!: number;
-  public name!: string;
+  public firstName!: string;
   public lastName!: string;
-  public gender!: number;
   public meta!: JSON;
   // timestamps
   public readonly createdAt!: Date;
@@ -35,7 +33,7 @@ function initUserModel(sequelize: Sequelize) {
         allowNull: false,
         primaryKey: true
       },
-      name: {
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -48,14 +46,6 @@ function initUserModel(sequelize: Sequelize) {
         allowNull: false,
         validate: {
           notEmpty: true
-        }
-      },
-      gender: {
-        type: DataTypes.TINYINT({ length: 1 }).UNSIGNED,
-        allowNull: false,
-        validate: {
-          max: 2,
-          min: 0
         }
       },
       meta: {

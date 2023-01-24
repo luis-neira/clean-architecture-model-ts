@@ -12,6 +12,7 @@ export default class ProductsRepositoryFactory extends RepositoryFactory<IEntity
 
     const productsRepositoryMakerByDialect = {
       [dbDialects.MARIA_DB]: () => new ProductsRepositorySequelize(),
+      [dbDialects.POSTGRES]: () => new ProductsRepositorySequelize(),
       [dbDialects.IN_MEMORY]: () => new ProductsRepositoryInMemory()
     };
 

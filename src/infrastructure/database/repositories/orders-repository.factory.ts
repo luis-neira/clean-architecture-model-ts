@@ -12,6 +12,7 @@ export default class OrdersRepositoryFactory extends RepositoryFactory<IEntityGa
 
     const ordersRepositoryMakerByDialect = {
       [dbDialects.MARIA_DB]: () => new OrdersRepositorySequelize(),
+      [dbDialects.POSTGRES]: () => new OrdersRepositorySequelize(),
       [dbDialects.IN_MEMORY]: () => new OrdersRepositoryInMemory()
     };
 

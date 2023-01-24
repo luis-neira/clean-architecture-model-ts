@@ -20,6 +20,7 @@ export default class DatabaseClientFactory {
 
     const databaseClientByDialect = {
       [dbDialects.MARIA_DB]: () => new SequelizeClient(),
+      [dbDialects.POSTGRES]: () => new SequelizeClient(),
       [dbDialects.IN_MEMORY]: () => new InMemoryClient()
     };
 
