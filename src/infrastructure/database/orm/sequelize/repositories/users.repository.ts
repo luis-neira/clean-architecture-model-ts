@@ -17,12 +17,12 @@ export default class UsersRepository
 {
   private _model: ModelCtor<Model<any, any>>;
 
-  private _maper: IEntityMapper<User, ICreateUserDto>;
+  private _mapper: IEntityMapper<User, ICreateUserDto>;
 
   public constructor() {
     super();
     this._model = (this._db as Sequelize).model('User');
-    this._maper = new CreateUserMapper();
+    this._mapper = new CreateUserMapper();
   }
 
   public async create(user: User): Promise<User> {
@@ -30,7 +30,7 @@ export default class UsersRepository
 
     const addedUser = await this._model.create(userRawData);
 
-    return this._maper.toDomain(addedUser.toJSON());
+    return this._mapper.toDomain(addedUser.toJSON());
   }
 
   public async findOne(userId: string): Promise<User | null> {
@@ -40,7 +40,7 @@ export default class UsersRepository
 
     if (!foundUser) return null;
 
-    return this._maper.toDomain(foundUser.toJSON());
+    return this._mapper.toDomain(foundUser.toJSON());
   }
 
   public async update(
@@ -62,7 +62,7 @@ export default class UsersRepository
 
     await foundUser.save();
 
-    return this._maper.toDomain(foundUser.toJSON());
+    return this._mapper.toDomain(foundUser.toJSON());
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -79,7 +79,7 @@ export default class UsersRepository
 
   public async find(): Promise<User[]> {
     const foundUsers = (await this._model.findAll()).map((el) =>
-      this._maper.toDomain(el.toJSON())
+      this._mapper.toDomain(el.toJSON())
     );
 
     return foundUsers;
