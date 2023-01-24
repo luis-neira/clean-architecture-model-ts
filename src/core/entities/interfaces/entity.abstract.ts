@@ -17,20 +17,16 @@ export default abstract class Entity<T> {
     return this._id;
   }
 
-  public equals(object: any): boolean {
-    if (object == null || object == undefined) {
+  public equals(obj: { [key: string]: any }): boolean {
+    if (obj == null) {
       return false;
     }
 
-    if (this === object) {
-      return true;
-    }
-
-    if (!isEntity(object)) {
+    if (!isEntity(obj)) {
       return false;
     }
 
-    return this.id === object.id;
+    return this.id === obj.id;
   }
 
   public toJSON() {
@@ -40,9 +36,7 @@ export default abstract class Entity<T> {
     };
   }
 
-  public getProps() {
-    return {
-      ...this.props
-    };
+  public getProps(): T {
+    return this.props;
   }
 }
