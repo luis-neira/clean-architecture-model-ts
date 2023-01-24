@@ -21,7 +21,9 @@ export default class UsersRepository
   }
 
   public async create(user: User): Promise<User> {
-    const userRawData = UserMap.toPersistence(user);
+    const userRawData = user.toJSON();
+
+    console.log(userRawData);
 
     const addedUser = await this._model.create(userRawData);
 
