@@ -3,7 +3,7 @@ import RouterMaker from '../interfaces/router.abstract';
 import { AddOrderDeliverer } from '../../delivery/orders';
 import { GetOrderByIdDeliverer } from '../../delivery/orders';
 import { GetOrdersDeliverer } from '../../delivery/orders';
-import { UpdateOrCreateOrderDeliverer } from '../../delivery/orders';
+import { UpdateOrderDeliverer } from '../../delivery/orders';
 import { DeleteOrderDeliverer } from '../../delivery/orders';
 
 export default class OrdersRouter extends RouterMaker {
@@ -30,7 +30,7 @@ export default class OrdersRouter extends RouterMaker {
 
     this._router.patch(
       '/:id',
-      this.makeRequestHandler(UpdateOrCreateOrderDeliverer)
+      this.makeRequestHandler(UpdateOrderDeliverer)
     );
 
     this._router.delete(

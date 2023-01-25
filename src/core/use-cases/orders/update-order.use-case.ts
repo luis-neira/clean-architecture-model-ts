@@ -13,14 +13,14 @@ import {
   IOrdersGateway,
   EntityGatewayDictionary
 } from '../interfaces';
-import { IUpdateOrCreateOrderRequestModel, IOrderDetails } from '../interfaces';
+import { IUpdateOrderRequestModel, IOrderDetails } from '../interfaces';
 
 interface IValidationError {
   field: string;
   msg: string;
 }
 
-export default class UpdateOrCreateOrderUseCase
+export default class UpdateOrderUseCase
   implements IUseCaseInputBoundary
 {
   private ordersRepository: IOrdersGateway;
@@ -43,7 +43,7 @@ export default class UpdateOrCreateOrderUseCase
   public async execute({
     id,
     orderDetails
-  }: IUpdateOrCreateOrderRequestModel): Promise<void> {
+  }: IUpdateOrderRequestModel): Promise<void> {
     try {
       const foundOrder = await this.ordersRepository.findOne(id);
 

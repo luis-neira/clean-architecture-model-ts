@@ -27,7 +27,7 @@ export {
   IAddOrderRequestModel,
   IDeleteOrderRequestModel,
   IGetOrderByIdRequestModel,
-  IUpdateOrCreateOrderRequestModel
+  IUpdateOrderRequestModel
 } from './order-request-models';
 export {
   IImageDetails,

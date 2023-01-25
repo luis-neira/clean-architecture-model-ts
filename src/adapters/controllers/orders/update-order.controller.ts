@@ -1,21 +1,21 @@
 import { IHttpRequestModel } from '../interfaces';
 
-import { UpdateOrCreateOrderUseCase } from '../../../core/use-cases/orders';
-import { UpdateOrCreateOrderPresenter } from '../../presenters/orders';
+import { UpdateOrderUseCase } from '../../../core/use-cases/orders';
+import { UpdateOrderPresenter } from '../../presenters/orders';
 
 import { EntityGatewayDictionary } from '../../../core/use-cases/interfaces';
 import { IResponder } from '../interfaces';
 
-export default class UpdateOrCreateOrderController {
+export default class UpdateOrderController {
   private reposByResource: EntityGatewayDictionary;
-  private updateOrCreateOrderPresenter: UpdateOrCreateOrderPresenter;
+  private UpdateOrderPresenter: UpdateOrderPresenter;
 
   public constructor(
     reposByResource: EntityGatewayDictionary,
     createdResponder: IResponder
   ) {
     this.reposByResource = reposByResource;
-    this.updateOrCreateOrderPresenter = new UpdateOrCreateOrderPresenter(
+    this.UpdateOrderPresenter = new UpdateOrderPresenter(
       createdResponder
     );
   }
@@ -26,11 +26,11 @@ export default class UpdateOrCreateOrderController {
       orderDetails: req.body
     };
 
-    const updateOrCreateOrderUseCase = new UpdateOrCreateOrderUseCase(
+    const updateOrderUseCase = new UpdateOrderUseCase(
       this.reposByResource,
-      this.updateOrCreateOrderPresenter
+      this.UpdateOrderPresenter
     );
 
-    await updateOrCreateOrderUseCase.execute(useCaseRequestModel);
+    await updateOrderUseCase.execute(useCaseRequestModel);
   }
 }

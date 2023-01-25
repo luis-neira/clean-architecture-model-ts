@@ -16,6 +16,6 @@ export interface IDeleteOrderRequestModel extends IOrderID {}
 
 export interface IGetOrderByIdRequestModel extends IOrderID {}
 
-export interface IUpdateOrCreateOrderRequestModel extends IOrderID {
+export interface IUpdateOrderRequestModel extends IOrderID {
   orderDetails: IOrderDetails;
 }

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { UpdateOrCreateOrderController } from '../../../../../../adapters/controllers/orders';
+import { UpdateOrderController } from '../../../../../../adapters/controllers/orders';
 import {
   UsersRepositoryFactory,
   ProductsRepositoryFactory,
@@ -10,7 +10,7 @@ import { CreatedResponder } from '../../../../responders/express/users';
 
 import { Deliverer } from '../interfaces';
 
-export default class UpdateOrCreateOrderDeliverer extends Deliverer {
+export default class UpdateOrderDeliverer extends Deliverer {
   public constructor(req: Request, res: Response, next: NextFunction) {
     super(req, res, next);
   }
@@ -39,7 +39,7 @@ export default class UpdateOrCreateOrderDeliverer extends Deliverer {
 
     const createdResponder = new CreatedResponder(this.res);
 
-    const updateOrCreateOrderController = new UpdateOrCreateOrderController(
+    const updateOrderController = new UpdateOrderController(
       repositoryDictionary,
       createdResponder
     );
@@ -47,7 +47,7 @@ export default class UpdateOrCreateOrderDeliverer extends Deliverer {
     const mappedHttpRequest = this.mapHttpRequest(this.req);
 
     try {
-      await updateOrCreateOrderController.processRequest(mappedHttpRequest);
+      await updateOrderController.processRequest(mappedHttpRequest);
     } catch (err: any) {
       this.handleError(err);
     }

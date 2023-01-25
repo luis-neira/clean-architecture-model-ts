@@ -3,18 +3,18 @@ import { SuccessResponse } from '../../../common/contracts';
 import { IUseCaseOutputBoundary } from '../../../core/use-cases/interfaces';
 import { IResponder } from '../../controllers/interfaces';
 
-export default class UpdateOrCreateOrderPresenter
+export default class UpdateOrderPresenter
   implements IUseCaseOutputBoundary
 {
-  private updateOrCreateOrderResponder: IResponder;
+  private updateOrderResponder: IResponder;
 
-  public constructor(updateOrCreateOrderResponder: IResponder) {
-    this.updateOrCreateOrderResponder = updateOrCreateOrderResponder;
+  public constructor(updateOrderResponder: IResponder) {
+    this.updateOrderResponder = updateOrderResponder;
   }
 
   public execute(responseModel: any): void {
     const successResponse = SuccessResponse.create(responseModel);
 
-    this.updateOrCreateOrderResponder.respond(successResponse);
+    this.updateOrderResponder.respond(successResponse);
   }
 }
