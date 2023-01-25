@@ -67,7 +67,7 @@ These are the routes this API uses:
 |GET|`/api/v1/images/:id`|get one image|
 |GET|`/api/v1/images`|get all images|
 |DELETE|`/api/v1/images/:id`|delete one image|
-|PUT|`/api/v1/images/:id`|update one image|
+|POST|`/api/v1/images/:id/update`|update one image|
 |POST|`/api/v1/images`|create one image|
 
 ## Run Locally

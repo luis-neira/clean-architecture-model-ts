@@ -1,0 +1,1 @@
+export { default as IImageDto } from './image.dto';

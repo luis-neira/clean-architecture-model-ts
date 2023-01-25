@@ -1,7 +1,9 @@
 import { Result } from '../../lib/result';
 import { ValueNotFoundError } from '../../../common/errors';
 import { Image } from '../../entities';
-import { ImageMap } from '../../../common/mappers';
+import { ImageMapper } from '../../mappers/image';
+import IEntityMapper from '../../mappers/i-entity-mapper'
+import { IImageDto } from '../../dtos/image'
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
@@ -12,6 +14,7 @@ import {
 export default class UpdateImageUseCase implements IUseCaseInputBoundary {
   private imagesRepository: IImagesGateway;
   private presenter: IUseCaseOutputBoundary;
+  private dataMapper: IEntityMapper<Image, IImageDto>;
 
   public constructor(
     imagesRepository: IImagesGateway,
@@ -19,13 +22,10 @@ export default class UpdateImageUseCase implements IUseCaseInputBoundary {
   ) {
     this.imagesRepository = imagesRepository;
     this.presenter = presenter;
+    this.dataMapper = new ImageMapper();
   }
 
-  public async execute(
-    requestModel: IUpdateOrCreateImageRequestModel
-  ): Promise<void> {
-    const { title, url, thumbnailUrl, _externalId } = requestModel;
-
+  public async execute({ title, url, thumbnailUrl, _externalId }: IUpdateOrCreateImageRequestModel): Promise<void> {
     const image = Image.create(
       {
         title,
@@ -42,13 +42,12 @@ export default class UpdateImageUseCase implements IUseCaseInputBoundary {
       });
 
       if (updatedImage === null) {
-        const errorMsg = `Couldn't find user by id=${image._externalId}`;
-        throw Result.fail(new ValueNotFoundError(errorMsg));
+        throw new ValueNotFoundError(`_eternalId '${image._externalId}' not found`);
       }
 
-      const updatedImageDTO = ImageMap.toDTO(updatedImage);
+      const updatedImageDto = this.dataMapper.toDTO(updatedImage);
 
-      this.presenter.execute(updatedImageDTO);
+      this.presenter.execute(updatedImageDto);
     } catch (err: any) {
       if (err.isFailure) throw err;
 

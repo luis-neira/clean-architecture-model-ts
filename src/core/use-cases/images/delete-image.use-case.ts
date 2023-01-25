@@ -16,16 +16,12 @@ export default class DeleteImageUseCase implements IUseCaseInputBoundary {
     this.presenter = presenter;
   }
 
-  public async execute(requestModel: IDeleteImageRequestModel): Promise<void> {
-    const { id } = requestModel;
-
+  public async execute({ id }: IDeleteImageRequestModel): Promise<void> {
     try {
       const imageIsDeleted = await this.imagesRepository.delete(id);
 
       if (imageIsDeleted === null) {
-        throw Result.fail(
-          new ValueNotFoundError(`Couldn't find user by id=${id}`)
-        );
+        throw new ValueNotFoundError(`_eternalId '${id}' not found`);
       }
 
       this.presenter.execute();
