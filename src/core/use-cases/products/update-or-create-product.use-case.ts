@@ -1,6 +1,8 @@
 import { Result } from '../../lib/result';
-import { ProductMap } from '../../../common/mappers';
 import { Product } from '../../entities';
+import { ProductMapper } from '../../mappers/product';
+import IEntityMapper from '../../mappers/i-entity-mapper'
+import { IProductDto } from '../../dtos/product'
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
@@ -14,6 +16,7 @@ export default class UpdateOrCreateProductUseCase
 {
   private productsRepository: IProductsGateway;
   private presenter: IUseCaseOutputBoundary;
+  private dataMapper: IEntityMapper<Product, IProductDto>;
 
   public constructor(
     productsRepository: IProductsGateway,
@@ -21,6 +24,7 @@ export default class UpdateOrCreateProductUseCase
   ) {
     this.productsRepository = productsRepository;
     this.presenter = presenter;
+    this.dataMapper = new ProductMapper();
   }
 
   public async execute(
@@ -43,7 +47,7 @@ export default class UpdateOrCreateProductUseCase
         { id }
       );
 
-      const updatedProductDTO = ProductMap.toDTO(updatedProduct!);
+      const updatedProductDTO = this.dataMapper.toDTO(updatedProduct!);
 
       this.presenter.execute(updatedProductDTO);
     } catch (err: any) {
@@ -73,7 +77,7 @@ export default class UpdateOrCreateProductUseCase
 
     const addedProduct = await this.productsRepository.create(product);
 
-    const addedProductDTO = ProductMap.toDTO(addedProduct);
+    const addedProductDTO = this.dataMapper.toDTO(addedProduct);
 
     this.presenter.execute(addedProductDTO);
   }
