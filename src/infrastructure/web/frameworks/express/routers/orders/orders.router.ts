@@ -28,7 +28,7 @@ export default class OrdersRouter extends RouterMaker {
       this.makeRequestHandler(AddOrderDeliverer)
     );
 
-    this._router.put(
+    this._router.patch(
       '/:id',
       this.makeRequestHandler(UpdateOrCreateOrderDeliverer)
     );

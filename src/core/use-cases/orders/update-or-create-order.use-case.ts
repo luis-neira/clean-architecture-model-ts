@@ -1,6 +1,7 @@
 import { Result } from '../../lib/result';
 import { ValidationError } from '../../../common/errors';
-import { Order } from '../../entities';
+import { Order, Product } from '../../entities';
+import { ValueNotFoundError } from '../../../common/errors'
 import { OrderMapper } from '../../mappers/order';
 import IEntityMapper from '../../mappers/i-entity-mapper'
 import { IOrderDto } from '../../dtos/order'
@@ -39,28 +40,23 @@ export default class UpdateOrCreateOrderUseCase
     this.dataMapper = new OrderMapper();
   }
 
-  public async execute(
-    requestModel: IUpdateOrCreateOrderRequestModel
-  ): Promise<void> {
-    const { id, orderDetails } = requestModel;
-
+  public async execute({
+    id,
+    orderDetails
+  }: IUpdateOrCreateOrderRequestModel): Promise<void> {
     try {
       const foundOrder = await this.ordersRepository.findOne(id);
 
       if (foundOrder === null) {
-        await this.addOrderUseCase(orderDetails, id);
-        return;
+        throw new ValueNotFoundError(`orderId '${id}' not found`);
       }
 
-      const orderCandidate = Order.create(orderDetails, id);
+      const modifiedOrderDetails = Object.assign(
+        foundOrder.toJSON(),
+        orderDetails
+      );
 
-      const updatedOrder = await this.ordersRepository.update(orderCandidate, {
-        id
-      });
-
-      const updatedOrderDto = this.dataMapper.toDTO(updatedOrder!);
-
-      this.presenter.execute(updatedOrderDto);
+      await this.addOrderUseCase(modifiedOrderDetails, id);
     } catch (err: any) {
       if (err.isFailure) throw err;
 
@@ -91,9 +87,11 @@ export default class UpdateOrCreateOrderUseCase
       throw Result.fail(invalid);
     }
 
-    const addedOrder = await this.ordersRepository.create(order);
+    const addedOrder = await this.ordersRepository.update(order, {
+      id: order.id
+    });
 
-    const addedOrderDto = this.dataMapper.toDTO(addedOrder);
+    const addedOrderDto = this.dataMapper.toDTO(addedOrder!);
 
     this.presenter.execute(addedOrderDto);
   }
@@ -117,9 +115,13 @@ export default class UpdateOrCreateOrderUseCase
 
     const foundProducts = await Promise.all(getProductsById);
 
-    const invalidProductIds = foundProducts.map((p: any, i: number) => {
-      if (p === null) return productIds[i];
-    });
+    const invalidProductIds = foundProducts.reduce(
+      (accum: string[], currentVal: Product | null, i: number) => {
+        if (currentVal === null) accum.push(productIds[i]);
+        return accum;
+      },
+      []
+    );
 
     if (invalidProductIds.length === 0) return [] as IValidationError[];
 
