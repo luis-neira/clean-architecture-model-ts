@@ -6,7 +6,7 @@ interface IProductProps {
   images: string[];
   price: number;
   color: string;
-  meta: any;
+  meta: Record<string, any>;
 }
 
 export default class Product extends Entity<IProductProps> {
@@ -47,7 +47,7 @@ export default class Product extends Entity<IProductProps> {
     return this.props.color;
   }
 
-  get meta(): any {
+  get meta(): Record<string, any> {
     return this.props.meta;
   }
 }
