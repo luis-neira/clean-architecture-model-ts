@@ -20,7 +20,7 @@ export {
   IAddProductRequestModel,
   IDeleteProductRequestModel,
   IGetProductByIdRequestModel,
-  IUpdateOrCreateProductRequestModel
+  IUpdateProductRequestModel
 } from './product-request-models';
 export {
   IOrderDetails,

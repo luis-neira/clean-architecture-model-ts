@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { UpdateOrCreateProductController } from '../../../../../../adapters/controllers/products';
+import { UpdateProductController } from '../../../../../../adapters/controllers/products';
 import { ProductsRepositoryFactory } from '../../../../../database/repositories';
 import { CreatedResponder } from '../../../../responders/express/users';
 
 import { Deliverer } from '../interfaces';
 
-export default class UpdateOrCreateProductDeliverer extends Deliverer {
+export default class UpdateProductDeliverer extends Deliverer {
   public constructor(req: Request, res: Response, next: NextFunction) {
     super(req, res, next);
   }
@@ -19,7 +19,7 @@ export default class UpdateOrCreateProductDeliverer extends Deliverer {
 
     const createdResponder = new CreatedResponder(this.res);
 
-    const updateOrCreateProductController = new UpdateOrCreateProductController(
+    const updateProductController = new UpdateProductController(
       productsRepository,
       createdResponder
     );
@@ -27,7 +27,7 @@ export default class UpdateOrCreateProductDeliverer extends Deliverer {
     const mappedHttpRequest = this.mapHttpRequest(this.req);
 
     try {
-      await updateOrCreateProductController.processRequest(mappedHttpRequest);
+      await updateProductController.processRequest(mappedHttpRequest);
     } catch (err: any) {
       this.handleError(err);
     }

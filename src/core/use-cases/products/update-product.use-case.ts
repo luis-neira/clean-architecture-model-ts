@@ -1,5 +1,6 @@
 import { Result } from '../../lib/result';
 import { Product } from '../../entities';
+import { ValueNotFoundError } from '../../../common/errors'
 import { ProductMapper } from '../../mappers/product';
 import IEntityMapper from '../../mappers/i-entity-mapper'
 import { IProductDto } from '../../dtos/product'
@@ -7,11 +8,10 @@ import { IProductDto } from '../../dtos/product'
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
   IProductsGateway,
-  IProductDetails,
-  IUpdateOrCreateProductRequestModel
+  IUpdateProductRequestModel
 } from '../interfaces';
 
-export default class UpdateOrCreateProductUseCase
+export default class UpdateProductUseCase
   implements IUseCaseInputBoundary
 {
   private productsRepository: IProductsGateway;
@@ -27,23 +27,26 @@ export default class UpdateOrCreateProductUseCase
     this.dataMapper = new ProductMapper();
   }
 
-  public async execute(
-    requestModel: IUpdateOrCreateProductRequestModel
-  ): Promise<void> {
-    const { id, productDetails } = requestModel;
-
+  public async execute({
+    id,
+    productDetails
+  }: IUpdateProductRequestModel): Promise<void> {
     try {
       const foundProduct = await this.productsRepository.findOne(id);
 
       if (foundProduct === null) {
-        this.addProductUseCase(productDetails, id);
-        return;
+        throw new ValueNotFoundError(`productId '${id}' not found`);
       }
 
-      const productCandidate = Product.create(productDetails, id);
+      const modifiedProductDetails = Object.assign(
+        foundProduct.toJSON(),
+        productDetails
+      );
+
+      const modifiedProduct = Product.create(modifiedProductDetails, id);
 
       const updatedProduct = await this.productsRepository.update(
-        productCandidate,
+        modifiedProduct,
         { id }
       );
 
@@ -55,30 +58,5 @@ export default class UpdateOrCreateProductUseCase
 
       throw Result.fail(err);
     }
-  }
-
-  private async addProductUseCase(
-    productDetails: IProductDetails,
-    productId?: string
-  ) {
-    const productIdOrNull = productId ? productId : null;
-
-    const product = Product.create(
-      {
-        name: productDetails.name,
-        description: productDetails.description,
-        images: productDetails.images,
-        price: productDetails.price,
-        color: productDetails.color,
-        meta: productDetails.meta
-      },
-      productIdOrNull
-    );
-
-    const addedProduct = await this.productsRepository.create(product);
-
-    const addedProductDTO = this.dataMapper.toDTO(addedProduct);
-
-    this.presenter.execute(addedProductDTO);
   }
 }

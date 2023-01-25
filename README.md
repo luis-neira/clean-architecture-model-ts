@@ -11,6 +11,7 @@ This is my demo of a RESTful API implementing Robert Martin's clean architecture
     * In-memory
     * Sequelize
         * MariaDB
+        * PostgreSQL
 * External Services
     * jsonplaceholder (example)
 
@@ -44,7 +45,7 @@ These are the routes this API uses:
 |GET|`/api/v1/products/:id`|get one product|
 |GET|`/api/v1/products`|get all products|
 |DELETE|`/api/v1/products/:id`|delete one product|
-|PUT|`/api/v1/products/:id`|update one product|
+|PATCH|`/api/v1/products/:id`|update one product|
 |POST|`/api/v1/products`|create one product|
 
 ### Orders
@@ -74,7 +75,7 @@ These are the routes this API uses:
 #### Prerequisites
 * Node.js
 * TypeScript
-* MariaDB
+* MariaDB or PostgreSQL
 
 
 #### 1. Clone the repo and install dependencies

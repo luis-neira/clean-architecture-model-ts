@@ -1,21 +1,21 @@
 import { IHttpRequestModel } from '../interfaces';
 
-import { UpdateOrCreateProductUseCase } from '../../../core/use-cases/products';
-import { UpdateOrCreateProductPresenter } from '../../presenters/products';
+import { UpdateProductUseCase } from '../../../core/use-cases/products';
+import { UpdateProductPresenter } from '../../presenters/products';
 
 import { IProductsGateway } from '../../../core/use-cases/interfaces';
 import { IResponder } from '../interfaces';
 
-export default class UpdateOrCreateProductController {
+export default class UpdateProductController {
   private productsRepository: IProductsGateway;
-  private updateOrCreateProductPresenter: UpdateOrCreateProductPresenter;
+  private UpdateProductPresenter: UpdateProductPresenter;
 
   public constructor(
     productsRepository: IProductsGateway,
     createdResponder: IResponder
   ) {
     this.productsRepository = productsRepository;
-    this.updateOrCreateProductPresenter = new UpdateOrCreateProductPresenter(
+    this.UpdateProductPresenter = new UpdateProductPresenter(
       createdResponder
     );
   }
@@ -26,9 +26,9 @@ export default class UpdateOrCreateProductController {
       productDetails: req.body
     };
 
-    const updateProductUseCase = new UpdateOrCreateProductUseCase(
+    const updateProductUseCase = new UpdateProductUseCase(
       this.productsRepository,
-      this.updateOrCreateProductPresenter
+      this.UpdateProductPresenter
     );
 
     await updateProductUseCase.execute(useCaseRequestModel);

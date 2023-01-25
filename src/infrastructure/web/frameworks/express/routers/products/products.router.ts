@@ -3,7 +3,7 @@ import RouterMaker from '../interfaces/router.abstract';
 import { AddProductDeliverer } from '../../delivery/products';
 import { GetProductByIdDeliverer } from '../../delivery/products';
 import { GetProductsDeliverer } from '../../delivery/products';
-import { UpdateOrCreateProductDeliverer } from '../../delivery/products';
+import { UpdateProductDeliverer } from '../../delivery/products';
 import { DeleteProductDeliverer } from '../../delivery/products';
 
 export default class ProductsRouter extends RouterMaker {
@@ -28,9 +28,9 @@ export default class ProductsRouter extends RouterMaker {
       this.makeRequestHandler(AddProductDeliverer)
     );
 
-    this._router.put(
+    this._router.patch(
       '/:id',
-      this.makeRequestHandler(UpdateOrCreateProductDeliverer)
+      this.makeRequestHandler(UpdateProductDeliverer)
     );
 
     this._router.delete(

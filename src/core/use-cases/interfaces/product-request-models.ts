@@ -17,6 +17,6 @@ export interface IDeleteProductRequestModel extends IProductID {}
 
 export interface IGetProductByIdRequestModel extends IProductID {}
 
-export interface IUpdateOrCreateProductRequestModel extends IProductID {
+export interface IUpdateProductRequestModel extends IProductID {
   productDetails: IProductDetails;
 }
