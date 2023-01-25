@@ -33,7 +33,7 @@ These are the routes this API uses:
 |GET|`/api/v1/users/:id`|get one user|
 |GET|`/api/v1/users`|get all users|
 |DELETE|`/api/v1/users/:id`|delete one user|
-|PUT|`/api/v1/users:id`|update one user|
+|PATCH|`/api/v1/users:id`|update one user|
 |POST|`/api/v1/users`|create one user|
 
 ### Products
