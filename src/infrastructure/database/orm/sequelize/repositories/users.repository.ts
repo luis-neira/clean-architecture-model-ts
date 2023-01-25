@@ -3,21 +3,22 @@ import { Model, ModelCtor, Sequelize } from 'sequelize';
 import { User } from '../../../../../core/entities';
 import { IUsersGateway } from '../../../../../core/use-cases/interfaces';
 import { UserMapper } from '../../../../../core/mappers/user'
-import IEntityMapper from '../../../../../core/mappers/i-mapper'
+import IEntityMapper from '../../../../../core/mappers/i-entity-mapper'
 
 import { DatabaseRepository } from '../../interfaces';
+
 export default class UsersRepository
   extends DatabaseRepository
   implements IUsersGateway
 {
   private _model: ModelCtor<Model<any, any>>;
 
-  private _mapper: Pick<IEntityMapper<User, any>, 'toDomain'>;
+  private _dataMapper: Pick<IEntityMapper<User, any>, 'toDomain'>;
 
   public constructor() {
     super();
     this._model = (this._db as Sequelize).model('User');
-    this._mapper = new UserMapper();
+    this._dataMapper = new UserMapper();
   }
 
   public async create(user: User): Promise<User> {
@@ -25,7 +26,7 @@ export default class UsersRepository
 
     const addedUser = await this._model.create(userRawData);
 
-    return this._mapper.toDomain(addedUser.toJSON());
+    return this._dataMapper.toDomain(addedUser.toJSON());
   }
 
   public async findOne(userId: string): Promise<User | null> {
@@ -35,7 +36,7 @@ export default class UsersRepository
 
     if (!foundUser) return null;
 
-    return this._mapper.toDomain(foundUser.toJSON());
+    return this._dataMapper.toDomain(foundUser.toJSON());
   }
 
   public async update(
@@ -57,7 +58,7 @@ export default class UsersRepository
 
     await foundUser.save();
 
-    return this._mapper.toDomain(foundUser.toJSON());
+    return this._dataMapper.toDomain(foundUser.toJSON());
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -74,7 +75,7 @@ export default class UsersRepository
 
   public async find(): Promise<User[]> {
     const foundUsers = (await this._model.findAll()).map((el) =>
-      this._mapper.toDomain(el.toJSON())
+      this._dataMapper.toDomain(el.toJSON())
     );
 
     return foundUsers;

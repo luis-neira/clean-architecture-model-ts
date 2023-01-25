@@ -1,8 +1,8 @@
 import { Result } from '../../lib/result';
 import { User } from '../../entities';
-import { CreateUserMapper } from '../../mappers/user';
-import IEntityMapper from '../../mappers/i-mapper'
-import ICreateUserDto from '../../dtos/user/create-user.dto'
+import { UserMapper } from '../../mappers/user';
+import IEntityMapper from '../../mappers/i-entity-mapper'
+import { IUserDto } from '../../dtos/user'
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import { IUsersGateway, IAddUserRequestModel } from '../interfaces';
@@ -10,7 +10,7 @@ import { IUsersGateway, IAddUserRequestModel } from '../interfaces';
 export default class AddUserUseCase implements IUseCaseInputBoundary {
   private usersRepository: IUsersGateway;
   private presenter: IUseCaseOutputBoundary;
-  private dataMapper: IEntityMapper<User, ICreateUserDto>;
+  private dataMapper: IEntityMapper<User, IUserDto>;
 
   public constructor(
     usersRepository: IUsersGateway,
@@ -18,7 +18,7 @@ export default class AddUserUseCase implements IUseCaseInputBoundary {
   ) {
     this.usersRepository = usersRepository;
     this.presenter = presenter;
-    this.dataMapper = new CreateUserMapper();
+    this.dataMapper = new UserMapper();
   }
 
   public async execute(requestDetails: IAddUserRequestModel): Promise<void> {

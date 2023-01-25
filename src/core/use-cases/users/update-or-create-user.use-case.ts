@@ -1,7 +1,9 @@
 import { Result } from '../../lib/result';
-import { UserMap } from '../../../common/mappers';
 import { User } from '../../entities';
 import { ValueNotFoundError } from '../../../common/errors';
+import { UserMapper } from '../../mappers/user';
+import IEntityMapper from '../../mappers/i-entity-mapper'
+import { IUserDto } from '../../dtos/user'
 
 import {
   IUseCaseInputBoundary,
@@ -16,6 +18,7 @@ export default class UpdateOrCreateUserUseCase
 {
   private usersRepository: IUsersGateway;
   private presenter: IUseCaseOutputBoundary;
+  private dataMapper: IEntityMapper<User, IUserDto>;
 
   public constructor(
     usersRepository: IUsersGateway,
@@ -23,6 +26,7 @@ export default class UpdateOrCreateUserUseCase
   ) {
     this.usersRepository = usersRepository;
     this.presenter = presenter;
+    this.dataMapper = new UserMapper();
   }
 
   public async execute({
@@ -50,9 +54,9 @@ export default class UpdateOrCreateUserUseCase
         id
       });
 
-      const updatedUserDTO = UserMap.toDTO(updatedUser!);
+      const updatedUserDto = this.dataMapper.toDTO(updatedUser!);
 
-      this.presenter.execute(updatedUserDTO);
+      this.presenter.execute(updatedUserDto);
     } catch (err: any) {
       if (err.isFailure) throw err;
 
@@ -70,8 +74,8 @@ export default class UpdateOrCreateUserUseCase
 
     const addedUser = await this.usersRepository.create(newUser);
 
-    const addedUserDTO = UserMap.toDTO(addedUser);
+    const addedUserDto = this.dataMapper.toDTO(addedUser);
 
-    this.presenter.execute(addedUserDTO);
+    this.presenter.execute(addedUserDto);
   }
 }

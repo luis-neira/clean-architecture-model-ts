@@ -1,4 +1,5 @@
-export default interface ICreateUserDto {
+export default interface IUserDto {
+  userId: string,
   firstName: string,
   lastName: string,
   meta: {
