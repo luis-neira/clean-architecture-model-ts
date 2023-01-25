@@ -1,6 +1,5 @@
 import { Result } from '../../lib/result';
 import { User } from '../../entities';
-import { ValidationError } from '../../../common/errors';
 import { UserMapper } from '../../mappers/user';
 import IEntityMapper from '../../mappers/i-entity-mapper'
 import { IUserDto } from '../../dtos/user'
@@ -37,13 +36,6 @@ export default class UpdateUserUseCase
       const foundUser = await this.usersRepository.findOne(id);
 
       if (foundUser === null) {
-        if (userDetails.firstName === undefined)
-          throw new ValidationError("'firstName' is required");
-        if (userDetails.lastName === undefined)
-          throw new ValidationError("'lastName' is required");
-        if (userDetails.meta === undefined)
-          throw new ValidationError("'meta' is required");
-
         const addUserUseCase = new AddUserUseCase(
           this.usersRepository,
           this.presenter
@@ -51,13 +43,6 @@ export default class UpdateUserUseCase
         addUserUseCase.execute(userDetails);
         return;
       }
-
-      if (userDetails.firstName === undefined)
-        throw new ValidationError("'firstName' is required");
-      if (userDetails.lastName === undefined)
-        throw new ValidationError("'lastName' is required");
-      if (userDetails.meta === undefined)
-        throw new ValidationError("'meta' is required");
 
       const userCandidate = User.create(userDetails, id);
 
