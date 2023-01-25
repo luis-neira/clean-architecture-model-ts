@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { AddProductController } from '../../../../../../adapters/controllers/products';
 import { ProductsRepositoryFactory } from '../../../../../database/repositories';
 import { CreatedResponder } from '../../../../responders/express/users';
+import { addProductValidator } from '../../../../validators/use-cases/products';
 
 import { Deliverer } from '../interfaces';
 
@@ -21,7 +22,8 @@ export default class AddProductDeliverer extends Deliverer {
 
     const addProductController = new AddProductController(
       productsRepository,
-      createdResponder
+      createdResponder,
+      addProductValidator
     );
 
     const mappedHttpRequest = this.mapHttpRequest(this.req);
