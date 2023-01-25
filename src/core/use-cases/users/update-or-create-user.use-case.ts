@@ -1,15 +1,15 @@
 import { Result } from '../../lib/result';
 import { User } from '../../entities';
-import { ValueNotFoundError } from '../../../common/errors';
+import { ValidationError } from '../../../common/errors';
 import { UserMapper } from '../../mappers/user';
 import IEntityMapper from '../../mappers/i-entity-mapper'
 import { IUserDto } from '../../dtos/user'
+import AddUserUseCase from './add-user.use-case';
 
 import {
   IUseCaseInputBoundary,
   IUseCaseOutputBoundary,
   IUsersGateway,
-  IUserDetails,
   IUpdateOrCreateUserRequestModel
 } from '../interfaces';
 
@@ -38,15 +38,26 @@ export default class UpdateOrCreateUserUseCase
 
       if (foundUser === null) {
         if (userDetails.firstName === undefined)
-          throw new ValueNotFoundError("'name' is required");
+          throw new ValidationError("'firstName' is required");
         if (userDetails.lastName === undefined)
-          throw new ValueNotFoundError("'lastName' is required");
+          throw new ValidationError("'lastName' is required");
         if (userDetails.meta === undefined)
-          throw new ValueNotFoundError("'meta' is required");
+          throw new ValidationError("'meta' is required");
 
-        this.addUserUseCase(userDetails, id);
+        const addUserUseCase = new AddUserUseCase(
+          this.usersRepository,
+          this.presenter
+        );
+        addUserUseCase.execute(userDetails);
         return;
       }
+
+      if (userDetails.firstName === undefined)
+        throw new ValidationError("'firstName' is required");
+      if (userDetails.lastName === undefined)
+        throw new ValidationError("'lastName' is required");
+      if (userDetails.meta === undefined)
+        throw new ValidationError("'meta' is required");
 
       const userCandidate = User.create(userDetails, id);
 
@@ -62,20 +73,5 @@ export default class UpdateOrCreateUserUseCase
 
       throw Result.fail(err);
     }
-  }
-
-  private async addUserUseCase(
-    userDetails: IUserDetails,
-    userId?: string
-  ): Promise<void> {
-    const userIdOrNull = userId ? userId : null;
-
-    const newUser = User.create(userDetails, userIdOrNull);
-
-    const addedUser = await this.usersRepository.create(newUser);
-
-    const addedUserDto = this.dataMapper.toDTO(addedUser);
-
-    this.presenter.execute(addedUserDto);
   }
 }
