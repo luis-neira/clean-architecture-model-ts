@@ -1,4 +1,4 @@
-import { User } from '../../../core/entities';
+import { User } from '../../entities';
 import IEntityMapper from '../i-mapper';
 import ICreateUserDto from '../../dtos/user/create-user.dto';
 

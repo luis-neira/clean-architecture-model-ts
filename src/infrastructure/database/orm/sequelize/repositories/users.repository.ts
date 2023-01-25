@@ -2,24 +2,22 @@ import { Model, ModelCtor, Sequelize } from 'sequelize';
 
 import { User } from '../../../../../core/entities';
 import { IUsersGateway } from '../../../../../core/use-cases/interfaces';
+import { UserMapper } from '../../../../../core/mappers/user'
+import IEntityMapper from '../../../../../core/mappers/i-mapper'
 
 import { DatabaseRepository } from '../../interfaces';
-import CreateUserMapper from '../../../../mappers/user/create-user.map'
-import IEntityMapper from '../../../../mappers/i-mapper'
-import ICreateUserDto from '../../../../dtos/user/create-user.dto'
-
 export default class UsersRepository
   extends DatabaseRepository
   implements IUsersGateway
 {
   private _model: ModelCtor<Model<any, any>>;
 
-  private _mapper: IEntityMapper<User, ICreateUserDto>;
+  private _mapper: Pick<IEntityMapper<User, any>, 'toDomain'>;
 
   public constructor() {
     super();
     this._model = (this._db as Sequelize).model('User');
-    this._mapper = new CreateUserMapper();
+    this._mapper = new UserMapper();
   }
 
   public async create(user: User): Promise<User> {
