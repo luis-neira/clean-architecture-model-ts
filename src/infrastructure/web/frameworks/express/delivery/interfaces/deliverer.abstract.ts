@@ -38,14 +38,14 @@ export default abstract class Deliverer {
   private httpErrorFactory(unknownError: any): HttpError {
     if (unknownError.statusCode) return unknownError;
 
-    if (!unknownError.code) return createHttpError(500, unknownError);
+    if (unknownError.code == null) return createHttpError(500, unknownError);
 
     const httpErrorCreatorByCode: Record<string, () => HttpError> = {
       [constants.ERR_VALIDATION]: () => createHttpError(400, unknownError),
       [constants.ERR_VALUE_NOT_FOUND]: () => createHttpError(404, unknownError)
     };
 
-    if (!httpErrorCreatorByCode[unknownError.code]) return unknownError;
+    if (httpErrorCreatorByCode[unknownError.code] == null) return unknownError;
 
     const createError = httpErrorCreatorByCode[unknownError.code];
 

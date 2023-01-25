@@ -28,7 +28,7 @@ export default class UsersRouter extends RouterMaker {
       this.makeRequestHandler(AddUserDeliverer)
     );
 
-    this._router.put(
+    this._router.patch(
       '/:id',
       this.makeRequestHandler(UpdateUserDeliverer)
     );

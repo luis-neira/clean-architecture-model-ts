@@ -1,9 +1,9 @@
 import { Result } from '../../lib/result';
 import { User } from '../../entities';
+import { ValueNotFoundError } from '../../../common/errors'
 import { UserMapper } from '../../mappers/user';
 import IEntityMapper from '../../mappers/i-entity-mapper'
 import { IUserDto } from '../../dtos/user'
-import AddUserUseCase from './add-user.use-case';
 
 import {
   IUseCaseInputBoundary,
@@ -35,18 +35,15 @@ export default class UpdateUserUseCase
     try {
       const foundUser = await this.usersRepository.findOne(id);
 
-      if (foundUser === null) {
-        const addUserUseCase = new AddUserUseCase(
-          this.usersRepository,
-          this.presenter
-        );
-        addUserUseCase.execute(userDetails);
-        return;
+      if (foundUser == null) {
+        throw new ValueNotFoundError(`userId '${id}' not found`);
       }
 
-      const userCandidate = User.create(userDetails, id);
+      const modifiedUserDetails = Object.assign(foundUser.toJSON(), userDetails)
 
-      const updatedUser = await this.usersRepository.update(userCandidate, {
+      const modifiedUser = User.create(modifiedUserDetails, id);
+
+      const updatedUser = await this.usersRepository.update(modifiedUser, {
         id
       });
 
