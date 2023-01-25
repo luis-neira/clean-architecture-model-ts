@@ -5,7 +5,7 @@ interface IOrderProps {
   productIds: string[];
   date: Date;
   isPayed: boolean;
-  meta: any;
+  meta: Record<string, any>;
 }
 
 export default class Order extends Entity<IOrderProps> {
@@ -41,7 +41,7 @@ export default class Order extends Entity<IOrderProps> {
     return this.props.isPayed;
   }
 
-  get meta(): any {
+  get meta(): Record<string, any> {
     return this.props.meta;
   }
 }

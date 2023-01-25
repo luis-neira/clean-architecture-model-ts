@@ -1,7 +1,9 @@
 import { Result } from '../../lib/result';
 import { ValidationError } from '../../../common/errors';
-import { OrderMap } from '../../../common/mappers';
 import { Order } from '../../entities';
+import { OrderMapper } from '../../mappers/order';
+import IEntityMapper from '../../mappers/i-entity-mapper'
+import { IOrderDto } from '../../dtos/order'
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
@@ -24,6 +26,7 @@ export default class UpdateOrCreateOrderUseCase
   private usersRepository: IUsersGateway;
   private productsRepository: IProductsGateway;
   private presenter: IUseCaseOutputBoundary;
+  private dataMapper: IEntityMapper<Order, IOrderDto>;
 
   public constructor(
     reposByResource: EntityGatewayDictionary,
@@ -33,6 +36,7 @@ export default class UpdateOrCreateOrderUseCase
     this.usersRepository = reposByResource.users;
     this.productsRepository = reposByResource.products;
     this.presenter = presenter;
+    this.dataMapper = new OrderMapper();
   }
 
   public async execute(
@@ -54,9 +58,9 @@ export default class UpdateOrCreateOrderUseCase
         id
       });
 
-      const updatedOrderDTO = OrderMap.toDTO(updatedOrder!);
+      const updatedOrderDto = this.dataMapper.toDTO(updatedOrder!);
 
-      this.presenter.execute(updatedOrderDTO);
+      this.presenter.execute(updatedOrderDto);
     } catch (err: any) {
       if (err.isFailure) throw err;
 
@@ -89,9 +93,9 @@ export default class UpdateOrCreateOrderUseCase
 
     const addedOrder = await this.ordersRepository.create(order);
 
-    const addedOrderDTO = OrderMap.toDTO(addedOrder);
+    const addedOrderDto = this.dataMapper.toDTO(addedOrder);
 
-    this.presenter.execute(addedOrderDTO);
+    this.presenter.execute(addedOrderDto);
   }
 
   private async getValidationErrors(order: Order): Promise<IValidationError[]> {

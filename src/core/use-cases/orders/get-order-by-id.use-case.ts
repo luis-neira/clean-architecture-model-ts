@@ -1,6 +1,9 @@
 import { Result } from '../../lib/result';
 import { ValueNotFoundError } from '../../../common/errors';
-import { OrderMap } from '../../../common/mappers';
+import { Order } from '../../entities';
+import { OrderMapper } from '../../mappers/order';
+import IEntityMapper from '../../mappers/i-entity-mapper'
+import { IOrderDto } from '../../dtos/order'
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import { IOrdersGateway, IGetOrderByIdRequestModel } from '../interfaces';
@@ -8,6 +11,7 @@ import { IOrdersGateway, IGetOrderByIdRequestModel } from '../interfaces';
 export default class GetOrderByIdUseCase implements IUseCaseInputBoundary {
   private ordersRepository: IOrdersGateway;
   private presenter: IUseCaseOutputBoundary;
+  private dataMapper: IEntityMapper<Order, IOrderDto>;
 
   public constructor(
     ordersRepository: IOrdersGateway,
@@ -15,6 +19,7 @@ export default class GetOrderByIdUseCase implements IUseCaseInputBoundary {
   ) {
     this.ordersRepository = ordersRepository;
     this.presenter = presenter;
+    this.dataMapper = new OrderMapper();
   }
 
   public async execute(requestModel: IGetOrderByIdRequestModel): Promise<void> {
@@ -29,9 +34,9 @@ export default class GetOrderByIdUseCase implements IUseCaseInputBoundary {
         );
       }
 
-      const foundOrderDTO = OrderMap.toDTO(foundOrder);
+      const foundOrderDto= this.dataMapper.toDTO(foundOrder);
 
-      this.presenter.execute(foundOrderDTO);
+      this.presenter.execute(foundOrderDto);
     } catch (err: any) {
       if (err.isFailure) throw err;
 
