@@ -10,10 +10,10 @@ import {
   IUseCaseInputBoundary,
   IUseCaseOutputBoundary,
   IUsersGateway,
-  IUpdateOrCreateUserRequestModel
+  IUpdateUserRequestModel
 } from '../interfaces';
 
-export default class UpdateOrCreateUserUseCase
+export default class UpdateUserUseCase
   implements IUseCaseInputBoundary
 {
   private usersRepository: IUsersGateway;
@@ -32,7 +32,7 @@ export default class UpdateOrCreateUserUseCase
   public async execute({
     id,
     userDetails
-  }: IUpdateOrCreateUserRequestModel): Promise<void> {
+  }: IUpdateUserRequestModel): Promise<void> {
     try {
       const foundUser = await this.usersRepository.findOne(id);
 

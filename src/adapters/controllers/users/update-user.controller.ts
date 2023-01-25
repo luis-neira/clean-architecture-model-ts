@@ -1,15 +1,15 @@
-import { UpdateOrCreateUserUseCase } from '../../../core/use-cases/users';
-import { UpdateOrCreateUserPresenter } from '../../presenters/users';
+import { UpdateUserUseCase } from '../../../core/use-cases/users';
+import { UpdateUserPresenter } from '../../presenters/users';
 
 import {
   IUsersGateway,
-  IUpdateOrCreateUserRequestModel
+  IUpdateUserRequestModel
 } from '../../../core/use-cases/interfaces';
 import { IHttpRequestModel, IResponder, IValidator } from '../interfaces';
 
-export default class UpdateOrCreateUserController {
+export default class UpdateUserController {
   private usersRepository: IUsersGateway;
-  private updateOrCreateUserPresenter: UpdateOrCreateUserPresenter;
+  private UpdateUserPresenter: UpdateUserPresenter;
   private validation: IValidator;
 
   public constructor(
@@ -18,14 +18,14 @@ export default class UpdateOrCreateUserController {
     validation: IValidator
   ) {
     this.usersRepository = usersRepository;
-    this.updateOrCreateUserPresenter = new UpdateOrCreateUserPresenter(
+    this.UpdateUserPresenter = new UpdateUserPresenter(
       createdResponder
     );
     this.validation = validation;
   }
 
   public async processRequest(req: IHttpRequestModel): Promise<void> {
-    const requestValidated = await this.validation.validate<IUpdateOrCreateUserRequestModel>({
+    const requestValidated = await this.validation.validate<IUpdateUserRequestModel>({
         id: req.params.id,
         userDetails: req.body
       });
@@ -36,11 +36,11 @@ export default class UpdateOrCreateUserController {
 
     const useCaseRequestModel = requestValidated.getValue()!;
 
-    const updateOrCreateUserUseCase = new UpdateOrCreateUserUseCase(
+    const updateUserUseCase = new UpdateUserUseCase(
       this.usersRepository,
-      this.updateOrCreateUserPresenter
+      this.UpdateUserPresenter
     );
 
-    await updateOrCreateUserUseCase.execute(useCaseRequestModel);
+    await updateUserUseCase.execute(useCaseRequestModel);
   }
 }

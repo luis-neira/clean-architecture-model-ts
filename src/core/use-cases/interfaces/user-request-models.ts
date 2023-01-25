@@ -16,6 +16,6 @@ export interface IDeleteUserRequestModel extends IUserID {}
 
 export interface IGetUserByIdRequestModel extends IUserID {}
 
-export interface IUpdateOrCreateUserRequestModel extends IUserID {
+export interface IUpdateUserRequestModel extends IUserID {
   userDetails: IUserDetails;
 }

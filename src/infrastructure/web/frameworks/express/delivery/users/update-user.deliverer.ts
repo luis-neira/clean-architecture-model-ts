@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { UpdateOrCreateUserController } from '../../../../../../adapters/controllers/users';
+import { UpdateUserController } from '../../../../../../adapters/controllers/users';
 import { UsersRepositoryFactory } from '../../../../../database/repositories';
 import { CreatedResponder } from '../../../../responders/express/users';
-import { updateOrCreateUserValidator } from '../../../../validators/use-cases/users';
+import { updateUserValidator } from '../../../../validators/use-cases/users';
 
 import { Deliverer } from '../interfaces';
 
-export default class UpdateOrCreateUserDeliverer extends Deliverer {
+export default class UpdateUserDeliverer extends Deliverer {
   public constructor(req: Request, res: Response, next: NextFunction) {
     super(req, res, next);
   }
@@ -20,16 +20,16 @@ export default class UpdateOrCreateUserDeliverer extends Deliverer {
 
     const createdResponder = new CreatedResponder(this.res);
 
-    const updateOrCreateUserController = new UpdateOrCreateUserController(
+    const updateUserController = new UpdateUserController(
       usersRepository,
       createdResponder,
-      updateOrCreateUserValidator
+      updateUserValidator
     );
 
     const mappedHttpRequest = this.mapHttpRequest(this.req);
 
     try {
-      await updateOrCreateUserController.processRequest(mappedHttpRequest);
+      await updateUserController.processRequest(mappedHttpRequest);
     } catch (err: any) {
       this.handleError(err);
     }

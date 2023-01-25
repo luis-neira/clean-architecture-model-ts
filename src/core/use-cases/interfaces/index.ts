@@ -13,7 +13,7 @@ export {
   IAddUserRequestModel,
   IDeleteUserRequestModel,
   IGetUserByIdRequestModel,
-  IUpdateOrCreateUserRequestModel
+  IUpdateUserRequestModel
 } from './user-request-models';
 export {
   IProductDetails,

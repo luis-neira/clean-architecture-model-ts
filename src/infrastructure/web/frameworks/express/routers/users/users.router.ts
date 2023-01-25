@@ -3,7 +3,7 @@ import RouterMaker from '../interfaces/router.abstract';
 import { AddUserDeliverer } from '../../delivery/users';
 import { GetUserByIdDeliverer } from '../../delivery/users';
 import { GetUsersDeliverer } from '../../delivery/users';
-import { UpdateOrCreateUserDeliverer } from '../../delivery/users';
+import { UpdateUserDeliverer } from '../../delivery/users';
 import { DeleteUserDeliverer } from '../../delivery/users';
 
 export default class UsersRouter extends RouterMaker {
@@ -30,7 +30,7 @@ export default class UsersRouter extends RouterMaker {
 
     this._router.put(
       '/:id',
-      this.makeRequestHandler(UpdateOrCreateUserDeliverer)
+      this.makeRequestHandler(UpdateUserDeliverer)
     );
 
     this._router.delete(
