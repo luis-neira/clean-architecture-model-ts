@@ -1,7 +1,8 @@
 import got, { Got, HTTPError } from 'got';
 
 import { Image } from '../../../../core/entities';
-import { ImageMap } from '../../../../common/mappers';
+import { ImageMapper } from '../../../../core/mappers/image'
+import IEntityMapper from '../../../../core/mappers/i-entity-mapper'
 
 import { IImagesGateway } from '../../../../core/use-cases/interfaces';
 
@@ -10,18 +11,20 @@ type PropByString = Record<string, any>;
 export default class ImagesRepository implements IImagesGateway {
   private _pathname: string;
   private _client: Got;
+  private _dataMapper: Pick<IEntityMapper<Image, any>, 'toDomain'>;
 
   public constructor() {
     this._pathname = 'photos';
     this._client = got.extend({
       prefixUrl: process.env.SERVICE_JSON_PLACEHOLDER
     });
+    this._dataMapper = new ImageMapper();
   }
 
   public async create(image: Image): Promise<Image> {
     const url = this._pathname;
 
-    const imageRequestDetails = ImageMap.toPersistence(image);
+    const imageRequestDetails = image.toJSON();
 
     const response: PropByString = await this._client.post(url, {
       responseType: 'json',
@@ -32,7 +35,7 @@ export default class ImagesRepository implements IImagesGateway {
     response._externalId = response.id;
     response.id = imageRequestDetails.id;
 
-    return ImageMap.toDomain(response);
+    return this._dataMapper.toDomain(response);
   }
 
   public async update(
@@ -41,7 +44,7 @@ export default class ImagesRepository implements IImagesGateway {
   ): Promise<Image | null> {
     const url = `${this._pathname}/${context.id}`;
 
-    const imageRequestDetails = ImageMap.toPersistence(image);
+    const imageRequestDetails = image.toJSON();
 
     try {
       const response: PropByString = await this._client.put(url, {
@@ -53,7 +56,7 @@ export default class ImagesRepository implements IImagesGateway {
       response._externalId = response.id;
       response.id = imageRequestDetails.id;
 
-      return ImageMap.toDomain(response);
+      return this._dataMapper.toDomain(response);
     } catch (e: any) {
       const notFoundMsg = "Cannot read properties of undefined (reading 'id')";
       if (e.message === notFoundMsg) return null;
@@ -85,7 +88,7 @@ export default class ImagesRepository implements IImagesGateway {
     response._externalId = response.id;
     response.id = null;
 
-    return ImageMap.toDomain(response);
+    return this._dataMapper.toDomain(response);
   }
 
   public async find(): Promise<Image[]> {
@@ -96,7 +99,7 @@ export default class ImagesRepository implements IImagesGateway {
     const mappedResponse = response.map((el) => {
       el._externalId = el.id;
       el.id = null;
-      return ImageMap.toDomain(el);
+      return this._dataMapper.toDomain(el);
     });
 
     return mappedResponse;
