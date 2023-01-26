@@ -1,8 +1,8 @@
 import { Model, ModelCtor, Sequelize } from 'sequelize';
 
 import { Order } from '../../../../../core/entities';
-import { OrderMapper } from '../../../../../core/mappers/order'
-import IEntityMapper from '../../../../../core/mappers/i-entity-mapper'
+import { OrderMapper } from '../../../../../core/mappers/order';
+import IEntityMapper from '../../../../../core/mappers/i-entity-mapper';
 
 import { DatabaseRepository } from '../../interfaces';
 import { IOrdersGateway } from '../../../../../core/use-cases/interfaces';

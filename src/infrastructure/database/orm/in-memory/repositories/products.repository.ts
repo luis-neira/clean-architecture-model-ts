@@ -1,6 +1,8 @@
-import { Product } from '../../../../../core/entities';
 import { InMemoryDatabase } from '../in-memory';
-import { ProductMap } from '../../../../../common/mappers';
+
+import { Product } from '../../../../../core/entities';
+import { ProductMapper } from '../../../../../core/mappers/product'
+import IEntityMapper from '../../../../../core/mappers/i-entity-mapper'
 
 import { DatabaseRepository } from '../../interfaces';
 import { IProductsGateway } from '../../../../../core/use-cases/interfaces';
@@ -11,17 +13,20 @@ export default class ProductsRepository
 {
   private _model: any[];
 
+  private _dataMapper: Pick<IEntityMapper<Product, any>, 'toDomain'>;
+
   public constructor() {
     super();
     this._model = (this._db as InMemoryDatabase).getModel('Product')!;
+    this._dataMapper = new ProductMapper();
   }
 
   public async create(product: Product): Promise<Product> {
-    this._model.push(ProductMap.toPersistence(product));
+    this._model.push(product.toJSON());
 
     const persistedUser = this._model[this._model.length - 1];
 
-    return ProductMap.toDomain(persistedUser);
+    return this._dataMapper.toDomain(persistedUser);
   }
 
   public async update(
@@ -39,7 +44,7 @@ export default class ProductsRepository
 
     Object.assign(this._model[productIndex], updatedProduct);
 
-    return ProductMap.toDomain(this._model[productIndex]);
+    return this._dataMapper.toDomain(this._model[productIndex]);
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -57,7 +62,7 @@ export default class ProductsRepository
 
     if (!persistedUser) return null;
 
-    return ProductMap.toDomain(persistedUser);
+    return this._dataMapper.toDomain(persistedUser);
   }
 
   public async find(): Promise<Product[]> {

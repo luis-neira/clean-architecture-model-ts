@@ -1,8 +1,8 @@
 import { Model, ModelCtor, Sequelize } from 'sequelize';
 
 import { Product } from '../../../../../core/entities';
-import { ProductMapper } from '../../../../../core/mappers/product'
-import IEntityMapper from '../../../../../core/mappers/i-entity-mapper'
+import { ProductMapper } from '../../../../../core/mappers/product';
+import IEntityMapper from '../../../../../core/mappers/i-entity-mapper';
 
 import { DatabaseRepository } from '../../interfaces';
 import { IProductsGateway } from '../../../../../core/use-cases/interfaces';

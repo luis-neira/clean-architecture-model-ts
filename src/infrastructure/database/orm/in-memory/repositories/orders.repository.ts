@@ -1,6 +1,8 @@
-import { Order } from '../../../../../core/entities';
 import { InMemoryDatabase } from '../in-memory';
-import { OrderMap } from '../../../../../common/mappers';
+
+import { Order } from '../../../../../core/entities';
+import { OrderMapper } from '../../../../../core/mappers/order';
+import IEntityMapper from '../../../../../core/mappers/i-entity-mapper';
 
 import { DatabaseRepository } from '../../interfaces';
 import { IOrdersGateway } from '../../../../../core/use-cases/interfaces';
@@ -11,17 +13,20 @@ export default class OrdersRepository
 {
   private _model: any[];
 
+  private _dataMapper: Pick<IEntityMapper<Order, any>, 'toDomain'>;
+
   public constructor() {
     super();
     this._model = (this._db as InMemoryDatabase).getModel('Order')!;
+    this._dataMapper = new OrderMapper();
   }
 
   public async create(order: Order): Promise<Order> {
-    this._model.push(OrderMap.toPersistence(order));
+    this._model.push(order.toJSON());
 
     const persistedOrder = this._model[this._model.length - 1];
 
-    return OrderMap.toDomain(persistedOrder);
+    return this._dataMapper.toDomain(persistedOrder);
   }
 
   public async update(
@@ -40,7 +45,7 @@ export default class OrdersRepository
 
     const persistedOrder = this._model[orderIndex];
 
-    return OrderMap.toDomain(persistedOrder);
+    return this._dataMapper.toDomain(persistedOrder);
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -58,7 +63,7 @@ export default class OrdersRepository
 
     if (!persistedOrder) return null;
 
-    return OrderMap.toDomain(persistedOrder);
+    return this._dataMapper.toDomain(persistedOrder);
   }
 
   public async find(): Promise<Order[]> {

@@ -1,6 +1,8 @@
-import { User } from '../../../../../core/entities';
 import { InMemoryDatabase } from '../in-memory';
-import { UserMap } from '../../../../../common/mappers';
+
+import { User } from '../../../../../core/entities';
+import { UserMapper } from '../../../../../core/mappers/user'
+import IEntityMapper from '../../../../../core/mappers/i-entity-mapper'
 
 import { DatabaseRepository } from '../../interfaces';
 import { IUsersGateway } from '../../../../../core/use-cases/interfaces';
@@ -11,17 +13,20 @@ export default class UsersRepository
 {
   private _model: any[];
 
+  private _dataMapper: Pick<IEntityMapper<User, any>, 'toDomain'>;
+
   public constructor() {
     super();
     this._model = (this._db as InMemoryDatabase).getModel('User')!;
+    this._dataMapper = new UserMapper();
   }
 
   public async create(user: User): Promise<User> {
-    this._model.push(UserMap.toPersistence(user));
+    this._model.push(user.toJSON());
 
     const persistedUser = this._model[this._model.length - 1];
 
-    return UserMap.toDomain(persistedUser);
+    return this._dataMapper.toDomain(persistedUser);
   }
 
   public async update(
@@ -37,7 +42,7 @@ export default class UsersRepository
 
     Object.assign(this._model[userIndex], updatedUser);
 
-    return UserMap.toDomain(this._model[userIndex]);
+    return this._dataMapper.toDomain(this._model[userIndex]);
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -55,7 +60,7 @@ export default class UsersRepository
 
     if (!persistedUser) return null;
 
-    return UserMap.toDomain(persistedUser);
+    return this._dataMapper.toDomain(persistedUser);
   }
 
   public async find(): Promise<User[]> {
