@@ -3,27 +3,36 @@ import { IHttpRequestModel } from '../interfaces';
 import { GetProductByIdUseCase } from '../../../core/use-cases/products';
 import { GetProductByIdPresenter } from '../../../adapters/presenters/products';
 
-import { IProductsGateway } from '../../../core/use-cases/interfaces';
-import { IResponder } from '../interfaces';
+import { IProductsGateway, IGetProductByIdRequestModel } from '../../../core/use-cases/interfaces';
+import { IResponder, IValidator } from '../interfaces';
 
 export default class GetProductByIdController {
   private productsRepository: IProductsGateway;
   private getProductByIdPresenter: GetProductByIdPresenter;
+  private validation: IValidator;
 
   public constructor(
     productsRepository: IProductsGateway,
-    createdResponder: IResponder
+    createdResponder: IResponder,
+    validation: IValidator
   ) {
     this.productsRepository = productsRepository;
     this.getProductByIdPresenter = new GetProductByIdPresenter(
       createdResponder
     );
+    this.validation = validation;
   }
 
   async processRequest(req: IHttpRequestModel): Promise<void> {
-    const useCaseRequestModel = {
+    const requestValidated = await this.validation.validate<IGetProductByIdRequestModel>({
       id: req.params.id
-    };
+    });
+
+    if (requestValidated.isFailure) {
+      throw requestValidated;
+    }
+
+    const useCaseRequestModel = requestValidated.getValue()!;
 
     const getProductByIdUseCase = new GetProductByIdUseCase(
       this.productsRepository,

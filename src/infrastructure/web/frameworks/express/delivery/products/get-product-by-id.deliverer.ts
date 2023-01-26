@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { GetProductByIdController } from '../../../../../../adapters/controllers/products';
 import { ProductsRepositoryFactory } from '../../../../../database/repositories';
 import { CreatedResponder } from '../../../../responders/express/users';
+import { getProductByIdValidator } from '../../../../validators/use-cases/products';
 
 import { Deliverer } from '../interfaces';
 
@@ -21,7 +22,8 @@ export default class GetProductByIdDeliverer extends Deliverer {
 
     const getProductByIdController = new GetProductByIdController(
       productsRepository,
-      createdResponder
+      createdResponder,
+      getProductByIdValidator
     );
 
     const mappedHttpRequest = this.mapHttpRequest(this.req);

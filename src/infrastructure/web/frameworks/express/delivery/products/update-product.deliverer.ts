@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { UpdateProductController } from '../../../../../../adapters/controllers/products';
 import { ProductsRepositoryFactory } from '../../../../../database/repositories';
 import { CreatedResponder } from '../../../../responders/express/users';
+import { updateProductValidator } from '../../../../validators/use-cases/products';
 
 import { Deliverer } from '../interfaces';
 
@@ -21,7 +22,8 @@ export default class UpdateProductDeliverer extends Deliverer {
 
     const updateProductController = new UpdateProductController(
       productsRepository,
-      createdResponder
+      createdResponder,
+      updateProductValidator
     );
 
     const mappedHttpRequest = this.mapHttpRequest(this.req);

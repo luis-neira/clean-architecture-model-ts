@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { DeleteProductController } from '../../../../../../adapters/controllers/products';
 import { ProductsRepositoryFactory } from '../../../../../database/repositories';
 import { NoContentResponder } from '../../../../responders/express/users';
+import { deleteProductByIdValidator } from '../../../../validators/use-cases/products';
 
 import { Deliverer } from '../interfaces';
 
@@ -21,7 +22,8 @@ export default class DeleteProductDeliverer extends Deliverer {
 
     const deleteProductController = new DeleteProductController(
       productsRepository,
-      noContentResponder
+      noContentResponder,
+      deleteProductByIdValidator
     );
 
     const mappedHttpRequest = this.mapHttpRequest(this.req);
