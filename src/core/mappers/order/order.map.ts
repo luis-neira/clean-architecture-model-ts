@@ -20,7 +20,7 @@ export default class OrderMapper implements IEntityMapper<Order, IOrderDto> {
         userId: raw.userId,
         productIds: raw.productIds,
         date: raw.date,
-        isPayed: raw.isPayed,
+        isPaid: raw.isPaid,
         meta: raw.meta
       },
       raw.id

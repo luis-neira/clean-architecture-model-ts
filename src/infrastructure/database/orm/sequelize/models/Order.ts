@@ -5,7 +5,7 @@ interface IOrderAttributes {
   userId: number;
   productIds: JSON;
   date: Date;
-  isPayed: Boolean;
+  isPaid: Boolean;
   meta: JSON;
 }
 
@@ -19,7 +19,7 @@ class Order
   public userId!: number;
   public productIds!: JSON;
   public date!: Date;
-  public isPayed!: Boolean;
+  public isPaid!: Boolean;
   public meta!: JSON;
   // timestamps
   public readonly createdAt!: Date;
@@ -56,7 +56,7 @@ function initOrderModel(sequelize: Sequelize) {
           isDate: true
         }
       },
-      isPayed: {
+      isPaid: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         validate: {

@@ -5,6 +5,6 @@ export default Joi.object({
   userDetails: Joi.object({
     firstName: Joi.string().alphanum().min(3).max(30),
     lastName: Joi.string().alphanum().min(3).max(30),
-    meta: Joi.object().pattern(Joi.string(), Joi.string().max(100))
+    meta: Joi.object().pattern(Joi.string(), Joi.any())
   }).required()
 });

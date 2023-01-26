@@ -7,6 +7,7 @@ import {
   OrdersRepositoryFactory
 } from '../../../../../database/repositories';
 import { CreatedResponder } from '../../../../responders/express/users';
+import { updateOrderValidator } from '../../../../validators/use-cases/orders';
 
 import { Deliverer } from '../interfaces';
 
@@ -41,7 +42,8 @@ export default class UpdateOrderDeliverer extends Deliverer {
 
     const updateOrderController = new UpdateOrderController(
       repositoryDictionary,
-      createdResponder
+      createdResponder,
+      updateOrderValidator
     );
 
     const mappedHttpRequest = this.mapHttpRequest(this.req);

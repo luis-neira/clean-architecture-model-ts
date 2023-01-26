@@ -8,6 +8,6 @@ export default Joi.object({
     images: Joi.array().items(Joi.string().min(3).max(30)),
     price: Joi.number().precision(2),
     color: Joi.string().alphanum().min(3).max(30),
-    meta: Joi.object().pattern(Joi.string(), Joi.string().max(100))
+    meta: Joi.object().pattern(Joi.string(), Joi.any())
   }).required()
 });

@@ -3,28 +3,37 @@ import { IHttpRequestModel } from '../interfaces';
 import { UpdateOrderUseCase } from '../../../core/use-cases/orders';
 import { UpdateOrderPresenter } from '../../presenters/orders';
 
-import { EntityGatewayDictionary } from '../../../core/use-cases/interfaces';
-import { IResponder } from '../interfaces';
+import { EntityGatewayDictionary, IUpdateOrderRequestModel } from '../../../core/use-cases/interfaces';
+import { IResponder, IValidator } from '../interfaces';
 
 export default class UpdateOrderController {
   private reposByResource: EntityGatewayDictionary;
   private UpdateOrderPresenter: UpdateOrderPresenter;
+  private validation: IValidator;
 
   public constructor(
     reposByResource: EntityGatewayDictionary,
-    createdResponder: IResponder
+    createdResponder: IResponder,
+    validation: IValidator
   ) {
     this.reposByResource = reposByResource;
     this.UpdateOrderPresenter = new UpdateOrderPresenter(
       createdResponder
     );
+    this.validation = validation;
   }
 
   async processRequest(req: IHttpRequestModel): Promise<void> {
-    const useCaseRequestModel = {
+    const requestValidated = await this.validation.validate<IUpdateOrderRequestModel>({
       id: req.params.id,
       orderDetails: req.body
-    };
+    });
+
+    if (requestValidated.isFailure) {
+      throw requestValidated;
+    }
+
+    const useCaseRequestModel = requestValidated.getValue()!;
 
     const updateOrderUseCase = new UpdateOrderUseCase(
       this.reposByResource,

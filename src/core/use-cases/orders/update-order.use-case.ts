@@ -72,7 +72,7 @@ export default class UpdateOrderUseCase
         userId: orderDetails.userId,
         productIds: orderDetails.productIds,
         date: orderDetails.date,
-        isPayed: orderDetails.isPayed,
+        isPaid: orderDetails.isPaid,
         meta: orderDetails.meta
       },
       orderIdOrNull

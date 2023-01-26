@@ -6,7 +6,7 @@ export interface IOrderDetails {
   userId: string;
   productIds: string[];
   date: Date;
-  isPayed: boolean;
+  isPaid: boolean;
   meta: any;
 }
 

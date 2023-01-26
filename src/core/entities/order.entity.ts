@@ -4,7 +4,7 @@ interface IOrderProps {
   userId: string;
   productIds: string[];
   date: Date;
-  isPayed: boolean;
+  isPaid: boolean;
   meta: Record<string, any>;
 }
 
@@ -18,11 +18,11 @@ export default class Order extends Entity<IOrderProps> {
       userId = '00000000-0000-0000-0000-000000000000',
       productIds = [],
       date = new Date(),
-      isPayed = false,
+      isPaid = false,
       meta = {}
     } = orderData;
 
-    return new Order({ userId, productIds, date, isPayed, meta }, id);
+    return new Order({ userId, productIds, date, isPaid, meta }, id);
   }
 
   get userId(): string {
@@ -37,8 +37,8 @@ export default class Order extends Entity<IOrderProps> {
     return this.props.date;
   }
 
-  get isPayed(): boolean {
-    return this.props.isPayed;
+  get isPaid(): boolean {
+    return this.props.isPaid;
   }
 
   get meta(): Record<string, any> {

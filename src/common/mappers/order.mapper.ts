@@ -9,7 +9,7 @@ export default class OrderMap {
       userId: order.userId,
       productIds: order.productIds,
       date: order.date,
-      isPayed: order.isPayed,
+      isPaid: order.isPaid,
       meta: order.meta
     };
   }
@@ -20,7 +20,7 @@ export default class OrderMap {
       userId: order.userId,
       productIds: order.productIds,
       date: order.date,
-      isPayed: order.isPayed,
+      isPaid: order.isPaid,
       meta: order.meta
     };
   }
@@ -31,7 +31,7 @@ export default class OrderMap {
         userId: raw.userId,
         productIds: raw.productIds,
         date: raw.date,
-        isPayed: raw.isPayed,
+        isPaid: raw.isPaid,
         meta: raw.meta
       },
       raw.id

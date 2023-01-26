@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { GetOrderByIdController } from '../../../../../../adapters/controllers/orders';
 import { OrdersRepositoryFactory } from '../../../../../database/repositories';
 import { OkResponder } from '../../../../responders/express/users';
+import { getOrderByIdValidator } from '../../../../validators/use-cases/orders';
 
 import { Deliverer } from '../interfaces';
 
@@ -21,7 +22,8 @@ export default class GetOrderByIdDeliverer extends Deliverer {
 
     const getOrderByIdController = new GetOrderByIdController(
       ordersRepository,
-      okResponder
+      okResponder,
+      getOrderByIdValidator
     );
 
     const mappedHttpRequest = this.mapHttpRequest(this.req);

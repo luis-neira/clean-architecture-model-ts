@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { DeleteOrderController } from '../../../../../../adapters/controllers/orders';
 import { OrdersRepositoryFactory } from '../../../../../database/repositories';
 import { NoContentResponder } from '../../../../responders/express/users';
+import { deleteOrderByIdValidator } from '../../../../validators/use-cases/orders';
 
 import { Deliverer } from '../interfaces';
 
@@ -21,7 +22,8 @@ export default class DeleteOrderDeliverer extends Deliverer {
 
     const deleteOrderController = new DeleteOrderController(
       ordersRepository,
-      noContentResponder
+      noContentResponder,
+      deleteOrderByIdValidator
     );
 
     const mappedHttpRequest = this.mapHttpRequest(this.req);

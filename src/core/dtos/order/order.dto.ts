@@ -3,6 +3,6 @@ export default interface IOrderDto {
   userId: string,
   productIds: string[],
   date: Date,
-  isPayed: boolean,
+  isPaid: boolean,
   meta: Record<string, any>
 }

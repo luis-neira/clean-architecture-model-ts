@@ -38,14 +38,14 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
   }
 
   public async execute(requestModel: IAddOrderRequestModel): Promise<void> {
-    const { userId, productIds, date, isPayed, meta } = requestModel;
+    const { userId, productIds, date, isPaid, meta } = requestModel;
 
     const order = Order.create(
       {
         userId,
         productIds,
         date,
-        isPayed,
+        isPaid,
         meta
       },
       null
