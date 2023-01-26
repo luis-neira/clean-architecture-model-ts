@@ -1,7 +1,8 @@
 import { Model, ModelCtor, Sequelize } from 'sequelize';
 
-import { OrderMap } from '../../../../../common/mappers';
 import { Order } from '../../../../../core/entities';
+import { OrderMapper } from '../../../../../core/mappers/order'
+import IEntityMapper from '../../../../../core/mappers/i-entity-mapper'
 
 import { DatabaseRepository } from '../../interfaces';
 import { IOrdersGateway } from '../../../../../core/use-cases/interfaces';
@@ -12,17 +13,20 @@ export default class OrdersRepository
 {
   private _model: ModelCtor<Model<any, any>>;
 
+  private _dataMapper: Pick<IEntityMapper<Order, any>, 'toDomain'>;
+
   public constructor() {
     super();
     this._model = (this._db as Sequelize).model('Order');
+    this._dataMapper = new OrderMapper();
   }
 
   public async create(order: Order): Promise<Order> {
-    const orderRawData = OrderMap.toPersistence(order);
+    const orderRawData = order.toJSON();
 
     const addedOrder = await this._model.create(orderRawData);
 
-    return OrderMap.toDomain(addedOrder.toJSON());
+    return this._dataMapper.toDomain(addedOrder.toJSON());
   }
 
   public async findOne(orderId: string): Promise<Order | null> {
@@ -32,7 +36,7 @@ export default class OrdersRepository
 
     if (!foundOrder) return null;
 
-    return OrderMap.toDomain(foundOrder.toJSON());
+    return this._dataMapper.toDomain(foundOrder.toJSON());
   }
 
   public async update(
@@ -54,7 +58,7 @@ export default class OrdersRepository
 
     await foundOrder.save();
 
-    return OrderMap.toDomain(foundOrder.toJSON());
+    return this._dataMapper.toDomain(foundOrder.toJSON());
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -71,7 +75,7 @@ export default class OrdersRepository
 
   public async find(): Promise<Order[]> {
     const foundProducts = (await this._model.findAll()).map((el) =>
-      OrderMap.toDomain(el.toJSON())
+      this._dataMapper.toDomain(el.toJSON())
     );
 
     return foundProducts;
