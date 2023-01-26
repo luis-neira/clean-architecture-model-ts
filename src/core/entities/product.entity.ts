@@ -19,7 +19,7 @@ export default class Product extends Entity<IProductProps> {
       name,
       description,
       images = [],
-      price = 0.0,
+      price = 0.00,
       color,
       meta = {}
     }: IProductProps = productData;

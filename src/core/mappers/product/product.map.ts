@@ -1,20 +1,27 @@
 import { Product } from '../../entities';
 import IEntityMapper from '../i-entity-mapper';
-import IProdcutDto from '../../dtos/product/product.dto';
+import IProductDto from '../../dtos/product/product.dto';
 
-export default class ProductMapper implements IEntityMapper<Product, IProdcutDto> {
+export default class ProductMapper implements IEntityMapper<Product, IProductDto> {
   public constructor() {}
 
-  public toDTO(product: Product): IProdcutDto {
+  public toDTO(product: Product): IProductDto {
     const p = product.toJSON();
     Reflect.deleteProperty(p, 'id');
+    Reflect.deleteProperty(p, 'price');
+
     return {
       productId: product.id,
-      ...p
+      ...p,
+      price: product.price.toFixed(2)
     };
   }
 
   public toDomain(raw: { [key:string]: any }): Product {
+    if (typeof raw.price === 'string') {
+      raw.price = parseFloat(raw.price);
+    }
+    
     return Product.create(
       {
         name: raw.name,

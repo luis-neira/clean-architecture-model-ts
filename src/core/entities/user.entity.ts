@@ -3,9 +3,7 @@ import Entity from './interfaces/entity.abstract';
 interface IUserProps {
   firstName: string;
   lastName: string;
-  meta: {
-    [key: string]: any
-  }
+  meta: Record<string, any>
 }
 
 export default class User extends Entity<IUserProps> {
@@ -31,7 +29,7 @@ export default class User extends Entity<IUserProps> {
     return this.props.lastName;
   }
 
-  get meta(): any {
+  get meta(): Record<string, any> {
     return this.props.meta;
   }
 }

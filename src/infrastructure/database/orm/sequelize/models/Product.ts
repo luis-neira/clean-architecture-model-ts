@@ -5,7 +5,7 @@ interface IProductAttributes {
   name: string;
   description: string;
   images: JSON;
-  price: string;
+  price: number;
   color: string;
   meta: JSON;
 }
@@ -20,7 +20,7 @@ class Product
     public name!: string;
     public description!: string;
     public images!: JSON;
-    public price!: string;
+    public price!: number;
     public color!: string;
     public meta!: JSON;
     // timestamps
@@ -60,7 +60,7 @@ function initProductModel(sequelize: Sequelize) {
         allowNull: false
       },
       price: {
-        type: DataTypes.STRING,
+        type: DataTypes.FLOAT,
         allowNull: false,
         validate: {
           notEmpty: true

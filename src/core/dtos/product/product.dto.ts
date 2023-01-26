@@ -3,7 +3,7 @@ export default interface IProductDto {
   name: string,
   description: string,
   images: string[],
-  price: number,
+  price: string,
   color: string,
   meta: Record<string, any>
 }

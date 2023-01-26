@@ -22,21 +22,9 @@ export default class AddProductUseCase implements IUseCaseInputBoundary {
   }
 
   async execute(requestModel: IAddProductRequestModel): Promise<void> {
-    const { name, description, images, price, color, meta } = requestModel;
-
-    const product = Product.create(
-      {
-        name,
-        description,
-        images,
-        price,
-        color,
-        meta
-      },
-      null
-    );
-
     try {
+      const product = Product.create(requestModel, null);
+
       const addedProduct = await this.productsRepository.create(product);
 
       const addedProductDto = this.dataMapper.toDTO(addedProduct);
