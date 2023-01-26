@@ -1,7 +1,8 @@
 import { Model, ModelCtor, Sequelize } from 'sequelize';
 
-import { ProductMap } from '../../../../../common/mappers';
 import { Product } from '../../../../../core/entities';
+import { ProductMapper } from '../../../../../core/mappers/product'
+import IEntityMapper from '../../../../../core/mappers/i-entity-mapper'
 
 import { DatabaseRepository } from '../../interfaces';
 import { IProductsGateway } from '../../../../../core/use-cases/interfaces';
@@ -12,17 +13,20 @@ export default class ProductsRepository
 {
   private _model: ModelCtor<Model<any, any>>;
 
+  private _dataMapper: Pick<IEntityMapper<Product, any>, 'toDomain'>;
+
   public constructor() {
     super();
     this._model = (this._db as Sequelize).model('Product');
+    this._dataMapper = new ProductMapper();
   }
 
   public async create(product: Product): Promise<Product> {
-    const productRawData = ProductMap.toPersistence(product);
+    const productRawData = product.toJSON();
 
     const addedProduct = await this._model.create(productRawData);
 
-    return ProductMap.toDomain(addedProduct.toJSON());
+    return this._dataMapper.toDomain(addedProduct.toJSON());
   }
 
   public async findOne(productId: string): Promise<Product | null> {
@@ -32,7 +36,7 @@ export default class ProductsRepository
 
     if (!foundProduct) return null;
 
-    return ProductMap.toDomain(foundProduct.toJSON());
+    return this._dataMapper.toDomain(foundProduct.toJSON());
   }
 
   public async update(
@@ -54,7 +58,7 @@ export default class ProductsRepository
 
     await foundProduct.save();
 
-    return ProductMap.toDomain(foundProduct.toJSON());
+    return this._dataMapper.toDomain(foundProduct.toJSON());
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -71,7 +75,7 @@ export default class ProductsRepository
 
   public async find(): Promise<Product[]> {
     const foundProducts = (await this._model.findAll()).map((el) =>
-      ProductMap.toDomain(el.toJSON())
+      this._dataMapper.toDomain(el.toJSON())
     );
 
     return foundProducts;
