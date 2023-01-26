@@ -1,10 +1,10 @@
-import { AddUserUseCase } from '../../../core/use-cases/users';
-import { AddUserPresenter } from '../../../adapters/presenters/users';
+import { AddUserUseCase } from '@core/use-cases/users';
+import { AddUserPresenter } from '../../presenters/users';
 
 import {
   IUsersGateway,
   IAddUserRequestModel
-} from '../../../core/use-cases/interfaces';
+} from '@core/use-cases/interfaces';
 import { IHttpRequestModel, IResponder, IValidator } from '../interfaces';
 
 export default class AddUserController {

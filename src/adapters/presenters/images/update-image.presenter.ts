@@ -1,6 +1,6 @@
-import { SuccessResponse } from '../../../common/contracts';
+import { SuccessResponse } from '@common/contracts';
 
-import { IUseCaseOutputBoundary } from '../../../core/use-cases/interfaces';
+import { IUseCaseOutputBoundary } from '@core/use-cases/interfaces';
 import { IResponder } from '../../controllers/interfaces';
 
 export default class UpdateImagePresenter implements IUseCaseOutputBoundary {

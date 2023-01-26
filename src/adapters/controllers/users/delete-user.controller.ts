@@ -1,10 +1,10 @@
-import { DeleteUserUseCase } from '../../../core/use-cases/users';
-import { DeleteUserPresenter } from '../../../adapters/presenters/users';
+import { DeleteUserUseCase } from '@core/use-cases/users';
+import { DeleteUserPresenter } from '../../presenters/users';
 
 import {
   IUsersGateway,
   IDeleteUserRequestModel
-} from '../../../core/use-cases/interfaces';
+} from '@core/use-cases/interfaces';
 import { IHttpRequestModel, IResponder, IValidator } from '../interfaces';
 
 export default class DeleteUserController {

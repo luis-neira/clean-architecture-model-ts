@@ -1,6 +1,6 @@
 import { Result } from '../../lib/result';
 import { User } from '../../entities';
-import { ValueNotFoundError } from '../../../common/errors'
+import { ValueNotFoundError } from '@common/errors'
 import { UserMapper } from '../../mappers/user';
 import IEntityMapper from '../../mappers/i-entity-mapper'
 import { IUserDto } from '../../dtos/user'

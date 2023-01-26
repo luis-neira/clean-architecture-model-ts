@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { UpdateImageController } from '../../../../../../adapters/controllers/images';
+import { UpdateImageController } from '@adapters/controllers/images';
 import { ImagesRepository } from '../../../../../external-service/json-placeholder/repositories';
 import { CreatedResponder } from '../../../../responders/express/users';
 

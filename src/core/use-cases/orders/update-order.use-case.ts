@@ -1,5 +1,5 @@
 import { Result } from '../../lib/result';
-import { ValidationError } from '../../../common/errors';
+import { ValidationError } from '@common/errors';
 import { Order, Product } from '../../entities';
 import { ValueNotFoundError } from '../../../common/errors'
 import { OrderMapper } from '../../mappers/order';

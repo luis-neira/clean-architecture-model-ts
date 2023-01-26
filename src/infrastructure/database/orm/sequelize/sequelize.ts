@@ -4,7 +4,7 @@ import { initUserModel } from './models/User';
 import { initProductModel } from './models/Product';
 import { initOrderModel } from './models/Order';
 
-import * as constants from '../../../../config/constants';
+import * as constants from '@config/constants';
 
 const dialectOpts = {};
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { DeleteOrderController } from '../../../../../../adapters/controllers/orders';
+import { DeleteOrderController } from '@adapters/controllers/orders';
 import { OrdersRepositoryFactory } from '../../../../../database/repositories';
 import { NoContentResponder } from '../../../../responders/express/users';
 import { deleteOrderByIdValidator } from '../../../../validators/use-cases/orders';

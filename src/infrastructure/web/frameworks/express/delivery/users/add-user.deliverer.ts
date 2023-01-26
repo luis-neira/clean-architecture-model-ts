@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { AddUserController } from '../../../../../../adapters/controllers/users';
+import { AddUserController } from '@adapters/controllers/users';
 import { UsersRepositoryFactory } from '../../../../../database/repositories';
 import { CreatedResponder } from '../../../../responders/express/users';
 import { addUserValidator } from '../../../../validators/use-cases/users';

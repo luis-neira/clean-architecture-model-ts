@@ -1,6 +1,6 @@
 import { InMemoryDatabase } from '../in-memory';
 
-import logger from '../../../../../common/logger';
+import logger from '@common/logger';
 import DatabaseClient from '../../interfaces/db-client.abstract';
 
 export default class InMemoryClient extends DatabaseClient {

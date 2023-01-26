@@ -1,10 +1,8 @@
-import { IHttpRequestModel } from '../interfaces';
+import { DeleteProductUseCase } from '@core/use-cases/products';
+import { DeleteProductPresenter } from '../../presenters/products';
 
-import { DeleteProductUseCase } from '../../../core/use-cases/products';
-import { DeleteProductPresenter } from '../../../adapters/presenters/products';
-
-import { IProductsGateway, IDeleteProductRequestModel } from '../../../core/use-cases/interfaces';
-import { IResponder, IValidator } from '../interfaces';
+import { IProductsGateway, IDeleteProductRequestModel } from '@core/use-cases/interfaces';
+import { IResponder, IValidator, IHttpRequestModel } from '../interfaces';
 
 export default class DeleteProductController {
   private productsRepository: IProductsGateway;

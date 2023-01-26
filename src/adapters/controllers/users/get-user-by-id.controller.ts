@@ -1,10 +1,10 @@
-import { GetUserByIdUseCase } from '../../../core/use-cases/users';
-import { GetUserByIdPresenter } from '../../../adapters/presenters/users';
+import { GetUserByIdUseCase } from '@core/use-cases/users';
+import { GetUserByIdPresenter } from '../../presenters/users';
 
 import {
   IUsersGateway,
   IGetUserByIdRequestModel
-} from '../../../core/use-cases/interfaces';
+} from '@core/use-cases/interfaces';
 import { IHttpRequestModel, IResponder, IValidator } from '../interfaces';
 
 export default class GetUserByIdController {

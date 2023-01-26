@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { DeleteUserController } from '../../../../../../adapters/controllers/users';
+import { DeleteUserController } from '@adapters/controllers/users';
 import { UsersRepositoryFactory } from '../../../../../database/repositories';
 import { NoContentResponder } from '../../../../responders/express/users';
 import { deleteUserByIdValidator } from '../../../../validators/use-cases/users';

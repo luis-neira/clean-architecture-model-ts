@@ -1,10 +1,8 @@
-import { IHttpRequestModel } from '../interfaces';
+import { AddProductUseCase } from '@core/use-cases/products';
+import { AddProductPresenter } from '../../presenters/products';
 
-import { AddProductUseCase } from '../../../core/use-cases/products';
-import { AddProductPresenter } from '../../../adapters/presenters/products';
-
-import { IProductsGateway, IAddProductRequestModel } from '../../../core/use-cases/interfaces';
-import { IResponder, IValidator } from '../interfaces';
+import { IProductsGateway, IAddProductRequestModel } from '@core/use-cases/interfaces';
+import { IResponder, IValidator, IHttpRequestModel } from '../interfaces';
 
 export default class AddProductController {
   private productsRepository: IProductsGateway;

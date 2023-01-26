@@ -1,10 +1,8 @@
-import { IHttpRequestModel } from '../interfaces';
+import { AddOrderUseCase } from '@core/use-cases/orders';
+import { AddOrderPresenter } from '../../presenters/orders';
 
-import { AddOrderUseCase } from '../../../core/use-cases/orders';
-import { AddOrderPresenter } from '../../../adapters/presenters/orders';
-
-import { EntityGatewayDictionary, IAddOrderRequestModel } from '../../../core/use-cases/interfaces';
-import { IResponder, IValidator } from '../interfaces';
+import { EntityGatewayDictionary, IAddOrderRequestModel } from '@core/use-cases/interfaces';
+import { IResponder, IValidator, IHttpRequestModel } from '../interfaces';
 
 export default class AddOrderController {
   private reposByResource: EntityGatewayDictionary;

@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import createHttpError, { HttpError } from 'http-errors';
 
-import * as constants from '../../../../../../config/constants';
-import { IHttpRequestModel } from '../../../../../../adapters/controllers/interfaces';
+import * as constants from '@config/constants';
+import { IHttpRequestModel } from '@adapters/controllers/interfaces';
 
 export default abstract class Deliverer {
   protected req: Request;

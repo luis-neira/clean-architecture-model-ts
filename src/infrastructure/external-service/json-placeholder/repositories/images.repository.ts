@@ -1,10 +1,10 @@
 import got, { Got, HTTPError } from 'got';
 
-import { Image } from '../../../../core/entities';
-import { ImageMapper } from '../../../../core/mappers/image'
-import IEntityMapper from '../../../../core/mappers/i-entity-mapper'
+import { Image } from '@core/entities';
+import { ImageMapper } from '@core/mappers/image'
+import IEntityMapper from '@core/mappers/i-entity-mapper'
 
-import { IImagesGateway } from '../../../../core/use-cases/interfaces';
+import { IImagesGateway } from '@core/use-cases/interfaces';
 
 type PropByString = Record<string, any>;
 

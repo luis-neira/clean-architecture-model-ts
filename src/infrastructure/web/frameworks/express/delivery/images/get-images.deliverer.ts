@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { GetImagesController } from '../../../../../../adapters/controllers/images';
+import { GetImagesController } from '@adapters/controllers/images';
 import { ImagesRepository } from '../../../../../external-service/json-placeholder/repositories';
 import { OkResponder } from '../../../../responders/express/users';
 

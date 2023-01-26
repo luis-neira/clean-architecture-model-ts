@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-import logger from '../../../../../common/logger';
+import logger from '@common/logger';
 import DatabaseClient from '../../interfaces/db-client.abstract';
 
 export default class SequelizeClient extends DatabaseClient {

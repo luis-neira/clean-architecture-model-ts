@@ -1,11 +1,11 @@
 import { Model, ModelCtor, Sequelize } from 'sequelize';
 
-import { Order } from '../../../../../core/entities';
-import { OrderMapper } from '../../../../../core/mappers/order';
-import IEntityMapper from '../../../../../core/mappers/i-entity-mapper';
+import { Order } from '@core/entities';
+import { OrderMapper } from '@core/mappers/order';
+import IEntityMapper from '@core/mappers/i-entity-mapper';
+import { IOrdersGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '../../interfaces';
-import { IOrdersGateway } from '../../../../../core/use-cases/interfaces';
 
 export default class OrdersRepository
   extends DatabaseRepository

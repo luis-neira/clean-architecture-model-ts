@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { DeleteProductController } from '../../../../../../adapters/controllers/products';
+import { DeleteProductController } from '@adapters/controllers/products';
 import { ProductsRepositoryFactory } from '../../../../../database/repositories';
 import { NoContentResponder } from '../../../../responders/express/users';
 import { deleteProductByIdValidator } from '../../../../validators/use-cases/products';

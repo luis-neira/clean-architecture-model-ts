@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { IResponder } from '../../../../../adapters/controllers/interfaces';
+import { IResponder } from '@adapters/controllers/interfaces';
 
 export default class NoContentResponder implements IResponder {
   private res: express.Response;

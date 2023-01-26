@@ -3,7 +3,7 @@ import { Server } from 'http';
 import { createTerminus } from '@godaddy/terminus';
 
 import { DatabaseClient } from '../../database/orm';
-import logger from '../../../common/logger';
+import logger from '@common/logger';
 
 export default class ServerConfig {
   private _server: Server;

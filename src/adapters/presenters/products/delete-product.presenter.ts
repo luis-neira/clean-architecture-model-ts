@@ -1,4 +1,4 @@
-import { IUseCaseOutputBoundary } from '../../../core/use-cases/interfaces';
+import { IUseCaseOutputBoundary } from '@core/use-cases/interfaces';
 import { IResponder } from '../../controllers/interfaces';
 
 export default class DeleteProductPresenter implements IUseCaseOutputBoundary {

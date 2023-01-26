@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { AddOrderController } from '../../../../../../adapters/controllers/orders';
+import { AddOrderController } from '@adapters/controllers/orders';
 import {
   UsersRepositoryFactory,
   ProductsRepositoryFactory,

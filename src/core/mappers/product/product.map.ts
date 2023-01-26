@@ -1,6 +1,6 @@
 import { Product } from '../../entities';
 import IEntityMapper from '../i-entity-mapper';
-import IProductDto from '../../dtos/product/product.dto';
+import { IProductDto } from '../../dtos/product';
 
 export default class ProductMapper implements IEntityMapper<Product, IProductDto> {
   public constructor() {}

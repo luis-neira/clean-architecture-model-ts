@@ -1,11 +1,11 @@
 import { InMemoryDatabase } from '../in-memory';
 
-import { User } from '../../../../../core/entities';
-import { UserMapper } from '../../../../../core/mappers/user'
-import IEntityMapper from '../../../../../core/mappers/i-entity-mapper'
+import { User } from '@core/entities';
+import { UserMapper } from '@core/mappers/user'
+import IEntityMapper from '@core/mappers/i-entity-mapper'
+import { IUsersGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '../../interfaces';
-import { IUsersGateway } from '../../../../../core/use-cases/interfaces';
 
 export default class UsersRepository
   extends DatabaseRepository

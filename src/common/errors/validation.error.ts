@@ -1,4 +1,4 @@
-import * as constants from '../../config/constants';
+import * as constants from '@config/constants';
 
 interface IValidationError extends Error {
   reason?: any;

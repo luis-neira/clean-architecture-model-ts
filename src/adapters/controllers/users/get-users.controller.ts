@@ -1,10 +1,8 @@
-import { IHttpRequestModel } from '../interfaces';
+import { GetUsersUseCase } from '@core/use-cases/users';
+import { GetUsersPresenter } from '../../presenters/users';
 
-import { GetUsersUseCase } from '../../../core/use-cases/users';
-import { GetUsersPresenter } from '../../../adapters/presenters/users';
-
-import { IUsersGateway } from '../../../core/use-cases/interfaces';
-import { IResponder } from '../interfaces';
+import { IUsersGateway } from '@core/use-cases/interfaces';
+import { IResponder, IHttpRequestModel } from '../interfaces';
 
 export default class GetUsersController {
   private usersRepository: IUsersGateway;

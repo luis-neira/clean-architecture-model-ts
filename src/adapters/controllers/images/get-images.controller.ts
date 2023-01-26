@@ -1,7 +1,7 @@
-import { GetImagesUseCase } from '../../../core/use-cases/images';
-import { GetImagesPresenter } from '../../../adapters/presenters/images';
+import { GetImagesUseCase } from '@core/use-cases/images';
+import { GetImagesPresenter } from '../../presenters/images';
 
-import { IImagesGateway } from '../../../core/use-cases/interfaces';
+import { IImagesGateway } from '@core/use-cases/interfaces';
 import { IHttpRequestModel, IResponder } from '../interfaces';
 
 export default class GetImagesController {

@@ -1,10 +1,8 @@
-import { IHttpRequestModel } from '../interfaces';
+import { GetOrderByIdUseCase } from '@core/use-cases/orders';
+import { GetOrderByIdPresenter } from '@adapters/presenters/orders';
 
-import { GetOrderByIdUseCase } from '../../../core/use-cases/orders';
-import { GetOrderByIdPresenter } from '../../../adapters/presenters/orders';
-
-import { IOrdersGateway, IGetOrderByIdRequestModel } from '../../../core/use-cases/interfaces';
-import { IResponder, IValidator } from '../interfaces';
+import { IOrdersGateway, IGetOrderByIdRequestModel } from '@core/use-cases/interfaces';
+import { IResponder, IValidator, IHttpRequestModel } from '../interfaces';
 
 export default class GetOrderByIdController {
   private ordersRepository: IOrdersGateway;

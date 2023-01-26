@@ -1,10 +1,8 @@
-import { IHttpRequestModel } from '../interfaces';
+import { GetOrdersUseCase } from '@core/use-cases/orders';
+import { GetOrdersPresenter } from '@adapters/presenters/orders';
 
-import { GetOrdersUseCase } from '../../../core/use-cases/orders';
-import { GetOrdersPresenter } from '../../../adapters/presenters/orders';
-
-import { IOrdersGateway } from '../../../core/use-cases/interfaces';
-import { IResponder } from '../interfaces';
+import { IOrdersGateway } from '@core/use-cases/interfaces';
+import { IResponder, IHttpRequestModel } from '../interfaces';
 
 export default class GetOrdersController {
   private ordersRepository: IOrdersGateway;

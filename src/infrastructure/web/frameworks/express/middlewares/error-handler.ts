@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { FailResponse } from '../../../../../common/contracts';
+import { FailResponse } from '@common/contracts';
 
 export default function errorHandler(
   err: any,

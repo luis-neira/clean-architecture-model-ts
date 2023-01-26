@@ -1,6 +1,6 @@
 import { User } from '../../entities';
 import IEntityMapper from '../i-entity-mapper';
-import IUserDto from '../../dtos/user/user.dto';
+import { IUserDto } from '../../dtos/user';
 
 export default class UserMapper implements IEntityMapper<User, IUserDto> {
   public constructor() {}

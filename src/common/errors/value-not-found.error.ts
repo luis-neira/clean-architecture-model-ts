@@ -1,4 +1,4 @@
-import * as constants from '../../config/constants';
+import * as constants from '@config/constants';
 
 export default class ValueNotFoundError extends Error {
   public name: string;

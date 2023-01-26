@@ -1,11 +1,11 @@
 import { Model, ModelCtor, Sequelize } from 'sequelize';
 
-import { Product } from '../../../../../core/entities';
-import { ProductMapper } from '../../../../../core/mappers/product';
-import IEntityMapper from '../../../../../core/mappers/i-entity-mapper';
+import { Product } from '@core/entities';
+import { ProductMapper } from '@core/mappers/product';
+import IEntityMapper from '@core/mappers/i-entity-mapper';
+import { IProductsGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '../../interfaces';
-import { IProductsGateway } from '../../../../../core/use-cases/interfaces';
 
 export default class ProductsRepository
   extends DatabaseRepository

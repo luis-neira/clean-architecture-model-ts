@@ -1,10 +1,8 @@
-import { IHttpRequestModel } from '../interfaces';
-
-import { UpdateProductUseCase } from '../../../core/use-cases/products';
+import { UpdateProductUseCase } from '@core/use-cases/products';
 import { UpdateProductPresenter } from '../../presenters/products';
 
-import { IProductsGateway, IUpdateProductRequestModel } from '../../../core/use-cases/interfaces';
-import { IResponder, IValidator } from '../interfaces';
+import { IProductsGateway, IUpdateProductRequestModel } from '@core/use-cases/interfaces';
+import { IResponder, IValidator, IHttpRequestModel } from '../interfaces';
 
 export default class UpdateProductController {
   private productsRepository: IProductsGateway;

@@ -3,7 +3,7 @@ import InMemoryClient from '../orm/in-memory/client';
 
 import { DatabaseClient } from './interfaces';
 
-import * as constants from '../../../config/constants';
+import * as constants from '@config/constants';
 
 export default class DatabaseClientFactory {
   public constructor() {}

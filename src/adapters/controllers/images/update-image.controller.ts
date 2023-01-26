@@ -1,10 +1,8 @@
-import { IHttpRequestModel } from '../interfaces';
+import { UpdateImageUseCase } from '@core/use-cases/images';
+import { UpdateImagePresenter } from '../../presenters/images';
 
-import { UpdateImageUseCase } from '../../../core/use-cases/images';
-import { UpdateImagePresenter } from '../../../adapters/presenters/images';
-
-import { IImagesGateway } from '../../../core/use-cases/interfaces';
-import { IResponder } from '../interfaces';
+import { IImagesGateway } from '@core/use-cases/interfaces';
+import { IResponder, IHttpRequestModel } from '../interfaces';
 
 export default class UpdateImageController {
   private imagesRepository: IImagesGateway;

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { GetUserByIdController } from '../../../../../../adapters/controllers/users';
+import { GetUserByIdController } from '@adapters/controllers/users';
 import { UsersRepositoryFactory } from '../../../../../database/repositories';
 import { OkResponder } from '../../../../responders/express/users';
 import { getUserByIdValidator } from '../../../../validators/use-cases/users';

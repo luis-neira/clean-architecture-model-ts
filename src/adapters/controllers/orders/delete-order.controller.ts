@@ -1,10 +1,8 @@
-import { IHttpRequestModel } from '../interfaces';
+import { DeleteOrderUseCase } from '@core/use-cases/orders';
+import { DeleteOrderPresenter } from '@adapters/presenters/orders';
 
-import { DeleteOrderUseCase } from '../../../core/use-cases/orders';
-import { DeleteOrderPresenter } from '../../../adapters/presenters/orders';
-
-import { IOrdersGateway, IDeleteOrderRequestModel } from '../../../core/use-cases/interfaces';
-import { IResponder, IValidator } from '../interfaces';
+import { IOrdersGateway, IDeleteOrderRequestModel } from '@core/use-cases/interfaces';
+import { IResponder, IValidator, IHttpRequestModel } from '../interfaces';
 
 export default class DeleteOrderController {
   private ordersRepository: IOrdersGateway;

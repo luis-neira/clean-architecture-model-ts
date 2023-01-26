@@ -4,7 +4,7 @@ import { AddressInfo } from 'net';
 import { Express } from 'express';
 
 import ServerConfig from './server-config';
-import logger from '../../../common/logger';
+import logger from '@common/logger';
 
 export default class HttpServer extends Server {
   public constructor(app: Express) {

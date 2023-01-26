@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { GetUsersController } from '../../../../../../adapters/controllers/users';
+import { GetUsersController } from '@adapters/controllers/users';
 import { UsersRepositoryFactory } from '../../../../../database/repositories';
 import { OkResponder } from '../../../../responders/express/users';
 

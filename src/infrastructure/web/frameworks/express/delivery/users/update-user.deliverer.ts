@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { UpdateUserController } from '../../../../../../adapters/controllers/users';
+import { UpdateUserController } from '@adapters/controllers/users';
 import { UsersRepositoryFactory } from '../../../../../database/repositories';
 import { CreatedResponder } from '../../../../responders/express/users';
 import { updateUserValidator } from '../../../../validators/use-cases/users';

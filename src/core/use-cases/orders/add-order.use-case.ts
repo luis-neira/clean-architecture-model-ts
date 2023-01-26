@@ -1,6 +1,6 @@
 import { Result } from '../../lib/result';
 import { Order, Product } from '../../entities';
-import { ValidationError } from '../../../common/errors';
+import { ValidationError } from '@common/errors';
 import { OrderMapper } from '../../mappers/order';
 import IEntityMapper from '../../mappers/i-entity-mapper'
 import { IOrderDto } from '../../dtos/order'

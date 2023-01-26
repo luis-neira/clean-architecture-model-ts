@@ -1,8 +1,9 @@
 import 'make-promises-safe';
+import './config/aliases';
 
-import { DatabaseClient } from './infrastructure/database/orm';
-import WebAppFactory from './infrastructure/web/web-app.factory';
-import HttpServer from './infrastructure/web/server';
+import { DatabaseClient } from '@infra/database/orm';
+import WebAppFactory from '@infra/web/web-app.factory';
+import HttpServer from '@infra/web/server';
 
 class App {
   public static async main(): Promise<void> {

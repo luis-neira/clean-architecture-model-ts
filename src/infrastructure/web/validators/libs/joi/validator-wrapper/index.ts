@@ -1,9 +1,9 @@
 import { ObjectSchema, ValidationError as joiError } from 'joi';
 
-import { Result } from '../../../../../../core/lib/result';
-import { ValidationError } from '../../../../../../common/errors';
+import { Result } from '@core/lib/result';
+import { ValidationError } from '@common/errors';
 
-import { IValidator } from '../../../../../../adapters/controllers/interfaces';
+import { IValidator } from '@adapters/controllers/interfaces';
 
 export class JoiValidator implements IValidator {
   private schema: ObjectSchema;

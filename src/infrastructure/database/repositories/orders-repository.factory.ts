@@ -3,7 +3,7 @@ import { OrdersRepositorySequelize } from '../orm/sequelize/repositories';
 
 import * as constants from '../../../config/constants';
 
-import { IEntityGateway } from '../../../core/use-cases/interfaces';
+import { IEntityGateway } from '@core/use-cases/interfaces';
 import { RepositoryFactory } from './interfaces';
 
 export default class OrdersRepositoryFactory extends RepositoryFactory<IEntityGateway> {

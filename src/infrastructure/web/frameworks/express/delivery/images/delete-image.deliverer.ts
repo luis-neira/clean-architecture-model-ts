@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { DeleteImageController } from '../../../../../../adapters/controllers/images';
+import { DeleteImageController } from '@adapters/controllers/images';
 import { ImagesRepository } from '../../../../../external-service/json-placeholder/repositories';
 import { NoContentResponder } from '../../../../responders/express/users';
 

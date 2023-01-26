@@ -1,10 +1,8 @@
-import { IHttpRequestModel } from '../interfaces';
+import { DeleteImageUseCase } from '@core/use-cases/images';
+import { DeleteImagePresenter } from '../../presenters/images';
 
-import { DeleteImageUseCase } from '../../../core/use-cases/images';
-import { DeleteImagePresenter } from '../../../adapters/presenters/images';
-
-import { IImagesGateway } from '../../../core/use-cases/interfaces';
-import { IResponder } from '../interfaces';
+import { IImagesGateway } from '@core/use-cases/interfaces';
+import { IResponder, IHttpRequestModel } from '../interfaces';
 
 export default class DeleteImageController {
   private imagesRepository: IImagesGateway;

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { AddProductController } from '../../../../../../adapters/controllers/products';
+import { AddProductController } from '@adapters/controllers/products';
 import { ProductsRepositoryFactory } from '../../../../../database/repositories';
 import { CreatedResponder } from '../../../../responders/express/users';
 import { addProductValidator } from '../../../../validators/use-cases/products';

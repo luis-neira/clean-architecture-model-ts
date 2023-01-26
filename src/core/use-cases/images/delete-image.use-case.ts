@@ -1,5 +1,5 @@
 import { Result } from '../../lib/result';
-import { ValueNotFoundError } from '../../../common/errors';
+import { ValueNotFoundError } from '@common/errors';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import { IImagesGateway, IDeleteImageRequestModel } from '../interfaces';

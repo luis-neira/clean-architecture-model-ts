@@ -1,10 +1,10 @@
-import { UpdateUserUseCase } from '../../../core/use-cases/users';
+import { UpdateUserUseCase } from '@core/use-cases/users';
 import { UpdateUserPresenter } from '../../presenters/users';
 
 import {
   IUsersGateway,
   IUpdateUserRequestModel
-} from '../../../core/use-cases/interfaces';
+} from '@core/use-cases/interfaces';
 import { IHttpRequestModel, IResponder, IValidator } from '../interfaces';
 
 export default class UpdateUserController {

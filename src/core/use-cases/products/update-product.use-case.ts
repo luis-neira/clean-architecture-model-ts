@@ -1,6 +1,6 @@
 import { Result } from '../../lib/result';
 import { Product } from '../../entities';
-import { ValueNotFoundError } from '../../../common/errors'
+import { ValueNotFoundError } from '@common/errors'
 import { ProductMapper } from '../../mappers/product';
 import IEntityMapper from '../../mappers/i-entity-mapper'
 import { IProductDto } from '../../dtos/product'
