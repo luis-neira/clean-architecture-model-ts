@@ -15,6 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "@godaddy/terminus": "^4.9.0",
+    "@mikro-orm/core": "^5.6.8",
+    "@mikro-orm/postgresql": "^5.6.8",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "got": "^11.8.3",
@@ -27,6 +29,7 @@
     "pg-hstore": "^2.3.4",
     "pino": "^7.1.0",
     "pino-http": "^6.0.0",
+    "reflect-metadata": "^0.1.13",
     "sequelize": "^6.9.0",
     "shallow-equal-object": "^1.1.1",
     "uuid": "^8.3.2"
