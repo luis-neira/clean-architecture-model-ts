@@ -29,6 +29,12 @@ export default class MikroOrmClient extends DatabaseClient {
           await generator.refreshDatabase(); 
           logger.info('Database refresh: Successful');
         }
+
+        if (process.env.DB_REFRESH === 'true') {
+          await generator.refreshDatabase(); 
+          logger.info('Database refresh: Successful');
+        }
+        
       } catch (err) {
         this._connection = null;
   
