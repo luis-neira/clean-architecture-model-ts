@@ -1,7 +1,7 @@
 import { MemoryCacheAdapter, Options } from '@mikro-orm/core';
 import type { PostgreSqlDriver } from '@mikro-orm/postgresql'; 
 
-import { User, Product } from './entities'
+import { User, Product, Order } from './entities'
  
 const config: Options<PostgreSqlDriver> = {
   resultCache: {
@@ -10,7 +10,7 @@ const config: Options<PostgreSqlDriver> = {
     options: {},
   },
   debug: true,
-  entities: [ User, Product ],
+  entities: [ User, Product, Order ],
   dbName: process.env.DB_NAME,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,

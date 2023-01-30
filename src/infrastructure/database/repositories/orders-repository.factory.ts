@@ -1,5 +1,6 @@
 import { OrdersRepositoryInMemory } from '../orm/in-memory/repositories';
 import { OrdersRepositorySequelize } from '../orm/sequelize/repositories';
+import { OrdersRepositoryMirkroORM } from '../orm/mikroorm/repositories';
 
 import * as constants from '../../../config/constants';
 
@@ -12,7 +13,7 @@ export default class OrdersRepositoryFactory extends RepositoryFactory<IEntityGa
 
     const ordersRepositoryMakerByDialect = {
       [dbDialects.MARIA_DB]: () => new OrdersRepositorySequelize(),
-      [dbDialects.POSTGRES]: () => new OrdersRepositorySequelize(),
+      [dbDialects.POSTGRES]: () => new OrdersRepositoryMirkroORM(),
       [dbDialects.IN_MEMORY]: () => new OrdersRepositoryInMemory()
     };
 
