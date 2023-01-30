@@ -1,5 +1,6 @@
 import { UsersRepositoryInMemory } from '../orm/in-memory/repositories';
 import { UsersRepositorySequelize } from '../orm/sequelize/repositories';
+import { UsersRepositoryMirkroORM } from '../orm/mikroorm/repositories';
 
 import * as constants from '@config/constants';
 
@@ -12,7 +13,7 @@ export default class UsersRepositoryFactory extends RepositoryFactory<IEntityGat
 
     const usersRepositoryMakerByDialect = {
       [dbDialects.MARIA_DB]: () => new UsersRepositorySequelize(),
-      [dbDialects.POSTGRES]: () => new UsersRepositorySequelize(),
+      [dbDialects.POSTGRES]: () => new UsersRepositoryMirkroORM(),
       [dbDialects.IN_MEMORY]: () => new UsersRepositoryInMemory()
     };
 

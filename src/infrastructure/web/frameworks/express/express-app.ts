@@ -4,6 +4,7 @@ import pinoHttp from './middlewares/vendors/pino-http';
 import errorHandler from './middlewares/error-handler';
 import errorLogger from './middlewares/error-logger';
 import notFoundHandler from './middlewares/not-found-handler';
+import mikroOrmRequestContext from './middlewares/vendors/mikroorm-request-context';
 
 import { RouterMaker } from './routers/interfaces';
 
@@ -42,6 +43,7 @@ export default class ExpressApp {
 
   private setMiddleWare(): void {
     this._app.use(pinoHttp);
+    this._app.use(mikroOrmRequestContext);
   }
 
   private setAppRouter(): void {

@@ -15,9 +15,9 @@ export class User {
   @Property()
   meta!: object;
 
-  @Property({ defaultRaw: 'now' })
-  cratedAt!: Date;
+  @Property({ defaultRaw: 'NOW()' })
+  createdAt!: Date;
 
-  @Property({ defaultRaw: 'now' })
+  @Property({ defaultRaw: 'NOW()' })
   updatedAt!: Date;
 }

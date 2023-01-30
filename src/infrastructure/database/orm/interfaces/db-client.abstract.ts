@@ -1,7 +1,8 @@
-import { Sequelize } from 'sequelize';
-import { InMemoryDatabase } from '../in-memory';
+import type { Sequelize } from 'sequelize';
+import type { InMemoryDatabase } from '../in-memory';
+import type { MikroORM } from '@mikro-orm/core';
 
-export type DatabaseConnection = Sequelize | InMemoryDatabase | null;
+export type DatabaseConnection = MikroORM | Sequelize | InMemoryDatabase | null;
 
 export interface IDatabaseClient {
   setDialect(dbDialect: string): void;

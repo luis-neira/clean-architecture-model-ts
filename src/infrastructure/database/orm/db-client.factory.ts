@@ -1,4 +1,5 @@
 import SequelizeClient from '../orm/sequelize/client';
+import MikroOrmClient from './mikroorm/client';
 import InMemoryClient from '../orm/in-memory/client';
 
 import { DatabaseClient } from './interfaces';
@@ -20,7 +21,7 @@ export default class DatabaseClientFactory {
 
     const databaseClientByDialect = {
       [dbDialects.MARIA_DB]: () => new SequelizeClient(),
-      [dbDialects.POSTGRES]: () => new SequelizeClient(),
+      [dbDialects.POSTGRES]: () => new MikroOrmClient(),
       [dbDialects.IN_MEMORY]: () => new InMemoryClient()
     };
 
