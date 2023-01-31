@@ -25,7 +25,7 @@ export default class AddUserUseCase implements IUseCaseInputBoundary {
     const user = User.create(requestDetails, null);
 
     try {
-      const addedUser = await this.usersRepository.create(user);
+      const addedUser = await this.usersRepository.save(user);
 
       const addedUserDto = this.dataMapper.toDTO(addedUser);
 

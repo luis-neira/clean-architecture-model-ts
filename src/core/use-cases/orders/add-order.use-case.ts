@@ -58,10 +58,10 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
         const invalid = new ValidationError('Validation Errors');
         invalid.reason = 'Bad data';
         invalid.validationErrors = validationErrors;
-        throw Result.fail(invalid);
+        throw invalid;
       }
 
-      const addedOrder = await this.ordersRepository.create(order);
+      const addedOrder = await this.ordersRepository.save(order);
 
       const addedOrderDto = this.dataMapper.toDTO(addedOrder);
 

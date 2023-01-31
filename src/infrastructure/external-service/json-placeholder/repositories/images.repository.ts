@@ -21,7 +21,7 @@ export default class ImagesRepository implements IImagesGateway {
     this._dataMapper = new ImageMapper();
   }
 
-  public async create(image: Image): Promise<Image> {
+  public async save(image: Image): Promise<Image> {
     const url = this._pathname;
 
     const imageRequestDetails = image.toJSON();
@@ -91,7 +91,7 @@ export default class ImagesRepository implements IImagesGateway {
     return this._dataMapper.toDomain(response);
   }
 
-  public async find(): Promise<Image[]> {
+  public async findAll(): Promise<Image[]> {
     const url = `${this._pathname}`;
 
     const response: PropByString[] = await this._client.get(url).json();

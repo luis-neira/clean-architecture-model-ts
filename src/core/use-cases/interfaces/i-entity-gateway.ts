@@ -1,13 +1,13 @@
 import { User, Product, Order, Image } from '../../entities';
 
 interface IWrite<T> {
-  create(entity: T): Promise<T>;
+  save(entity: T): Promise<T>;
   update(entity: T, context: { id: string }): Promise<T | null>;
   delete(id: string): Promise<true | null>;
 }
 
 interface IRead<T> {
-  find(): Promise<T[]>;
+  findAll(): Promise<T[]>;
   findOne(id: string): Promise<T | null>;
 }
 

@@ -23,7 +23,7 @@ export default class GetProductsUseCase implements IUseCaseInputBoundary {
 
   public async execute(): Promise<void> {
     try {
-      const foundProducts = await this.productsRepository.find();
+      const foundProducts = await this.productsRepository.findAll();
 
       const foundProductDTOs = foundProducts.map((p) => this.dataMapper.toDTO(p));
 

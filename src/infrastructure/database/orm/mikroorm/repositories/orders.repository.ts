@@ -22,7 +22,7 @@ export default class OrdersRepository
     this._dataMapper = new OrderMapper();
   }
 
-  public async create(order: Order): Promise<Order> {
+  public async save(order: Order): Promise<Order> {
     const orderRawData = order.toJSON();
 
     const addedOrder = await this._model.create(orderRawData);
@@ -65,7 +65,7 @@ export default class OrdersRepository
     return true;
   }
 
-  public async find(): Promise<Order[]> {
+  public async findAll(): Promise<Order[]> {
     const foundOrders = (await this._model.findAll()).map((u) =>
       this._dataMapper.toDomain(u.toJSON())
     );

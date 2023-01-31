@@ -21,7 +21,7 @@ export default class ProductsRepository
     this._dataMapper = new ProductMapper();
   }
 
-  public async create(product: Product): Promise<Product> {
+  public async save(product: Product): Promise<Product> {
     const productRawData = product.toJSON();
 
     const addedProduct = await this._model.create(productRawData);
@@ -73,7 +73,7 @@ export default class ProductsRepository
     return true;
   }
 
-  public async find(): Promise<Product[]> {
+  public async findAll(): Promise<Product[]> {
     const foundProducts = (await this._model.findAll()).map((el) =>
       this._dataMapper.toDomain(el.toJSON())
     );

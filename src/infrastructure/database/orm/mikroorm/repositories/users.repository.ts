@@ -22,7 +22,7 @@ export default class UsersRepository
     this._dataMapper = new UserMapper();
   }
 
-  public async create(user: User): Promise<User> {
+  public async save(user: User): Promise<User> {
     const userRawData = user.toJSON();
 
     const addedUser = await this._model.create(userRawData);
@@ -65,7 +65,7 @@ export default class UsersRepository
     return true;
   }
 
-  public async find(): Promise<User[]> {
+  public async findAll(): Promise<User[]> {
     const foundUsers = (await this._model.findAll()).map((u) =>
       this._dataMapper.toDomain(u.toJSON())
     );

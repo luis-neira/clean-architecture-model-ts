@@ -84,7 +84,7 @@ export default class UpdateOrderUseCase
       const invalid = new ValidationError('Validation Errors');
       invalid.reason = 'Bad data';
       invalid.validationErrors = validationErrors;
-      throw Result.fail(invalid);
+      throw invalid;
     }
 
     const addedOrder = await this.ordersRepository.update(order, {

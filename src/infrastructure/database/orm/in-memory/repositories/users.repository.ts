@@ -21,7 +21,7 @@ export default class UsersRepository
     this._dataMapper = new UserMapper();
   }
 
-  public async create(user: User): Promise<User> {
+  public async save(user: User): Promise<User> {
     this._model.push(user.toJSON());
 
     const persistedUser = this._model[this._model.length - 1];
@@ -63,7 +63,7 @@ export default class UsersRepository
     return this._dataMapper.toDomain(persistedUser);
   }
 
-  public async find(): Promise<User[]> {
+  public async findAll(): Promise<User[]> {
     return this._model;
   }
 }

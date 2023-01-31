@@ -34,7 +34,7 @@ export default class AddImageUseCase implements IUseCaseInputBoundary {
     );
 
     try {
-      const addedImage = await this.imagesRepository.create(image);
+      const addedImage = await this.imagesRepository.save(image);
 
       const addedImageDto = this.dataMapper.toDTO(addedImage);
 

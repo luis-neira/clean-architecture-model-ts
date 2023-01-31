@@ -21,7 +21,7 @@ export default class ProductsRepository
     this._dataMapper = new ProductMapper();
   }
 
-  public async create(product: Product): Promise<Product> {
+  public async save(product: Product): Promise<Product> {
     this._model.push(product.toJSON());
 
     const persistedUser = this._model[this._model.length - 1];
@@ -65,7 +65,7 @@ export default class ProductsRepository
     return this._dataMapper.toDomain(persistedUser);
   }
 
-  public async find(): Promise<Product[]> {
+  public async findAll(): Promise<Product[]> {
     return this._model;
   }
 }

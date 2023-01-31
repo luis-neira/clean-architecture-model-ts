@@ -23,7 +23,7 @@ export default class GetImagesUseCase implements IUseCaseInputBoundary {
 
   public async execute(): Promise<void> {
     try {
-      const foundImages = await this.imagesRepository.find();
+      const foundImages = await this.imagesRepository.findAll();
 
       if (foundImages === null) {
         throw new Error('Something went wrong!');

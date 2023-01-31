@@ -25,7 +25,7 @@ export default class AddProductUseCase implements IUseCaseInputBoundary {
     try {
       const product = Product.create(requestModel, null);
 
-      const addedProduct = await this.productsRepository.create(product);
+      const addedProduct = await this.productsRepository.save(product);
 
       const addedProductDto = this.dataMapper.toDTO(addedProduct);
 

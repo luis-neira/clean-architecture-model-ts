@@ -23,7 +23,7 @@ export default class GetOrdersUseCase implements IUseCaseInputBoundary {
 
   public async execute(): Promise<void> {
     try {
-      const foundOrders = await this.ordersRepository.find();
+      const foundOrders = await this.ordersRepository.findAll();
 
       const foundOrderDTOs = foundOrders.map((o) => this.dataMapper.toDTO(o));
 
