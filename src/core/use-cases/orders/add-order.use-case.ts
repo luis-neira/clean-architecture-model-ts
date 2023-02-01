@@ -74,6 +74,11 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
   private async getProductIdValidationErrors(
     order: IOrder
   ): Promise<IValidationError[]> {
+
+    if (order.productIds == null) {
+      return [] as IValidationError[];
+    }
+    
     const productIds = order.productIds as string[];
 
     const getProductsById = productIds.map((id: string) => {
@@ -106,6 +111,10 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
     order: IOrder
   ): Promise<IValidationError[]> {
     const { userId } = order;
+
+    if (userId == null) {
+      return [] as IValidationError[];
+    }
 
     const foundUser = await this.usersRepository.findOne(userId);
 
