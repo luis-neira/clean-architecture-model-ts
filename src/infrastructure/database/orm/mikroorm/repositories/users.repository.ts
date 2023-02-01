@@ -62,7 +62,7 @@ export default class UsersRepository
   }
 
   public async findAll(): Promise<User[]> {
-    const foundUsers = await this._model.findAll();
+    const foundUsers = await this._model.findAll({ populate: ['orders'] });
 
     return foundUsers;
   }

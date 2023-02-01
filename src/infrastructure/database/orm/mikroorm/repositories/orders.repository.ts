@@ -64,7 +64,7 @@ export default class OrdersRepository
   }
 
   public async findAll(): Promise<Order[]> {
-    const foundOrders = await this._model.findAll();
+    const foundOrders = await this._model.findAll({ populate: ['user'] });
 
     return foundOrders;
   }
