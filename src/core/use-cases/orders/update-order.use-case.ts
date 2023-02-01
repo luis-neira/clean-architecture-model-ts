@@ -80,6 +80,11 @@ export default class UpdateOrderUseCase
   private async getProductIdValidationErrors(
     order: IOrderDetails
   ): Promise<IValidationError[]> {
+
+    if (order.productIds == null) {
+      return [] as IValidationError[];
+    }
+
     const productIds = order.productIds as string[];
 
     const getProductsById = productIds.map((id: string) => {
@@ -112,6 +117,10 @@ export default class UpdateOrderUseCase
     order: IOrderDetails
   ): Promise<IValidationError[]> {
     const { userId } = order;
+
+    if (userId == null) {
+      return [] as IValidationError[];
+    }
 
     const foundUser = await this.usersRepository.findOne(userId);
 

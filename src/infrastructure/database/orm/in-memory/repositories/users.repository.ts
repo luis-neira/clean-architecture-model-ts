@@ -67,6 +67,6 @@ export default class UsersRepository
   }
 
   public async findAll(): Promise<User[]> {
-    return this._model;
+    return this._model.map((u) => this._dataMapper.toDomain(u));
   }
 }

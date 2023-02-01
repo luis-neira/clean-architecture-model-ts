@@ -69,6 +69,6 @@ export default class OrdersRepository
   }
 
   public async findAll(): Promise<Order[]> {
-    return this._model;
+    return this._model.map((o) => this._dataMapper.toDomain(o));
   }
 }

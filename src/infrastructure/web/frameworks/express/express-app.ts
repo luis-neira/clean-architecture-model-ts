@@ -43,7 +43,9 @@ export default class ExpressApp {
 
   private setMiddleWare(): void {
     this._app.use(pinoHttp);
-    this._app.use(mikroOrmRequestContext);
+    if (process.env.DB_DIALECT === 'postgres') {
+      this._app.use(mikroOrmRequestContext);
+    }
   }
 
   private setAppRouter(): void {

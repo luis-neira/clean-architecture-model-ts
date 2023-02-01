@@ -69,6 +69,6 @@ export default class ProductsRepository
   }
 
   public async findAll(): Promise<Product[]> {
-    return this._model;
+    return this._model.map((p) => this._dataMapper.toDomain(p));
   }
 }
