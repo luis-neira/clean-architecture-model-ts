@@ -1,5 +1,5 @@
 import { Result } from '../../lib/result';
-import { IOrder, IProduct } from '@core/entities/interfaces';
+import { IOrder, IProduct, IUser } from '@core/entities/interfaces';
 import { ValidationError } from '@common/errors';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
@@ -14,6 +14,11 @@ import { IAddOrderRequestModel } from '../interfaces';
 interface IValidationError {
   field: string;
   msg: string;
+}
+
+interface IRelations {
+  products: IProduct[];
+  user: IUser | undefined;
 }
 
 export default class AddOrderUseCase implements IUseCaseInputBoundary {
@@ -33,25 +38,24 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
   }
 
   public async execute(requestModel: IAddOrderRequestModel): Promise<void> {
-    const { userId, productIds, date, isPaid, meta } = requestModel;
-
     try {
-      const order = await this.ordersRepository.create({
-        userId,
-        productIds,
-        date,
-        isPaid,
-        meta
-      })
-
-      const validationErrors = await this.getValidationErrors(order);
+      const [ validationErrors, relationDict ] = await this.validateRelations(requestModel);
 
       if (validationErrors.length > 0) {
         const invalid = new ValidationError('Validation Errors');
-        invalid.reason = 'Bad data';
+        invalid.reason = 'Bad data input';
         invalid.validationErrors = validationErrors;
         throw invalid;
       }
+
+      const order = await this.ordersRepository.create({
+        productIds: requestModel.productIds,
+        date: requestModel.date,
+        isPaid: requestModel.isPaid,
+        meta: requestModel.meta
+      });
+
+      order.user = relationDict.user;
 
       const addedOrder = await this.ordersRepository.save(order);
 
@@ -63,39 +67,50 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
     }
   }
 
-  private async getValidationErrors(order: IOrder): Promise<IValidationError[]> {
-    const notFoundProductIds = await this.getProductIdValidationErrors(order);
+  private async validateRelations(order: IAddOrderRequestModel): Promise<[IValidationError[], IRelations]> {
+    const [ productIdErrors, foundProducts ] = await this.getProductIdValidationErrors(order);
 
-    const notFoundUserId = await this.getUserIdValidationError(order);
+    const [ userIdErrors, foundUser ] = await this.getUserIdValidationError(order);
 
-    return [...notFoundProductIds, ...notFoundUserId];
+    return [
+      [...productIdErrors, ...userIdErrors],
+      { 
+        products: foundProducts,
+        user: foundUser
+      }
+    ];
   }
 
   private async getProductIdValidationErrors(
-    order: IOrder
-  ): Promise<IValidationError[]> {
+    order: IAddOrderRequestModel
+  ): Promise<[IValidationError[], IProduct[]]> {
 
     if (order.productIds == null) {
-      return [] as IValidationError[];
+      return [ [], [] ];
     }
     
-    const productIds = order.productIds as string[];
+    const productIds = order.productIds;
 
-    const getProductsById = productIds.map((id: string) => {
+    const productsById = productIds.map((id) => {
       return this.productsRepository.findOne(id);
     });
 
-    const foundProducts = await Promise.all(getProductsById);
+    const foundProducts = await Promise.all(productsById);
+
+    const validatedProducts = [] as IProduct[];
 
     const invalidProductIds = foundProducts.reduce(
       (accum: string[], currentVal: IProduct | null, i: number) => {
         if (currentVal === null) accum.push(productIds[i]);
+        else validatedProducts.push(currentVal);
         return accum;
       },
       []
     );
 
-    if (invalidProductIds.length === 0) return [] as IValidationError[];
+    if (invalidProductIds.length === 0) {
+      return [ [], validatedProducts ];
+    }
 
     const returnable = [] as IValidationError[];
 
@@ -104,21 +119,23 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
       msg: `No products with ids ${invalidProductIds.join(', ')}`
     });
 
-    return returnable;
+    return [returnable, validatedProducts];
   }
 
   private async getUserIdValidationError(
-    order: IOrder
-  ): Promise<IValidationError[]> {
+    order: IAddOrderRequestModel
+  ): Promise<[IValidationError[], IUser | undefined]> {
     const { userId } = order;
 
     if (userId == null) {
-      return [] as IValidationError[];
+      return [ [], undefined ];
     }
 
     const foundUser = await this.usersRepository.findOne(userId);
 
-    if (foundUser) return [] as IValidationError[];
+    if (foundUser) {
+      return [ [], foundUser ];
+    }
 
     const returnable = [] as IValidationError[];
 
@@ -127,6 +144,6 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
       msg: `No user with id ${userId}`
     });
 
-    return returnable;
+    return [ returnable, undefined ];
   }
 }

@@ -19,9 +19,9 @@ export default class OrdersRepository
   }
 
   public async create(input: any): Promise<Order> {
-    const product = await this._model.create(input);
+    const order = await this._model.create(input);
 
-    return product;
+    return order;
   }
 
   public async save(order: Order): Promise<Order> {

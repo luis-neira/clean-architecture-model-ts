@@ -1,7 +1,8 @@
-import { Entity, PrimaryKey, Property, t, wrap } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, t, wrap, OneToMany, Collection } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 
 import { IUser } from '@core/entities/interfaces';
+import { Order } from './Order';
 
 @Entity()
 export class User implements IUser {
@@ -16,6 +17,9 @@ export class User implements IUser {
 
   @Property({ type: t.json, defaultRaw: "'{}'", nullable: false })
   meta!: Record<string, any>;
+
+  @OneToMany(() => Order, order => order.user)
+  orders = new Collection<Order>(this);
 
   @Property({ type: t.datetime, defaultRaw: 'NOW()', nullable: false })
   createdAt!: Date;

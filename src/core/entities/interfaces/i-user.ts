@@ -3,6 +3,7 @@ export interface IUser {
   firstName: string;
   lastName: string;
   meta: Record<string, any>;
+  orders?: unknown
   createdAt?: Date;
   updatedAt?: Date;
 

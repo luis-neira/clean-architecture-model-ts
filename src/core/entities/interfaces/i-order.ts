@@ -1,10 +1,11 @@
 export interface IOrder {
   id: string;
-  userId: string;
+  userId?: string;
   productIds: string[];
   date: Date;
   isPaid: boolean;
   meta: Record<string, any>;
+  user?: unknown;
   createdAt?: Date;
   updatedAt?: Date;
 

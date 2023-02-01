@@ -1,15 +1,13 @@
-import { Entity, PrimaryKey, Property, t, wrap } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, t, wrap, ManyToOne } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 
 import { IOrder } from '@core/entities/interfaces';
+import { User } from './User'
 
 @Entity()
 export class Order implements IOrder {
   @PrimaryKey({ type: t.uuid, nullable: false})
   id: string = v4();
-
-  @Property({ type: t.uuid, nullable: false })
-  userId!: string;
 
   @Property({ type: t.array, nullable: false })
   productIds!: string[];
@@ -22,6 +20,9 @@ export class Order implements IOrder {
 
   @Property({ type: t.json, defaultRaw: "'{}'", nullable: false })
   meta!: Record<string, any>;
+
+  @ManyToOne(() => User)
+  user!: User;
 
   @Property({ type: t.datetime, defaultRaw: 'NOW()', nullable: false })
   createdAt!: Date;
