@@ -1,8 +1,10 @@
-import { Entity, PrimaryKey, Property, t } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, t, wrap } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 
+import { IProduct } from '@core/entities/interfaces';
+
 @Entity()
-export class Product {
+export class Product implements IProduct {
   @PrimaryKey({ type: t.uuid, nullable: false})
   id: string = v4();
 
@@ -29,4 +31,9 @@ export class Product {
 
   @Property({ type: t.datetime, defaultRaw: 'NOW()', nullable: false })
   updatedAt!: Date;
+
+  toJSON() {
+    const o = wrap<Product>(this).toObject();
+    return o;
+  }
 }

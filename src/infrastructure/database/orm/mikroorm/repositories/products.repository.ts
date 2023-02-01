@@ -1,11 +1,9 @@
-import type { MikroORM, EntityRepository } from '@mikro-orm/core';
+import { MikroORM, EntityRepository, wrap } from '@mikro-orm/core';
 
-import { Product } from '@core/entities';
-import { ProductMapper } from '@core/mappers/product';
-import IEntityMapper from '@core/mappers/i-entity-mapper';
 import { IProductsGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '@infra/database/orm/interfaces';
+import { Product } from '@infra/database/orm/mikroorm/entities'
 
 export default class ProductsRepository
   extends DatabaseRepository
@@ -14,45 +12,43 @@ export default class ProductsRepository
   protected _db!: MikroORM
 
   private _model: EntityRepository<Product>;
-  private _dataMapper: Pick<IEntityMapper<Product, any>, 'toDomain'>;
 
   public constructor() {
     super();
     this._model = this._db.em.getRepository(Product);
-    this._dataMapper = new ProductMapper();
+  }
+
+  public async create(input: any): Promise<Product> {
+    const product = await this._model.create(input);
+
+    return product;
   }
 
   public async save(product: Product): Promise<Product> {
-    const productRawData = product.toJSON();
+    await this._model.persistAndFlush(product);
 
-    const addedProduct = await this._model.create(productRawData);
-
-    await this._model.persistAndFlush(addedProduct);
-
-    return this._dataMapper.toDomain(addedProduct.toJSON());
+    return product;
   }
 
   public async findOne(productId: string): Promise<Product | null> {
     const foundProduct = await this._model.findOne({ id: productId });
 
-    if (!foundProduct) return null;
-
-    return this._dataMapper.toDomain(foundProduct.toJSON());
+    return foundProduct;
   }
 
   public async update(
-    product: Product,
+    input: any,
     context: { id: string }
   ): Promise<Product | null> {
     const foundProduct = await this._model.findOne({ id: context.id });
 
     if (!foundProduct) return null;
 
-    Object.assign(foundProduct, product.getProps());
+    wrap(foundProduct).assign(input, { mergeObjects: true });
 
     await this._model.persistAndFlush(foundProduct);
 
-    return this._dataMapper.toDomain(foundProduct.toJSON());
+    return foundProduct;
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -66,9 +62,7 @@ export default class ProductsRepository
   }
 
   public async findAll(): Promise<Product[]> {
-    const foundProducts = (await this._model.findAll()).map((u) =>
-      this._dataMapper.toDomain(u.toJSON())
-    );
+    const foundProducts = await this._model.findAll();
 
     return foundProducts;
   }

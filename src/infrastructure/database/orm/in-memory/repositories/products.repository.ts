@@ -21,6 +21,10 @@ export default class ProductsRepository
     this._dataMapper = new ProductMapper();
   }
 
+  public async create(input: any): Promise<Product> {
+    return this._dataMapper.toDomain(input);
+  }
+
   public async save(product: Product): Promise<Product> {
     this._model.push(product.toJSON());
 
@@ -30,7 +34,7 @@ export default class ProductsRepository
   }
 
   public async update(
-    product: Product,
+    input: any,
     context: { id: string }
   ): Promise<Product | null> {
     const productIndex = this._model.findIndex(
@@ -39,10 +43,9 @@ export default class ProductsRepository
 
     if (productIndex < 0) return null;
 
-    const updatedProduct = product.toJSON();
-    Reflect.deleteProperty(updatedProduct, 'id');
+    Reflect.deleteProperty(input, 'id');
 
-    Object.assign(this._model[productIndex], updatedProduct);
+    Object.assign(this._model[productIndex], input);
 
     return this._dataMapper.toDomain(this._model[productIndex]);
   }

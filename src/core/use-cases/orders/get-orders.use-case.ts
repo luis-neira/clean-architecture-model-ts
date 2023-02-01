@@ -25,7 +25,7 @@ export default class GetOrdersUseCase implements IUseCaseInputBoundary {
     try {
       const foundOrders = await this.ordersRepository.findAll();
 
-      const foundOrderDTOs = foundOrders.map((o) => this.dataMapper.toDTO(o));
+      const foundOrderDTOs = foundOrders.map((o) => o.toJSON());
 
       this.presenter.execute(foundOrderDTOs);
     } catch (err: any) {

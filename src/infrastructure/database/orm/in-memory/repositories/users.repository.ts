@@ -21,6 +21,10 @@ export default class UsersRepository
     this._dataMapper = new UserMapper();
   }
 
+  public async create(input: any): Promise<User> {
+    return this._dataMapper.toDomain(input);
+  }
+
   public async save(user: User): Promise<User> {
     this._model.push(user.toJSON());
 
@@ -30,17 +34,16 @@ export default class UsersRepository
   }
 
   public async update(
-    user: User,
+    input: any,
     context: { id: string }
   ): Promise<User | null> {
     const userIndex = this._model.findIndex((u: User) => u.id === context.id);
 
     if (userIndex < 0) return null;
 
-    const updatedUser = user.toJSON();
-    Reflect.deleteProperty(updatedUser, 'id');
+    Reflect.deleteProperty(input, 'id');
 
-    Object.assign(this._model[userIndex], updatedUser);
+    Object.assign(this._model[userIndex], input);
 
     return this._dataMapper.toDomain(this._model[userIndex]);
   }

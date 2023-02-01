@@ -1,11 +1,9 @@
-import type { MikroORM, EntityRepository } from '@mikro-orm/core';
+import { MikroORM, EntityRepository, wrap } from '@mikro-orm/core';
 
-import { Order } from '@core/entities';
-import { OrderMapper } from '@core/mappers/order';
-import IEntityMapper from '@core/mappers/i-entity-mapper';
 import { IOrdersGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '@infra/database/orm/interfaces';
+import { Order } from '@infra/database/orm/mikroorm/entities'
 
 export default class OrdersRepository
   extends DatabaseRepository
@@ -14,45 +12,45 @@ export default class OrdersRepository
   protected _db!: MikroORM
 
   private _model: EntityRepository<Order>;
-  private _dataMapper: Pick<IEntityMapper<Order, any>, 'toDomain'>;
 
   public constructor() {
     super();
     this._model = this._db.em.getRepository(Order);
-    this._dataMapper = new OrderMapper();
+  }
+
+  public async create(input: any): Promise<Order> {
+    const product = await this._model.create(input);
+
+    return product;
   }
 
   public async save(order: Order): Promise<Order> {
-    const orderRawData = order.toJSON();
+    await this._model.persistAndFlush(order);
 
-    const addedOrder = await this._model.create(orderRawData);
-
-    await this._model.persistAndFlush(addedOrder);
-
-    return this._dataMapper.toDomain(addedOrder.toJSON());
+    return order;
   }
 
   public async findOne(orderId: string): Promise<Order | null> {
     const foundOrder = await this._model.findOne({ id: orderId });
 
-    if (!foundOrder) return null;
-
-    return this._dataMapper.toDomain(foundOrder.toJSON());
+    return foundOrder;
   }
 
   public async update(
-    order: Order,
+    input: any,
     context: { id: string }
   ): Promise<Order | null> {
     const foundOrder = await this._model.findOne({ id: context.id });
 
     if (!foundOrder) return null;
 
-    Object.assign(foundOrder, order.getProps());
+    const updatedOrder = wrap(foundOrder).assign(input, {
+      mergeObjects: true
+    });
 
-    await this._model.persistAndFlush(foundOrder);
+    await this._model.persistAndFlush(updatedOrder);
 
-    return this._dataMapper.toDomain(foundOrder.toJSON());
+    return updatedOrder;
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -66,9 +64,7 @@ export default class OrdersRepository
   }
 
   public async findAll(): Promise<Order[]> {
-    const foundOrders = (await this._model.findAll()).map((u) =>
-      this._dataMapper.toDomain(u.toJSON())
-    );
+    const foundOrders = await this._model.findAll();
 
     return foundOrders;
   }

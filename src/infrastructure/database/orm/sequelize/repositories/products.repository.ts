@@ -1,32 +1,33 @@
 import { Model, ModelCtor, Sequelize } from 'sequelize';
 
-import { Product } from '@core/entities';
-import { ProductMapper } from '@core/mappers/product';
-import IEntityMapper from '@core/mappers/i-entity-mapper';
 import { IProductsGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '../../interfaces';
+import { Product } from '@infra/database/orm/sequelize/models/Product';
 
 export default class ProductsRepository
   extends DatabaseRepository
   implements IProductsGateway
 {
-  private _model: ModelCtor<Model<any, any>>;
+  protected _db!: Sequelize;
 
-  private _dataMapper: Pick<IEntityMapper<Product, any>, 'toDomain'>;
+  private _model: ModelCtor<Product>;
 
   public constructor() {
     super();
-    this._model = (this._db as Sequelize).model('Product');
-    this._dataMapper = new ProductMapper();
+    this._model = this._db.model('Product') as ModelCtor<Product>;
+  }
+
+  public async create(input: any): Promise<Product> {
+    const user = await this._model.create(input);
+
+    return user;
   }
 
   public async save(product: Product): Promise<Product> {
-    const productRawData = product.toJSON();
+    const savedProduct = await product.save();
 
-    const addedProduct = await this._model.create(productRawData);
-
-    return this._dataMapper.toDomain(addedProduct.toJSON());
+    return savedProduct;
   }
 
   public async findOne(productId: string): Promise<Product | null> {
@@ -36,11 +37,11 @@ export default class ProductsRepository
 
     if (!foundProduct) return null;
 
-    return this._dataMapper.toDomain(foundProduct.toJSON());
+    return foundProduct;
   }
 
   public async update(
-    product: Product,
+    input: any,
     context: { id: string }
   ): Promise<Product | null> {
     const foundProduct = await this._model.findOne({
@@ -49,16 +50,15 @@ export default class ProductsRepository
 
     if (!foundProduct) return null;
 
-    const updatedProduct = product.toJSON();
-    Reflect.deleteProperty(updatedProduct, 'id');
+    Reflect.deleteProperty(input, 'id');
 
     foundProduct.set({
-      ...updatedProduct
+      ...input
     });
 
-    await foundProduct.save();
+    const savedProduct = await foundProduct.save();
 
-    return this._dataMapper.toDomain(foundProduct.toJSON());
+    return savedProduct;
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -74,9 +74,7 @@ export default class ProductsRepository
   }
 
   public async findAll(): Promise<Product[]> {
-    const foundProducts = (await this._model.findAll()).map((el) =>
-      this._dataMapper.toDomain(el.toJSON())
-    );
+    const foundProducts = await this._model.findAll();
 
     return foundProducts;
   }

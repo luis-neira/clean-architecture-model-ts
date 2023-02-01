@@ -1,32 +1,33 @@
-import { Model, ModelCtor, Sequelize } from 'sequelize';
+import { ModelCtor, Sequelize } from 'sequelize';
 
-import { Order } from '@core/entities';
-import { OrderMapper } from '@core/mappers/order';
-import IEntityMapper from '@core/mappers/i-entity-mapper';
 import { IOrdersGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '../../interfaces';
+import { Order } from '@infra/database/orm/sequelize/models/Order';
 
 export default class OrdersRepository
   extends DatabaseRepository
   implements IOrdersGateway
 {
-  private _model: ModelCtor<Model<any, any>>;
+  protected _db!: Sequelize;
 
-  private _dataMapper: Pick<IEntityMapper<Order, any>, 'toDomain'>;
+  private _model: ModelCtor<Order>;
 
   public constructor() {
     super();
-    this._model = (this._db as Sequelize).model('Order');
-    this._dataMapper = new OrderMapper();
+    this._model = this._db.model('Order') as ModelCtor<Order>;
+  }
+
+  public async create(input: any): Promise<Order> {
+    const order = await this._model.create(input);
+
+    return order;
   }
 
   public async save(order: Order): Promise<Order> {
-    const orderRawData = order.toJSON();
+    const savedOrder = await order.save();
 
-    const addedOrder = await this._model.create(orderRawData);
-
-    return this._dataMapper.toDomain(addedOrder.toJSON());
+    return savedOrder;
   }
 
   public async findOne(orderId: string): Promise<Order | null> {
@@ -36,11 +37,11 @@ export default class OrdersRepository
 
     if (!foundOrder) return null;
 
-    return this._dataMapper.toDomain(foundOrder.toJSON());
+    return foundOrder;
   }
 
   public async update(
-    order: Order,
+    input: any,
     context: { id: string }
   ): Promise<Order | null> {
     const foundOrder = await this._model.findOne({
@@ -49,16 +50,15 @@ export default class OrdersRepository
 
     if (!foundOrder) return null;
 
-    const updatedOrder = order.toJSON();
-    Reflect.deleteProperty(updatedOrder, 'id');
+    Reflect.deleteProperty(input, 'id');
 
     foundOrder.set({
-      ...updatedOrder
+      ...input
     });
 
-    await foundOrder.save();
+    const savedOrder = await foundOrder.save();
 
-    return this._dataMapper.toDomain(foundOrder.toJSON());
+    return savedOrder;
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -74,9 +74,7 @@ export default class OrdersRepository
   }
 
   public async findAll(): Promise<Order[]> {
-    const foundProducts = (await this._model.findAll()).map((el) =>
-      this._dataMapper.toDomain(el.toJSON())
-    );
+    const foundProducts = await this._model.findAll();
 
     return foundProducts;
   }

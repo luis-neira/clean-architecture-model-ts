@@ -1,9 +1,5 @@
 import { Result } from '../../lib/result';
-import { Product } from '../../entities';
 import { ValueNotFoundError } from '@common/errors'
-import { ProductMapper } from '../../mappers/product';
-import IEntityMapper from '../../mappers/i-entity-mapper'
-import { IProductDto } from '../../dtos/product'
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
@@ -16,7 +12,6 @@ export default class UpdateProductUseCase
 {
   private productsRepository: IProductsGateway;
   private presenter: IUseCaseOutputBoundary;
-  private dataMapper: IEntityMapper<Product, IProductDto>;
 
   public constructor(
     productsRepository: IProductsGateway,
@@ -24,7 +19,6 @@ export default class UpdateProductUseCase
   ) {
     this.productsRepository = productsRepository;
     this.presenter = presenter;
-    this.dataMapper = new ProductMapper();
   }
 
   public async execute({
@@ -32,27 +26,16 @@ export default class UpdateProductUseCase
     productDetails
   }: IUpdateProductRequestModel): Promise<void> {
     try {
-      const foundProduct = await this.productsRepository.findOne(id);
-
-      if (foundProduct === null) {
-        throw new ValueNotFoundError(`productId '${id}' not found`);
-      }
-
-      const modifiedProductDetails = Object.assign(
-        foundProduct.toJSON(),
-        productDetails
-      );
-
-      const modifiedProduct = Product.create(modifiedProductDetails, id);
-
       const updatedProduct = await this.productsRepository.update(
-        modifiedProduct,
+        productDetails,
         { id }
       );
 
-      const updatedProductDTO = this.dataMapper.toDTO(updatedProduct!);
+      if (updatedProduct === null) {
+        throw new ValueNotFoundError(`productId '${id}' not found`);
+      }
 
-      this.presenter.execute(updatedProductDTO);
+      this.presenter.execute(updatedProduct.toJSON());
     } catch (err: any) {
       if (err.isFailure) throw err;
 

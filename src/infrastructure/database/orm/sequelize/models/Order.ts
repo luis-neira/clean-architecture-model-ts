@@ -1,11 +1,11 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 interface IOrderAttributes {
-  id: number;
-  userId: number;
-  productIds: JSON;
+  id: string;
+  userId: string;
+  productIds: string[];
   date: Date;
-  isPaid: Boolean;
+  isPaid: boolean;
   meta: JSON;
 }
 
@@ -15,11 +15,11 @@ class Order
   extends Model<IOrderAttributes, IOrderCreationAttributes>
   implements IOrderAttributes
 {
-  public id!: number;
-  public userId!: number;
-  public productIds!: JSON;
+  public id!: string;
+  public userId!: string;
+  public productIds!: string[];
   public date!: Date;
-  public isPaid!: Boolean;
+  public isPaid!: boolean;
   public meta!: JSON;
   // timestamps
   public readonly createdAt!: Date;

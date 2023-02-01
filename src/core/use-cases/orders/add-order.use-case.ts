@@ -1,9 +1,6 @@
 import { Result } from '../../lib/result';
-import { Order, Product } from '../../entities';
+import { IOrder, IProduct } from '@core/entities/interfaces';
 import { ValidationError } from '@common/errors';
-import { OrderMapper } from '../../mappers/order';
-import IEntityMapper from '../../mappers/i-entity-mapper'
-import { IOrderDto } from '../../dtos/order'
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
@@ -24,7 +21,6 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
   private usersRepository: IUsersGateway;
   private productsRepository: IProductsGateway;
   private presenter: IUseCaseOutputBoundary;
-  private dataMapper: IEntityMapper<Order, IOrderDto>;
 
   public constructor(
     reposByResource: EntityGatewayDictionary,
@@ -34,24 +30,20 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
     this.usersRepository = reposByResource.users;
     this.productsRepository = reposByResource.products;
     this.presenter = presenter;
-    this.dataMapper = new OrderMapper();
   }
 
   public async execute(requestModel: IAddOrderRequestModel): Promise<void> {
     const { userId, productIds, date, isPaid, meta } = requestModel;
 
-    const order = Order.create(
-      {
+    try {
+      const order = await this.ordersRepository.create({
         userId,
         productIds,
         date,
         isPaid,
         meta
-      },
-      null
-    );
+      })
 
-    try {
       const validationErrors = await this.getValidationErrors(order);
 
       if (validationErrors.length > 0) {
@@ -63,9 +55,7 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
 
       const addedOrder = await this.ordersRepository.save(order);
 
-      const addedOrderDto = this.dataMapper.toDTO(addedOrder);
-
-      this.presenter.execute(addedOrderDto);
+      this.presenter.execute(addedOrder.toJSON());
     } catch (err: any) {
       if (err.isFailure) throw err;
 
@@ -73,7 +63,7 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
     }
   }
 
-  private async getValidationErrors(order: Order): Promise<IValidationError[]> {
+  private async getValidationErrors(order: IOrder): Promise<IValidationError[]> {
     const notFoundProductIds = await this.getProductIdValidationErrors(order);
 
     const notFoundUserId = await this.getUserIdValidationError(order);
@@ -82,7 +72,7 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
   }
 
   private async getProductIdValidationErrors(
-    order: Order
+    order: IOrder
   ): Promise<IValidationError[]> {
     const productIds = order.productIds as string[];
 
@@ -93,7 +83,7 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
     const foundProducts = await Promise.all(getProductsById);
 
     const invalidProductIds = foundProducts.reduce(
-      (accum: string[], currentVal: Product | null, i: number) => {
+      (accum: string[], currentVal: IProduct | null, i: number) => {
         if (currentVal === null) accum.push(productIds[i]);
         return accum;
       },
@@ -113,7 +103,7 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
   }
 
   private async getUserIdValidationError(
-    order: Order
+    order: IOrder
   ): Promise<IValidationError[]> {
     const { userId } = order;
 

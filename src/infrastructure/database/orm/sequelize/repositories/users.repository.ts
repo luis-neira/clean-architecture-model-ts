@@ -1,32 +1,33 @@
-import { Model, ModelCtor, Sequelize } from 'sequelize';
+import { ModelCtor, Sequelize } from 'sequelize';
 
-import { User } from '@core/entities';
-import { UserMapper } from '@core/mappers/user';
-import IEntityMapper from '@core/mappers/i-entity-mapper';
 import { IUsersGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '../../interfaces';
+import { User } from '@infra/database/orm/sequelize/models/User';
 
 export default class UsersRepository
   extends DatabaseRepository
   implements IUsersGateway
 {
-  private _model: ModelCtor<Model<any, any>>;
+  protected _db!: Sequelize;
 
-  private _dataMapper: Pick<IEntityMapper<User, any>, 'toDomain'>;
+  private _model: ModelCtor<User>;
 
   public constructor() {
     super();
-    this._model = (this._db as Sequelize).model('User');
-    this._dataMapper = new UserMapper();
+    this._model = this._db.model('User') as ModelCtor<User>;
+  }
+
+  public async create(input: any): Promise<User> {
+    const user = await this._model.create(input);
+
+    return user;
   }
 
   public async save(user: User): Promise<User> {
-    const userRawData = user.toJSON();
+    const savedUser = await user.save()
 
-    const addedUser = await this._model.create(userRawData);
-
-    return this._dataMapper.toDomain(addedUser.toJSON());
+    return savedUser;
   }
 
   public async findOne(userId: string): Promise<User | null> {
@@ -36,11 +37,11 @@ export default class UsersRepository
 
     if (!foundUser) return null;
 
-    return this._dataMapper.toDomain(foundUser.toJSON());
+    return foundUser;
   }
 
   public async update(
-    user: User,
+    input: any,
     context: { id: string }
   ): Promise<User | null> {
     const foundUser = await this._model.findOne({
@@ -49,16 +50,15 @@ export default class UsersRepository
 
     if (!foundUser) return null;
 
-    const updatedUser = user.toJSON();
-    Reflect.deleteProperty(updatedUser, 'id');
+    Reflect.deleteProperty(input, 'id');
 
     foundUser.set({
-      ...updatedUser
+      ...input
     });
 
-    await foundUser.save();
+    const savedUser = await foundUser.save();
 
-    return this._dataMapper.toDomain(foundUser.toJSON());
+    return savedUser;
   }
 
   public async delete(id: string): Promise<true | null> {
@@ -74,9 +74,7 @@ export default class UsersRepository
   }
 
   public async findAll(): Promise<User[]> {
-    const foundUsers = (await this._model.findAll()).map((el) =>
-      this._dataMapper.toDomain(el.toJSON())
-    );
+    const foundUsers = await this._model.findAll();
 
     return foundUsers;
   }

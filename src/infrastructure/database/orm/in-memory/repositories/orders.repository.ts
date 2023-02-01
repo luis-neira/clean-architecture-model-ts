@@ -21,6 +21,10 @@ export default class OrdersRepository
     this._dataMapper = new OrderMapper();
   }
 
+  public async create(input: any): Promise<Order> {
+    return this._dataMapper.toDomain(input);
+  }
+
   public async save(order: Order): Promise<Order> {
     this._model.push(order.toJSON());
 
@@ -30,18 +34,16 @@ export default class OrdersRepository
   }
 
   public async update(
-    order: Order,
+    input: any,
     context: { id: string }
   ): Promise<Order | null> {
     const orderIndex = this._model.findIndex((o: Order) => o.id === context.id);
 
     if (orderIndex < 0) return null;
 
-    const updatedOrder = order.toJSON();
+    Reflect.deleteProperty(input, 'id');
 
-    Reflect.deleteProperty(updatedOrder, 'id');
-
-    Object.assign(this._model[orderIndex], updatedOrder);
+    Object.assign(this._model[orderIndex], input);
 
     const persistedOrder = this._model[orderIndex];
 

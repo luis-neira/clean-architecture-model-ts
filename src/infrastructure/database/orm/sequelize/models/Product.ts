@@ -1,10 +1,10 @@
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 
 interface IProductAttributes {
-  id: number;
+  id: string;
   name: string;
   description: string;
-  images: JSON;
+  images: string[];
   price: number;
   color: string;
   meta: JSON;
@@ -16,10 +16,10 @@ interface IProductCreationAttributes
 class Product
   extends Model<IProductAttributes, IProductCreationAttributes>
   implements IProductAttributes {
-    public id!: number;
+    public id!: string;
     public name!: string;
     public description!: string;
-    public images!: JSON;
+    public images!: string[];
     public price!: number;
     public color!: string;
     public meta!: JSON;

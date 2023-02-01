@@ -1,8 +1,10 @@
-import { User, Product, Order, Image } from '../../entities';
+import { Image } from '../../entities';
+import { IUser, IProduct, IOrder } from '@core/entities/interfaces';
 
 interface IWrite<T> {
+  create(input: any): Promise<T>;
   save(entity: T): Promise<T>;
-  update(entity: T, context: { id: string }): Promise<T | null>;
+  update(input: any, context: { id: string }): Promise<T | null>;
   delete(id: string): Promise<true | null>;
 }
 
@@ -15,10 +17,10 @@ export default interface IEntityGateway extends IWrite<any>, IRead<any> {}
 
 export type EntityGatewayDictionary = Record<string, IEntityGateway>;
 
-export interface IUsersGateway extends IWrite<User>, IRead<User> {}
+export interface IUsersGateway extends IWrite<IUser>, IRead<IUser> {}
 
-export interface IProductsGateway extends IWrite<Product>, IRead<Product> {}
+export interface IProductsGateway extends IWrite<IProduct>, IRead<IProduct> {}
 
-export interface IOrdersGateway extends IWrite<Order>, IRead<Order> {}
+export interface IOrdersGateway extends IWrite<IOrder>, IRead<IOrder> {}
 
-export interface IImagesGateway extends IWrite<Image>, IRead<Image> {}
+export interface IImagesGateway extends Omit<IWrite<Image>, 'create'>, IRead<Image> {}

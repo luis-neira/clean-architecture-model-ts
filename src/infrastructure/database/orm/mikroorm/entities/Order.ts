@@ -1,8 +1,10 @@
-import { Entity, PrimaryKey, Property, t, ArrayType } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, t, wrap } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 
+import { IOrder } from '@core/entities/interfaces';
+
 @Entity()
-export class Order {
+export class Order implements IOrder {
   @PrimaryKey({ type: t.uuid, nullable: false})
   id: string = v4();
 
@@ -13,7 +15,7 @@ export class Order {
   productIds!: string[];
 
   @Property({ type: t.datetime, defaultRaw: 'NOW()', nullable: false })
-  date!: number;
+  date!: Date;
 
   @Property({ type: t.boolean, default: false, nullable: false })
   isPaid!: boolean;
@@ -26,4 +28,9 @@ export class Order {
 
   @Property({ type: t.datetime, defaultRaw: 'NOW()', nullable: false })
   updatedAt!: Date;
+
+  toJSON() {
+    const o = wrap<Order>(this).toObject();
+    return o;
+  }
 }

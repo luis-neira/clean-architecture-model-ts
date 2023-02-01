@@ -1,10 +1,7 @@
 import { Result } from '../../lib/result';
 import { ValidationError } from '@common/errors';
-import { Order, Product } from '../../entities';
-import { ValueNotFoundError } from '../../../common/errors'
-import { OrderMapper } from '../../mappers/order';
-import IEntityMapper from '../../mappers/i-entity-mapper'
-import { IOrderDto } from '../../dtos/order'
+import { IProduct } from '@core/entities/interfaces';
+import { ValueNotFoundError } from '../../../common/errors';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
@@ -27,7 +24,6 @@ export default class UpdateOrderUseCase
   private usersRepository: IUsersGateway;
   private productsRepository: IProductsGateway;
   private presenter: IUseCaseOutputBoundary;
-  private dataMapper: IEntityMapper<Order, IOrderDto>;
 
   public constructor(
     reposByResource: EntityGatewayDictionary,
@@ -37,7 +33,6 @@ export default class UpdateOrderUseCase
     this.usersRepository = reposByResource.users;
     this.productsRepository = reposByResource.products;
     this.presenter = presenter;
-    this.dataMapper = new OrderMapper();
   }
 
   public async execute({
@@ -45,18 +40,7 @@ export default class UpdateOrderUseCase
     orderDetails
   }: IUpdateOrderRequestModel): Promise<void> {
     try {
-      const foundOrder = await this.ordersRepository.findOne(id);
-
-      if (foundOrder === null) {
-        throw new ValueNotFoundError(`orderId '${id}' not found`);
-      }
-
-      const modifiedOrderDetails = Object.assign(
-        foundOrder.toJSON(),
-        orderDetails
-      );
-
-      await this.addOrderUseCase(modifiedOrderDetails, id);
+      await this.addOrderUseCase(orderDetails, id);
     } catch (err: any) {
       if (err.isFailure) throw err;
 
@@ -64,21 +48,8 @@ export default class UpdateOrderUseCase
     }
   }
 
-  private async addOrderUseCase(orderDetails: IOrderDetails, orderId?: string) {
-    const orderIdOrNull = orderId ? orderId : null;
-
-    const order = Order.create(
-      {
-        userId: orderDetails.userId,
-        productIds: orderDetails.productIds,
-        date: orderDetails.date,
-        isPaid: orderDetails.isPaid,
-        meta: orderDetails.meta
-      },
-      orderIdOrNull
-    );
-
-    const validationErrors = await this.getValidationErrors(order);
+  private async addOrderUseCase(orderDetails: IOrderDetails, orderId: string) {
+    const validationErrors = await this.getValidationErrors(orderDetails);
 
     if (validationErrors.length > 0) {
       const invalid = new ValidationError('Validation Errors');
@@ -87,16 +58,18 @@ export default class UpdateOrderUseCase
       throw invalid;
     }
 
-    const addedOrder = await this.ordersRepository.update(order, {
-      id: order.id
+    const addedOrder = await this.ordersRepository.update(orderDetails, {
+      id: orderId
     });
 
-    const addedOrderDto = this.dataMapper.toDTO(addedOrder!);
+    if (addedOrder === null) {
+      throw new ValueNotFoundError(`orderId '${orderId}' not found`);
+    }
 
-    this.presenter.execute(addedOrderDto);
+    this.presenter.execute(addedOrder.toJSON());
   }
 
-  private async getValidationErrors(order: Order): Promise<IValidationError[]> {
+  private async getValidationErrors(order: IOrderDetails): Promise<IValidationError[]> {
     const notFoundProductIds = await this.getProductIdValidationErrors(order);
 
     const notFoundUserId = await this.getUserIdValidationError(order);
@@ -105,7 +78,7 @@ export default class UpdateOrderUseCase
   }
 
   private async getProductIdValidationErrors(
-    order: Order
+    order: IOrderDetails
   ): Promise<IValidationError[]> {
     const productIds = order.productIds as string[];
 
@@ -116,7 +89,7 @@ export default class UpdateOrderUseCase
     const foundProducts = await Promise.all(getProductsById);
 
     const invalidProductIds = foundProducts.reduce(
-      (accum: string[], currentVal: Product | null, i: number) => {
+      (accum: string[], currentVal: IProduct | null, i: number) => {
         if (currentVal === null) accum.push(productIds[i]);
         return accum;
       },
@@ -136,7 +109,7 @@ export default class UpdateOrderUseCase
   }
 
   private async getUserIdValidationError(
-    order: Order
+    order: IOrderDetails
   ): Promise<IValidationError[]> {
     const { userId } = order;
 

@@ -1,8 +1,4 @@
 import { Result } from '../../lib/result';
-import { User } from '../../entities';
-import { UserMapper } from '../../mappers/user';
-import IEntityMapper from '../../mappers/i-entity-mapper'
-import { IUserDto } from '../../dtos/user'
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import { IUsersGateway, IAddUserRequestModel } from '../interfaces';
@@ -10,7 +6,6 @@ import { IUsersGateway, IAddUserRequestModel } from '../interfaces';
 export default class AddUserUseCase implements IUseCaseInputBoundary {
   private usersRepository: IUsersGateway;
   private presenter: IUseCaseOutputBoundary;
-  private dataMapper: IEntityMapper<User, IUserDto>;
 
   public constructor(
     usersRepository: IUsersGateway,
@@ -18,18 +13,15 @@ export default class AddUserUseCase implements IUseCaseInputBoundary {
   ) {
     this.usersRepository = usersRepository;
     this.presenter = presenter;
-    this.dataMapper = new UserMapper();
   }
 
   public async execute(requestDetails: IAddUserRequestModel): Promise<void> {
-    const user = User.create(requestDetails, null);
-
     try {
+      const user = await this.usersRepository.create(requestDetails);
+
       const addedUser = await this.usersRepository.save(user);
 
-      const addedUserDto = this.dataMapper.toDTO(addedUser);
-
-      this.presenter.execute(addedUserDto);
+      this.presenter.execute(addedUser.toJSON());
     } catch (err: any) {
       throw Result.fail(err);
     }

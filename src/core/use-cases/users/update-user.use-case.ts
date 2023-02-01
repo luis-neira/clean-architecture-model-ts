@@ -1,9 +1,5 @@
 import { Result } from '../../lib/result';
-import { User } from '../../entities';
 import { ValueNotFoundError } from '@common/errors'
-import { UserMapper } from '../../mappers/user';
-import IEntityMapper from '../../mappers/i-entity-mapper'
-import { IUserDto } from '../../dtos/user'
 
 import {
   IUseCaseInputBoundary,
@@ -17,7 +13,6 @@ export default class UpdateUserUseCase
 {
   private usersRepository: IUsersGateway;
   private presenter: IUseCaseOutputBoundary;
-  private dataMapper: IEntityMapper<User, IUserDto>;
 
   public constructor(
     usersRepository: IUsersGateway,
@@ -25,7 +20,6 @@ export default class UpdateUserUseCase
   ) {
     this.usersRepository = usersRepository;
     this.presenter = presenter;
-    this.dataMapper = new UserMapper();
   }
 
   public async execute({
@@ -33,23 +27,15 @@ export default class UpdateUserUseCase
     userDetails
   }: IUpdateUserRequestModel): Promise<void> {
     try {
-      const foundUser = await this.usersRepository.findOne(id);
-
-      if (foundUser == null) {
-        throw new ValueNotFoundError(`userId '${id}' not found`);
-      }
-
-      const modifiedUserDetails = Object.assign(foundUser.toJSON(), userDetails)
-
-      const modifiedUser = User.create(modifiedUserDetails, id);
-
-      const updatedUser = await this.usersRepository.update(modifiedUser, {
+      const updatedUser = await this.usersRepository.update(userDetails, {
         id
       });
 
-      const updatedUserDto = this.dataMapper.toDTO(updatedUser!);
+      if (updatedUser == null) {
+        throw new ValueNotFoundError(`userId '${id}' not found`);
+      }
 
-      this.presenter.execute(updatedUserDto);
+      this.presenter.execute(updatedUser.toJSON());
     } catch (err: any) {
       if (err.isFailure) throw err;
 
