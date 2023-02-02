@@ -1,45 +1,32 @@
 import { Result } from '../../lib/result';
-import { IProduct, IUser } from '@core/entities/interfaces';
 import { ValidationError } from '@common/errors';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
-  IProductsGateway,
-  IUsersGateway,
   IOrdersGateway,
-  EntityGatewayDictionary
+  EntityGatewayDictionary,
+  IAddOrderRequestModel
 } from '../interfaces';
-import { IAddOrderRequestModel } from '../interfaces';
 
-interface IValidationError {
-  field: string;
-  msg: string;
-}
-
-interface IRelations {
-  products: IProduct[];
-  user: IUser | undefined;
-}
+import { RelationValidator } from './relations-validator';
 
 export default class AddOrderUseCase implements IUseCaseInputBoundary {
   private ordersRepository: IOrdersGateway;
-  private usersRepository: IUsersGateway;
-  private productsRepository: IProductsGateway;
   private presenter: IUseCaseOutputBoundary;
+  private validateRelations: RelationValidator;
 
   public constructor(
     reposByResource: EntityGatewayDictionary,
     presenter: IUseCaseOutputBoundary
   ) {
     this.ordersRepository = reposByResource.orders;
-    this.usersRepository = reposByResource.users;
-    this.productsRepository = reposByResource.products;
     this.presenter = presenter;
+    this.validateRelations = new RelationValidator(reposByResource.products, reposByResource.users)
   }
 
   public async execute(requestModel: IAddOrderRequestModel): Promise<void> {
     try {
-      const [ validationErrors, relationDict ] = await this.validateRelations(requestModel);
+      const [ validationErrors, relationDictionary ] = await this.validateRelations.validate(requestModel);
 
       if (validationErrors.length > 0) {
         const invalid = new ValidationError('Validation Errors');
@@ -55,7 +42,7 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
         meta: requestModel.meta
       });
 
-      order.user = relationDict.user;
+      order.user = relationDictionary.user;
 
       const addedOrder = await this.ordersRepository.save(order);
 
@@ -65,85 +52,5 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
 
       throw Result.fail(err);
     }
-  }
-
-  private async validateRelations(order: IAddOrderRequestModel): Promise<[IValidationError[], IRelations]> {
-    const [ productIdErrors, foundProducts ] = await this.getProductIdValidationErrors(order);
-
-    const [ userIdErrors, foundUser ] = await this.getUserIdValidationError(order);
-
-    return [
-      [...productIdErrors, ...userIdErrors],
-      { 
-        products: foundProducts,
-        user: foundUser
-      }
-    ];
-  }
-
-  private async getProductIdValidationErrors(
-    order: IAddOrderRequestModel
-  ): Promise<[IValidationError[], IProduct[]]> {
-
-    if (order.productIds == null) {
-      return [ [], [] ];
-    }
-    
-    const productIds = order.productIds;
-
-    const productsById = productIds.map((id) => {
-      return this.productsRepository.findOne(id);
-    });
-
-    const foundProducts = await Promise.all(productsById);
-
-    const validatedProducts = [] as IProduct[];
-
-    const invalidProductIds = foundProducts.reduce(
-      (accum: string[], currentVal: IProduct | null, i: number) => {
-        if (currentVal === null) accum.push(productIds[i]);
-        else validatedProducts.push(currentVal);
-        return accum;
-      },
-      []
-    );
-
-    if (invalidProductIds.length === 0) {
-      return [ [], validatedProducts ];
-    }
-
-    const returnable = [] as IValidationError[];
-
-    returnable.push({
-      field: 'productIds',
-      msg: `No products with ids ${invalidProductIds.join(', ')}`
-    });
-
-    return [returnable, validatedProducts];
-  }
-
-  private async getUserIdValidationError(
-    order: IAddOrderRequestModel
-  ): Promise<[IValidationError[], IUser | undefined]> {
-    const { userId } = order;
-
-    if (userId == null) {
-      return [ [], undefined ];
-    }
-
-    const foundUser = await this.usersRepository.findOne(userId);
-
-    if (foundUser) {
-      return [ [], foundUser ];
-    }
-
-    const returnable = [] as IValidationError[];
-
-    returnable.push({
-      field: 'userId',
-      msg: `No user with id ${userId}`
-    });
-
-    return [ returnable, undefined ];
   }
 }
