@@ -26,7 +26,10 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
 
   public async execute(requestModel: IAddOrderRequestModel): Promise<void> {
     try {
-      const [ validationErrors, relationDictionary ] = await this.validateRelations.validate(requestModel);
+      const [
+        validationErrors,
+        relationDictionary
+      ] = await this.validateRelations.validate(requestModel);
 
       if (validationErrors.length > 0) {
         const invalid = new ValidationError('Validation Errors');
