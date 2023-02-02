@@ -54,7 +54,7 @@ export default class UpdateOrderUseCase
   }
 
   private async addOrderUseCase(orderDetails: IOrderDetails, orderId: string) {
-    const [ validationErrors ] = await this.validateRelations(orderDetails);
+    const [ validationErrors, relationDict ] = await this.validateRelations(orderDetails);
 
     if (validationErrors.length > 0) {
       const invalid = new ValidationError('Validation Errors');
@@ -71,11 +71,8 @@ export default class UpdateOrderUseCase
       throw new ValueNotFoundError(`orderId '${orderId}' not found`);
     }
 
-    const foundUser = await this.usersRepository.findOne(orderDetails.userId);
-
-
-    if (foundUser) {
-      updatedOrder.user = foundUser;
+    if (relationDict.user) {
+      updatedOrder.user = relationDict.user;
     }
 
     const savedOrder = await this.ordersRepository.save(updatedOrder);
