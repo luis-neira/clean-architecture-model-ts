@@ -46,16 +46,6 @@ export default class OrdersRepository
 
     if (!foundOrder) return null;
 
-    // const inputData = {} as Record<string, any>
-
-    // for (const key in input) {
-    //   if (Object.prototype.hasOwnProperty.call(input, key)) {
-    //     if (key !== 'userId') {
-    //       inputData[key] = input[key];
-    //     }
-    //   }
-    // }
-
     const updatedOrder = wrap(foundOrder).assign(input, {
       mergeObjects: true
     });

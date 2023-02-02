@@ -9,9 +9,6 @@ export class Order implements IOrder {
   @PrimaryKey({ type: t.uuid, nullable: false})
   id: string = v4();
 
-  // @Property({ type: t.array, nullable: false })
-  // productIds!: string[];
-
   @Property({ type: t.datetime, defaultRaw: 'NOW()', nullable: false })
   date!: Date;
 
@@ -24,7 +21,7 @@ export class Order implements IOrder {
   @ManyToOne(() => User)
   user!: User;
 
-  @ManyToMany(() => Product, product => product.orders)
+  @ManyToMany(() => Product, product => product.orders, { owner: true })
   products = new Collection<Product>(this);
 
   @Property({ type: t.datetime, defaultRaw: 'NOW()', nullable: false })

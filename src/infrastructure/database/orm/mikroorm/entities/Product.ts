@@ -27,7 +27,7 @@ export class Product implements IProduct {
   @Property({ type: t.json, defaultRaw: "'{}'", nullable: false })
   meta!: Record<string, any>;
 
-  @ManyToMany(() => Order, order => order.products, { owner: true })
+  @ManyToMany(() => Order, order => order.products)
   orders = new Collection<Order>(this);
 
   @Property({ type: t.datetime, defaultRaw: 'NOW()', nullable: false })
