@@ -39,13 +39,13 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
       }
 
       const order = await this.ordersRepository.create({
-        productIds: requestModel.productIds,
         date: requestModel.date,
         isPaid: requestModel.isPaid,
         meta: requestModel.meta
       });
 
       order.user = relationDictionary.user;
+      order.products = relationDictionary.products;
 
       const addedOrder = await this.ordersRepository.save(order);
 

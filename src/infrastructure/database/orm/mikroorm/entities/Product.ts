@@ -1,7 +1,8 @@
-import { Entity, PrimaryKey, Property, t, wrap } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, t, wrap, ManyToMany, Collection } from '@mikro-orm/core';
 import { v4 } from 'uuid';
 
 import { IProduct } from '@core/entities/interfaces';
+import { Order } from './Order';
 
 @Entity()
 export class Product implements IProduct {
@@ -25,6 +26,9 @@ export class Product implements IProduct {
 
   @Property({ type: t.json, defaultRaw: "'{}'", nullable: false })
   meta!: Record<string, any>;
+
+  @ManyToMany(() => Order, order => order.products, { owner: true })
+  orders = new Collection<Order>(this);
 
   @Property({ type: t.datetime, defaultRaw: 'NOW()', nullable: false })
   createdAt!: Date;

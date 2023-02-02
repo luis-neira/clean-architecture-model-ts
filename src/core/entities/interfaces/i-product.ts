@@ -6,6 +6,7 @@ export interface IProduct {
   price: number;
   color: string;
   meta: Record<string, any>;
+  orders?: unknown;
   createdAt?: Date;
   updatedAt?: Date;
 
