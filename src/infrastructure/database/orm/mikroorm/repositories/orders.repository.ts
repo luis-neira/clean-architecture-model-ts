@@ -40,21 +40,23 @@ export default class OrdersRepository
     input: any,
     context: { id: string }
   ): Promise<Order | null> {
-    const foundOrder = await this._model.findOne({ id: context.id });
+    const foundOrder = await this._model.findOne({ id: context.id }, {
+      populate: ['user', 'products']
+    });
 
     if (!foundOrder) return null;
 
-    const inputData = {} as Record<string, any>
+    // const inputData = {} as Record<string, any>
 
-    for (const key in input) {
-      if (Object.prototype.hasOwnProperty.call(input, key)) {
-        if (key !== 'userId') {
-          inputData[key] = input[key];
-        }
-      }
-    }
+    // for (const key in input) {
+    //   if (Object.prototype.hasOwnProperty.call(input, key)) {
+    //     if (key !== 'userId') {
+    //       inputData[key] = input[key];
+    //     }
+    //   }
+    // }
 
-    const updatedOrder = wrap(foundOrder).assign(inputData, {
+    const updatedOrder = wrap(foundOrder).assign(input, {
       mergeObjects: true
     });
 

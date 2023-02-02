@@ -44,9 +44,16 @@ export default class UpdateOrderUseCase
       throw invalid;
     }
 
-    const updatedOrder = await this.ordersRepository.update(orderDetails, {
-      id
-    });
+    const test = Object.assign({}, orderDetails);
+
+    if (test.productIds) {
+      Reflect.deleteProperty(test, 'productIds')
+    }
+    if (test.userId) {
+      Reflect.deleteProperty(test, 'userId')
+    }
+
+    const updatedOrder = await this.ordersRepository.update(test, { id });
 
     if (updatedOrder === null) {
       throw new ValueNotFoundError(`orderId '${id}' not found`);
@@ -54,6 +61,12 @@ export default class UpdateOrderUseCase
 
     if (relationDictionary.user) {
       updatedOrder.user = relationDictionary.user;
+    }
+    if (relationDictionary.products) {
+      (updatedOrder.products as any).removeAll();
+      for (const product of relationDictionary.products) {
+        (updatedOrder.products as any).add(product);
+      }
     }
 
     const savedOrder = await this.ordersRepository.save(updatedOrder);
