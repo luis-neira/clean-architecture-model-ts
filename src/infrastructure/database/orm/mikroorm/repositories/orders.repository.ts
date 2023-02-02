@@ -44,11 +44,19 @@ export default class OrdersRepository
 
     if (!foundOrder) return null;
 
-    const updatedOrder = wrap(foundOrder).assign(input, {
+    const inputData = {} as Record<string, any>
+
+    for (const key in input) {
+      if (Object.prototype.hasOwnProperty.call(input, key)) {
+        if (key !== 'userId') {
+          inputData[key] = input[key];
+        }
+      }
+    }
+
+    const updatedOrder = wrap(foundOrder).assign(inputData, {
       mergeObjects: true
     });
-
-    await this._model.persistAndFlush(updatedOrder);
 
     return updatedOrder;
   }

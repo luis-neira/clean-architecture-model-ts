@@ -1,5 +1,5 @@
 import { Result } from '../../lib/result';
-import { IOrder, IProduct, IUser } from '@core/entities/interfaces';
+import { IProduct, IUser } from '@core/entities/interfaces';
 import { ValidationError } from '@common/errors';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';

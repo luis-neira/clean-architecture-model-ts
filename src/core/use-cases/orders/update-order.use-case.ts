@@ -1,6 +1,6 @@
 import { Result } from '../../lib/result';
 import { ValidationError } from '@common/errors';
-import { IProduct } from '@core/entities/interfaces';
+import { IProduct, IUser } from '@core/entities/interfaces';
 import { ValueNotFoundError } from '../../../common/errors';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
@@ -15,6 +15,11 @@ import { IUpdateOrderRequestModel, IOrderDetails } from '../interfaces';
 interface IValidationError {
   field: string;
   msg: string;
+}
+
+interface IRelations {
+  products: IProduct[];
+  user: IUser | undefined;
 }
 
 export default class UpdateOrderUseCase
@@ -49,7 +54,7 @@ export default class UpdateOrderUseCase
   }
 
   private async addOrderUseCase(orderDetails: IOrderDetails, orderId: string) {
-    const validationErrors = await this.getValidationErrors(orderDetails);
+    const [ validationErrors ] = await this.validateRelations(orderDetails);
 
     if (validationErrors.length > 0) {
       const invalid = new ValidationError('Validation Errors');
@@ -58,50 +63,71 @@ export default class UpdateOrderUseCase
       throw invalid;
     }
 
-    const addedOrder = await this.ordersRepository.update(orderDetails, {
+    const updatedOrder = await this.ordersRepository.update(orderDetails, {
       id: orderId
     });
 
-    if (addedOrder === null) {
+    if (updatedOrder === null) {
       throw new ValueNotFoundError(`orderId '${orderId}' not found`);
     }
 
-    this.presenter.execute(addedOrder.toJSON());
+    const foundUser = await this.usersRepository.findOne(orderDetails.userId);
+
+
+    if (foundUser) {
+      updatedOrder.user = foundUser;
+    }
+
+    const savedOrder = await this.ordersRepository.save(updatedOrder);
+
+
+    this.presenter.execute(savedOrder.toJSON());
   }
 
-  private async getValidationErrors(order: IOrderDetails): Promise<IValidationError[]> {
-    const notFoundProductIds = await this.getProductIdValidationErrors(order);
+  private async validateRelations(order: IOrderDetails): Promise<[IValidationError[], IRelations]> {
+    const [ productIdErrors, foundProducts ] = await this.getProductIdValidationErrors(order);
 
-    const notFoundUserId = await this.getUserIdValidationError(order);
+    const [ userIdErrors, foundUser ] = await this.getUserIdValidationError(order);
 
-    return [...notFoundProductIds, ...notFoundUserId];
+    return [
+      [...productIdErrors, ...userIdErrors],
+      { 
+        products: foundProducts,
+        user: foundUser
+      }
+    ];
   }
 
   private async getProductIdValidationErrors(
     order: IOrderDetails
-  ): Promise<IValidationError[]> {
+  ): Promise<[IValidationError[], IProduct[]]> {
 
     if (order.productIds == null) {
-      return [] as IValidationError[];
+      return [ [], [] ];
     }
 
-    const productIds = order.productIds as string[];
+    const productIds = order.productIds;
 
-    const getProductsById = productIds.map((id: string) => {
+    const productsById = productIds.map((id: string) => {
       return this.productsRepository.findOne(id);
     });
 
-    const foundProducts = await Promise.all(getProductsById);
+    const foundProducts = await Promise.all(productsById);
+
+    const validatedProducts = [] as IProduct[];
 
     const invalidProductIds = foundProducts.reduce(
       (accum: string[], currentVal: IProduct | null, i: number) => {
         if (currentVal === null) accum.push(productIds[i]);
+        else validatedProducts.push(currentVal);
         return accum;
       },
       []
     );
 
-    if (invalidProductIds.length === 0) return [] as IValidationError[];
+    if (invalidProductIds.length === 0) {
+      return [ [], validatedProducts ];
+    }
 
     const returnable = [] as IValidationError[];
 
@@ -110,21 +136,23 @@ export default class UpdateOrderUseCase
       msg: `No products with ids ${invalidProductIds.join(', ')}`
     });
 
-    return returnable;
+    return [returnable, validatedProducts];
   }
 
   private async getUserIdValidationError(
     order: IOrderDetails
-  ): Promise<IValidationError[]> {
+  ): Promise<[IValidationError[], IUser | undefined]> {
     const { userId } = order;
 
     if (userId == null) {
-      return [] as IValidationError[];
+      return [ [], undefined ];
     }
 
     const foundUser = await this.usersRepository.findOne(userId);
 
-    if (foundUser) return [] as IValidationError[];
+    if (foundUser) {
+      return [ [], foundUser ];
+    }
 
     const returnable = [] as IValidationError[];
 
@@ -133,6 +161,6 @@ export default class UpdateOrderUseCase
       msg: `No user with id ${userId}`
     });
 
-    return returnable;
+    return [ returnable, undefined ];
   }
 }
