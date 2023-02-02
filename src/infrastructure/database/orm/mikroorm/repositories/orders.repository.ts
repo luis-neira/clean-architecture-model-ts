@@ -4,7 +4,6 @@ import { IOrdersGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '@infra/database/orm/interfaces';
 import { Order, User, Product } from '@infra/database/orm/mikroorm/entities';
-import { IRelations } from '@core/use-cases/orders/request-model-validator';
 
 export default class OrdersRepository
   extends DatabaseRepository
@@ -39,7 +38,13 @@ export default class OrdersRepository
 
   public async update(
     input: any,
-    context: { id: string; relations: IRelations }
+    context: { 
+      id: string;
+      relations: {
+        user: User;
+        products: Product[];
+      }
+    }
   ): Promise<Order | null> {
     const foundOrder = await this._model.findOne({ id: context.id }, {
       populate: ['user', 'products']
