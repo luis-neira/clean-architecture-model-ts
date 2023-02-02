@@ -32,36 +32,26 @@ export default class UpdateOrderUseCase
     orderDetails
   }: IUpdateOrderRequestModel): Promise<void> {
     try {
-    const [
-      validationErrors,
-      relationDictionary
-    ] = await this.validateRelations.validate(orderDetails);
+    const {
+      errors,
+      data,
+      relationsDictionary
+    } = await this.validateRelations.validate(orderDetails);
     
-    if (validationErrors.length > 0) {
+    if (errors.length > 0) {
       const invalid = new ValidationError('Validation Errors');
       invalid.reason = 'Bad data';
-      invalid.validationErrors = validationErrors;
+      invalid.validationErrors = errors;
       throw invalid;
     }
 
-    if (orderDetails.productIds) {
-      Reflect.deleteProperty(orderDetails, 'productIds')
-    }
-    if (orderDetails.userId) {
-      Reflect.deleteProperty(orderDetails, 'userId')
-    }
-
-    const updatedOrder = await this.ordersRepository.update(orderDetails, { id });
+    const updatedOrder = await this.ordersRepository.update(data, {
+      id,
+      relations: relationsDictionary
+    });
 
     if (updatedOrder === null) {
       throw new ValueNotFoundError(`orderId '${id}' not found`);
-    }
-
-    if (relationDictionary.user) {
-      updatedOrder.user = relationDictionary.user;
-    }
-    if (relationDictionary.products) {
-      (updatedOrder.products as any).set(relationDictionary.products);
     }
 
     const savedOrder = await this.ordersRepository.save(updatedOrder);

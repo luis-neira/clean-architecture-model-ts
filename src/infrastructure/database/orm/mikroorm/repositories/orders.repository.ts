@@ -3,7 +3,8 @@ import { MikroORM, EntityRepository, wrap } from '@mikro-orm/core';
 import { IOrdersGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '@infra/database/orm/interfaces';
-import { Order } from '@infra/database/orm/mikroorm/entities'
+import { Order, User, Product } from '@infra/database/orm/mikroorm/entities';
+import { IRelations } from '@core/use-cases/orders/relations-validator';
 
 export default class OrdersRepository
   extends DatabaseRepository
@@ -38,7 +39,7 @@ export default class OrdersRepository
 
   public async update(
     input: any,
-    context: { id: string }
+    context: { id: string; relations: IRelations }
   ): Promise<Order | null> {
     const foundOrder = await this._model.findOne({ id: context.id }, {
       populate: ['user', 'products']
@@ -49,6 +50,14 @@ export default class OrdersRepository
     const updatedOrder = wrap(foundOrder).assign(input, {
       mergeObjects: true
     });
+
+    if (context.relations.user) {
+      updatedOrder.user = context.relations.user as User;
+    }
+    
+    if (context.relations.products) {
+      updatedOrder.products.set(context.relations.products as Product[]);
+    }
 
     return updatedOrder;
   }

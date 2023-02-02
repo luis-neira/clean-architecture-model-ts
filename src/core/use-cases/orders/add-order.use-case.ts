@@ -24,28 +24,29 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
     this.validateRelations = new RelationValidator(reposByResource.products, reposByResource.users)
   }
 
-  public async execute(requestModel: IAddOrderRequestModel): Promise<void> {
+  public async execute(orderDetails: IAddOrderRequestModel): Promise<void> {
     try {
-      const [
-        validationErrors,
-        relationDictionary
-      ] = await this.validateRelations.validate(requestModel);
+      const {
+        errors,
+        data,
+        relationsDictionary
+      } = await this.validateRelations.validate(orderDetails);
 
-      if (validationErrors.length > 0) {
+      if (errors.length > 0) {
         const invalid = new ValidationError('Validation Errors');
         invalid.reason = 'Bad data input';
-        invalid.validationErrors = validationErrors;
+        invalid.validationErrors = errors;
         throw invalid;
       }
 
       const order = await this.ordersRepository.create({
-        date: requestModel.date,
-        isPaid: requestModel.isPaid,
-        meta: requestModel.meta
+        date: data.date,
+        isPaid: data.isPaid,
+        meta: data.meta
       });
 
-      order.user = relationDictionary.user;
-      order.products = relationDictionary.products;
+      order.user = relationsDictionary.user;
+      order.products = relationsDictionary.products;
 
       const addedOrder = await this.ordersRepository.save(order);
 

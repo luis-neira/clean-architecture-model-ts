@@ -1,10 +1,15 @@
 import { Image } from '../../entities';
 import { IUser, IProduct, IOrder } from '@core/entities/interfaces';
 
+interface IContext {
+  id: string;
+  [key: string]: any;
+}
+
 interface IWrite<T> {
   create(input: any): Promise<T>;
   save(entity: T): Promise<T>;
-  update(input: any, context: { id: string }): Promise<T | null>;
+  update(input: any, context: IContext): Promise<T | null>;
   delete(id: string): Promise<true | null>;
 }
 

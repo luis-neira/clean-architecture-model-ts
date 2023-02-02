@@ -11,7 +11,7 @@ interface IValidationError {
   msg: string;
 }
 
-interface IRelations {
+export interface IRelations {
   products: IProduct[];
   user: IUser | undefined;
 }
@@ -25,18 +25,34 @@ export class RelationValidator {
     this.productsRepository = productsRepository;
   }
 
-  public async validate(order: IOrderDetails): Promise<[IValidationError[], IRelations]> {
-    const [ productIdErrors, foundProducts ] = await this.getProductIdValidationErrors(order);
+  public async validate(order: IOrderDetails): Promise<{
+    errors: IValidationError[],
+    relationsDictionary: IRelations,
+    data: any
+  }> {
 
-    const [ userIdErrors, foundUser ] = await this.getUserIdValidationError(order);
+    const processedOrder = { ...order };
 
-    return [
-      [...productIdErrors, ...userIdErrors],
-      { 
+    const [ productIdErrors, foundProducts ] = await this.getProductIdValidationErrors(processedOrder);
+
+    const [ userIdErrors, foundUser ] = await this.getUserIdValidationError(processedOrder);
+
+    if (processedOrder.productIds) {
+      Reflect.deleteProperty(processedOrder, 'productIds')
+    }
+
+    if (processedOrder.userId) {
+      Reflect.deleteProperty(processedOrder, 'userId')
+    }
+
+    return {
+      errors: [ ...productIdErrors, ...userIdErrors ],
+      relationsDictionary: { 
         products: foundProducts,
         user: foundUser
-      }
-    ];
+      },
+      data: processedOrder
+    };
   }
 
   private async getProductIdValidationErrors(
