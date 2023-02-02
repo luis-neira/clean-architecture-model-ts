@@ -16,7 +16,7 @@ export interface IRelations {
   user: IUser | undefined;
 }
 
-export class RelationValidator {
+export class RequestModelValidator {
   private usersRepository: IUsersGateway;
   private productsRepository: IProductsGateway;
 

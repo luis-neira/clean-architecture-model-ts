@@ -8,12 +8,12 @@ import {
   IAddOrderRequestModel
 } from '../interfaces';
 
-import { RelationValidator } from './relations-validator';
+import { RequestModelValidator } from './request-model-validator';
 
 export default class AddOrderUseCase implements IUseCaseInputBoundary {
   private ordersRepository: IOrdersGateway;
   private presenter: IUseCaseOutputBoundary;
-  private validateRelations: RelationValidator;
+  private requestModelValidator: RequestModelValidator;
 
   public constructor(
     reposByResource: EntityGatewayDictionary,
@@ -21,7 +21,7 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
   ) {
     this.ordersRepository = reposByResource.orders;
     this.presenter = presenter;
-    this.validateRelations = new RelationValidator(reposByResource.products, reposByResource.users)
+    this.requestModelValidator = new RequestModelValidator(reposByResource.products, reposByResource.users)
   }
 
   public async execute(orderDetails: IAddOrderRequestModel): Promise<void> {
@@ -30,7 +30,7 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
         errors,
         data,
         relationsDictionary
-      } = await this.validateRelations.validate(orderDetails);
+      } = await this.requestModelValidator.validate(orderDetails);
 
       if (errors.length > 0) {
         const invalid = new ValidationError('Validation Errors');
