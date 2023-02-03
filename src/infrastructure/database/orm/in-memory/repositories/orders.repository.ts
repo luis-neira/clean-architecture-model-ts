@@ -33,21 +33,13 @@ export default class OrdersRepository
     return this._dataMapper.toDomain(persistedOrder);
   }
 
-  public async update(
-    input: any,
-    context: { id: string }
-  ): Promise<Order | null> {
-    const orderIndex = this._model.findIndex((o: Order) => o.id === context.id);
+  public update(
+    order: Order,
+    input: Record<string, any>
+  ): Order {
+    const updatedPojo = Object.assign({}, order.toJSON(), input);
 
-    if (orderIndex < 0) return null;
-
-    Reflect.deleteProperty(input, 'id');
-
-    Object.assign(this._model[orderIndex], input);
-
-    const persistedOrder = this._model[orderIndex];
-
-    return this._dataMapper.toDomain(persistedOrder);
+    return this._dataMapper.toDomain(updatedPojo);
   }
 
   public async remove(id: string): Promise<true | null> {

@@ -33,19 +33,13 @@ export default class UsersRepository
     return this._dataMapper.toDomain(persistedUser);
   }
 
-  public async update(
-    input: any,
-    context: { id: string }
-  ): Promise<User | null> {
-    const userIndex = this._model.findIndex((u: User) => u.id === context.id);
+  public update(
+    user: User,
+    input: Record<string, any>
+  ): User {
+    const updatedPojo = Object.assign({}, user.toJSON(), input);
 
-    if (userIndex < 0) return null;
-
-    Reflect.deleteProperty(input, 'id');
-
-    Object.assign(this._model[userIndex], input);
-
-    return this._dataMapper.toDomain(this._model[userIndex]);
+    return this._dataMapper.toDomain(updatedPojo);
   }
 
   public async remove(id: string): Promise<true | null> {

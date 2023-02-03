@@ -26,14 +26,15 @@ export default class UpdateProductUseCase
     productDetails
   }: IUpdateProductRequestModel): Promise<void> {
     try {
-      const updatedProduct = await this.productsRepository.update(
-        productDetails,
-        { id }
-      );
+      const foundProduct = await this.productsRepository.findOne(id);
 
-      if (updatedProduct === null) {
+      if (foundProduct === null) {
         throw new ValueNotFoundError(`productId '${id}' not found`);
       }
+
+      const updatedProduct = this.productsRepository.update(foundProduct, productDetails);
+
+      await this.productsRepository.save(updatedProduct);
 
       this.presenter.execute(updatedProduct.toJSON());
     } catch (err: any) {

@@ -40,25 +40,13 @@ export default class OrdersRepository
     return foundOrder;
   }
 
-  public async update(
-    input: any,
-    context: { id: string }
-  ): Promise<Order | null> {
-    const foundOrder = await this._model.findOne({
-      where: { id: context.id }
-    });
-
-    if (!foundOrder) return null;
-
-    Reflect.deleteProperty(input, 'id');
-
-    foundOrder.set({
+  public update(
+    order: Order,
+    input: Record<string, any>
+  ): Order {
+    return order.set({
       ...input
     });
-
-    const savedOrder = await foundOrder.save();
-
-    return savedOrder;
   }
 
   public async remove(id: string): Promise<true | null> {

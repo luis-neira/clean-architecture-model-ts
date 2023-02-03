@@ -30,25 +30,13 @@ export default class UsersRepository
     return savedUser;
   }
 
-  public async update(
-    input: any,
-    context: { id: string }
-  ): Promise<User | null> {
-    const foundUser = await this._model.findOne({
-      where: { id: context.id }
-    });
-
-    if (!foundUser) return null;
-
-    Reflect.deleteProperty(input, 'id');
-
-    foundUser.set({
+  public update(
+    user: User,
+    input: Record<string, any>
+  ): User {
+    return user.set({
       ...input
     });
-
-    const savedUser = await foundUser.save();
-
-    return savedUser;
   }
 
   public async remove(id: string): Promise<true | null> {

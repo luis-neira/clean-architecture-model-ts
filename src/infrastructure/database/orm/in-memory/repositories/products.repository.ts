@@ -33,21 +33,13 @@ export default class ProductsRepository
     return this._dataMapper.toDomain(persistedUser);
   }
 
-  public async update(
-    input: any,
-    context: { id: string }
-  ): Promise<Product | null> {
-    const productIndex = this._model.findIndex(
-      (p: Product) => p.id === context.id
-    );
+  public update(
+    product: Product,
+    input: Record<string, any>
+  ): Product {
+    const updatedPojo = Object.assign({}, product.toJSON(), input);
 
-    if (productIndex < 0) return null;
-
-    Reflect.deleteProperty(input, 'id');
-
-    Object.assign(this._model[productIndex], input);
-
-    return this._dataMapper.toDomain(this._model[productIndex]);
+    return this._dataMapper.toDomain(updatedPojo);
   }
 
   public async remove(id: string): Promise<true | null> {

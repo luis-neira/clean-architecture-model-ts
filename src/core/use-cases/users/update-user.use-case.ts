@@ -27,13 +27,15 @@ export default class UpdateUserUseCase
     userDetails
   }: IUpdateUserRequestModel): Promise<void> {
     try {
-      const updatedUser = await this.usersRepository.update(userDetails, {
-        id
-      });
+      const foundUser = await this.usersRepository.findOne(id);
 
-      if (updatedUser == null) {
+      if (foundUser == null) {
         throw new ValueNotFoundError(`userId '${id}' not found`);
       }
+
+      const updatedUser = this.usersRepository.update(foundUser, userDetails);
+
+      await this.usersRepository.save(updatedUser);
 
       this.presenter.execute(updatedUser.toJSON());
     } catch (err: any) {

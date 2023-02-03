@@ -38,30 +38,32 @@ export default class ImagesRepository implements IImagesGateway {
     return this._dataMapper.toDomain(response);
   }
 
-  public async update(
+  public update(
     image: Image,
     context: { id: string }
-  ): Promise<Image | null> {
-    const url = `${this._pathname}/${context.id}`;
+  ): Image {
+    // const url = `${this._pathname}/${context.id}`;
 
-    const imageRequestDetails = image.toJSON();
+    // const imageRequestDetails = image.toJSON();
 
-    try {
-      const response: PropByString = await this._client.put(url, {
-        responseType: 'json',
-        resolveBodyOnly: true,
-        json: imageRequestDetails
-      });
+    // try {
+    //   const response: PropByString = await this._client.put(url, {
+    //     responseType: 'json',
+    //     resolveBodyOnly: true,
+    //     json: imageRequestDetails
+    //   });
 
-      response._externalId = response.id;
-      response.id = imageRequestDetails.id;
+    //   response._externalId = response.id;
+    //   response.id = imageRequestDetails.id;
 
-      return this._dataMapper.toDomain(response);
-    } catch (e: any) {
-      const notFoundMsg = "Cannot read properties of undefined (reading 'id')";
-      if (e.message === notFoundMsg) return null;
-      throw e;
-    }
+    //   return this._dataMapper.toDomain(response);
+    // } catch (e: any) {
+    //   const notFoundMsg = "Cannot read properties of undefined (reading 'id')";
+    //   if (e.message === notFoundMsg) return null;
+    //   throw e;
+    // }
+
+    throw new Error('Method is not implemented!');
   }
 
   public async remove(id: string): Promise<true | null> {

@@ -1,6 +1,6 @@
 import { Result } from '../../lib/result';
 import { ValidationError } from '@common/errors';
-import { ValueNotFoundError } from '../../../common/errors';
+// import { ValueNotFoundError } from '../../../common/errors';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
@@ -45,14 +45,20 @@ export default class UpdateOrderUseCase
       throw invalid;
     }
 
-    const updatedOrder = await this.ordersRepository.update(data, {
-      id,
-      relations: relationsDictionary
-    });
+    const foundOrder = await this.ordersRepository.findOne(id);
 
-    if (updatedOrder === null) {
-      throw new ValueNotFoundError(`orderId '${id}' not found`);
+    for (const key in relationsDictionary) {
+      if (Object.prototype.hasOwnProperty.call(relationsDictionary, key)) {
+        const el = relationsDictionary[key as 'user' | 'products'];
+         if (el == null) {
+          Reflect.deleteProperty(relationsDictionary, key);
+         }
+      }
     }
+
+    const input = Object.assign({}, data, relationsDictionary);
+
+    const updatedOrder = this.ordersRepository.update(foundOrder!, input);
 
     await this.ordersRepository.save(updatedOrder);
 

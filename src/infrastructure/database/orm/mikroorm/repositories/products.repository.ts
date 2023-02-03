@@ -40,19 +40,13 @@ export default class ProductsRepository
     return foundProduct;
   }
 
-  public async update(
-    input: any,
-    context: { id: string }
-  ): Promise<Product | null> {
-    const foundProduct = await this._model.findOne({ id: context.id });
-
-    if (!foundProduct) return null;
-
-    wrap(foundProduct).assign(input, { mergeObjects: true });
-
-    await this._model.persistAndFlush(foundProduct);
-
-    return foundProduct;
+  public update(
+    product: Product,
+    input: Record<string, any>,
+  ): Product {
+    return this._model.assign(product, { ...input }, {
+      mergeObjects: true
+    });
   }
 
   public async remove(id: string): Promise<true | null> {

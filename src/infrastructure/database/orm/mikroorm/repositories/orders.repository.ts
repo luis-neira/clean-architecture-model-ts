@@ -3,7 +3,7 @@ import { MikroORM, EntityRepository, wrap } from '@mikro-orm/core';
 import { IOrdersGateway } from '@core/use-cases/interfaces';
 
 import { DatabaseRepository } from '@infra/database/orm/interfaces';
-import { Order, User, Product } from '@infra/database/orm/mikroorm/entities';
+import { Order } from '@infra/database/orm/mikroorm/entities';
 
 export default class OrdersRepository
   extends DatabaseRepository
@@ -40,35 +40,13 @@ export default class OrdersRepository
     return foundOrder;
   }
 
-  public async update(
-    input: any,
-    context: { 
-      id: string;
-      relations: {
-        user: User;
-        products: Product[];
-      }
-    }
-  ): Promise<Order | null> {
-    const foundOrder = await this._model.findOne({ id: context.id }, {
-      populate: ['user', 'products']
-    });
-
-    if (!foundOrder) return null;
-
-    const updatedOrder = wrap(foundOrder).assign(input, {
+  public update(
+    order: Order,
+    input: Record<string, any>
+  ): Order {
+    return this._model.assign(order, { ...input }, {
       mergeObjects: true
     });
-
-    if (context.relations.user) {
-      updatedOrder.user = context.relations.user as User;
-    }
-
-    if (context.relations.products) {
-      updatedOrder.products.set(context.relations.products as Product[]);
-    }
-
-    return updatedOrder;
   }
 
   public async remove(id: string): Promise<true | null> {

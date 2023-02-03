@@ -34,19 +34,13 @@ export default class UsersRepository
     return user;
   }
 
-  public async update(
-    input: any,
-    context: { id: string }
-  ): Promise<User | null> {
-    const foundUser = await this._model.findOne({ id: context.id });
-
-    if (!foundUser) return null;
-
-    wrap(foundUser).assign(input, { mergeObjects: true });
-
-    await this._model.persistAndFlush(foundUser);
-
-    return foundUser;
+  public update(
+    user: User,
+    input: Record<string, any>
+  ): User {
+    return this._model.assign(user, { ...input }, {
+      mergeObjects: true
+    });
   }
 
   public async remove(id: string): Promise<true | null> {

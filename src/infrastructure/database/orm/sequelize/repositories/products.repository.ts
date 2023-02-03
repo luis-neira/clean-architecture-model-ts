@@ -40,25 +40,13 @@ export default class ProductsRepository
     return foundProduct;
   }
 
-  public async update(
-    input: any,
-    context: { id: string }
-  ): Promise<Product | null> {
-    const foundProduct = await this._model.findOne({
-      where: { id: context.id }
-    });
-
-    if (!foundProduct) return null;
-
-    Reflect.deleteProperty(input, 'id');
-
-    foundProduct.set({
+  public update(
+    product: Product,
+    input: Record<string, any>
+  ): Product {
+    return product.set({
       ...input
-    });
-
-    const savedProduct = await foundProduct.save();
-
-    return savedProduct;
+    })
   }
 
   public async remove(id: string): Promise<true | null> {
