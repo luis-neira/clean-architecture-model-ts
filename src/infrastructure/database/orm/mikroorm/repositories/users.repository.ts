@@ -51,7 +51,7 @@ export default class UsersRepository
     return foundUser;
   }
 
-  public async delete(id: string): Promise<true | null> {
+  public async remove(id: string): Promise<true | null> {
     const foundUser = await this._model.findOne({ id });
 
     if (!foundUser) return null;

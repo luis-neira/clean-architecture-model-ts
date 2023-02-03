@@ -18,7 +18,7 @@ export default class DeleteImageUseCase implements IUseCaseInputBoundary {
 
   public async execute({ id }: IDeleteImageRequestModel): Promise<void> {
     try {
-      const imageIsDeleted = await this.imagesRepository.delete(id);
+      const imageIsDeleted = await this.imagesRepository.remove(id);
 
       if (imageIsDeleted === null) {
         throw new ValueNotFoundError(`_eternalId '${id}' not found`);

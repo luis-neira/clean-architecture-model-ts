@@ -61,7 +61,7 @@ export default class ProductsRepository
     return savedProduct;
   }
 
-  public async delete(id: string): Promise<true | null> {
+  public async remove(id: string): Promise<true | null> {
     const foundProduct = await this._model.findOne({
       where: { id }
     });

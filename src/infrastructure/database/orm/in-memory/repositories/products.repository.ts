@@ -50,7 +50,7 @@ export default class ProductsRepository
     return this._dataMapper.toDomain(this._model[productIndex]);
   }
 
-  public async delete(id: string): Promise<true | null> {
+  public async remove(id: string): Promise<true | null> {
     const productIndex = this._model.findIndex((p: Product) => p.id === id);
 
     if (productIndex < 0) return null;

@@ -20,7 +20,7 @@ export default class DeleteOrderUseCase implements IUseCaseInputBoundary {
     const { id } = requestModel;
 
     try {
-      const orderIsDeleted = await this.ordersRepository.delete(id);
+      const orderIsDeleted = await this.ordersRepository.remove(id);
 
       if (orderIsDeleted === null) {
         throw Result.fail(

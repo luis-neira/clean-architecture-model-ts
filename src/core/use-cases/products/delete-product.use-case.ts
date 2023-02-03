@@ -22,7 +22,7 @@ export default class DeleteProductUseCase implements IUseCaseInputBoundary {
     const { id } = requestModel;
 
     try {
-      const productIsDeleted = await this.productsRepository.delete(id);
+      const productIsDeleted = await this.productsRepository.remove(id);
 
       if (productIsDeleted === null) {
         throw Result.fail(

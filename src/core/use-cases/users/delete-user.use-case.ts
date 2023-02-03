@@ -18,7 +18,7 @@ export default class DeleteUserUseCase implements IUseCaseInputBoundary {
 
   public async execute({ id }: IDeleteUserRequestModel): Promise<void> {
     try {
-      const userIsDeleted = await this.usersRepository.delete(id);
+      const userIsDeleted = await this.usersRepository.remove(id);
 
       if (userIsDeleted === null) {
         throw Result.fail(

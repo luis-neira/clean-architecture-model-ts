@@ -61,7 +61,7 @@ export default class OrdersRepository
     return savedOrder;
   }
 
-  public async delete(id: string): Promise<true | null> {
+  public async remove(id: string): Promise<true | null> {
     const foundOrder = await this._model.findOne({
       where: { id }
     });

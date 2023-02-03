@@ -64,7 +64,7 @@ export default class ImagesRepository implements IImagesGateway {
     }
   }
 
-  public async delete(id: string): Promise<true | null> {
+  public async remove(id: string): Promise<true | null> {
     const url = `${this._pathname}/${id}`;
 
     try {

@@ -48,7 +48,7 @@ export default class UsersRepository
     return this._dataMapper.toDomain(this._model[userIndex]);
   }
 
-  public async delete(id: string): Promise<true | null> {
+  public async remove(id: string): Promise<true | null> {
     const userIndex = this._model.findIndex((u: User) => u.id === id);
 
     if (userIndex < 0) return null;

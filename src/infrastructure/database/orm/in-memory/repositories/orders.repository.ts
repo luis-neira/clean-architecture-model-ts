@@ -50,7 +50,7 @@ export default class OrdersRepository
     return this._dataMapper.toDomain(persistedOrder);
   }
 
-  public async delete(id: string): Promise<true | null> {
+  public async remove(id: string): Promise<true | null> {
     const orderIndex = this._model.findIndex((o: Order) => o.id === id);
 
     if (orderIndex < 0) return null;

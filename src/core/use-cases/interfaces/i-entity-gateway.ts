@@ -10,7 +10,7 @@ interface IWrite<T> {
   create(input: any): Promise<T>;
   save(entity: T): Promise<T>;
   update(input: any, context: IContext): Promise<T | null>;
-  delete(id: string): Promise<true | null>;
+  remove(id: string): Promise<true | null>;
 }
 
 interface IRead<T> {
