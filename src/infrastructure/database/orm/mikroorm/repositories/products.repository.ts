@@ -18,10 +18,19 @@ export default class ProductsRepository
     this._model = this._db.em.getRepository(Product);
   }
 
-  public async create(input: any): Promise<Product> {
-    const product = await this._model.create(input);
+  public create(input: any): Product {
+    const product = this._model.create(input);
 
     return product;
+  }
+
+  public update(
+    product: Product,
+    input: Record<string, any>,
+  ): Product {
+    return this._model.assign(product, { ...input }, {
+      mergeObjects: true
+    });
   }
 
   public async save(product: Product): Promise<Product> {
@@ -38,15 +47,6 @@ export default class ProductsRepository
     const foundProduct = await this._model.findOne({ id: productId });
 
     return foundProduct;
-  }
-
-  public update(
-    product: Product,
-    input: Record<string, any>,
-  ): Product {
-    return this._model.assign(product, { ...input }, {
-      mergeObjects: true
-    });
   }
 
   public async remove(id: string): Promise<true | null> {

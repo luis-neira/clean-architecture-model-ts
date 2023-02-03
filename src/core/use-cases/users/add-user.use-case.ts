@@ -1,4 +1,4 @@
-import { Result } from '../../lib/result';
+import { Result } from '@core/lib/result';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import { IUsersGateway, IAddUserRequestModel } from '../interfaces';
@@ -17,7 +17,7 @@ export default class AddUserUseCase implements IUseCaseInputBoundary {
 
   public async execute(requestDetails: IAddUserRequestModel): Promise<void> {
     try {
-      const user = await this.usersRepository.create(requestDetails);
+      const user = this.usersRepository.create(requestDetails);
 
       await this.usersRepository.save(user);
 

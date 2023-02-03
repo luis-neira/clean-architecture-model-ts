@@ -21,16 +21,8 @@ export default class UsersRepository
     this._dataMapper = new UserMapper();
   }
 
-  public async create(input: any): Promise<User> {
+  public create(input: any): User {
     return this._dataMapper.toDomain(input);
-  }
-
-  public async save(user: User): Promise<User> {
-    this._model.push(user.toJSON());
-
-    const persistedUser = this._model[this._model.length - 1];
-
-    return this._dataMapper.toDomain(persistedUser);
   }
 
   public update(
@@ -40,6 +32,14 @@ export default class UsersRepository
     const updatedPojo = Object.assign({}, user.toJSON(), input);
 
     return this._dataMapper.toDomain(updatedPojo);
+  }
+
+  public async save(user: User): Promise<User> {
+    this._model.push(user.toJSON());
+
+    const persistedUser = this._model[this._model.length - 1];
+
+    return this._dataMapper.toDomain(persistedUser);
   }
 
   public async remove(id: string): Promise<true | null> {

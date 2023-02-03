@@ -21,16 +21,8 @@ export default class ProductsRepository
     this._dataMapper = new ProductMapper();
   }
 
-  public async create(input: any): Promise<Product> {
+  public create(input: any): Product {
     return this._dataMapper.toDomain(input);
-  }
-
-  public async save(product: Product): Promise<Product> {
-    this._model.push(product.toJSON());
-
-    const persistedUser = this._model[this._model.length - 1];
-
-    return this._dataMapper.toDomain(persistedUser);
   }
 
   public update(
@@ -40,6 +32,14 @@ export default class ProductsRepository
     const updatedPojo = Object.assign({}, product.toJSON(), input);
 
     return this._dataMapper.toDomain(updatedPojo);
+  }
+
+  public async save(product: Product): Promise<Product> {
+    this._model.push(product.toJSON());
+
+    const persistedUser = this._model[this._model.length - 1];
+
+    return this._dataMapper.toDomain(persistedUser);
   }
 
   public async remove(id: string): Promise<true | null> {

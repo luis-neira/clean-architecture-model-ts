@@ -2,9 +2,10 @@ import { Image } from '../../entities';
 import { IUser, IProduct, IOrder } from '@core/entities/interfaces';
 
 interface IWrite<T> {
-  create(input: any): Promise<T>;
-  save(entity?: T | T[]): Promise<T>;
+  create(input: Record<string, any>): T;
   update(entity: T, input: Record<string, any>): T;
+  
+  save(entity?: T | T[]): Promise<T>;
   remove(id: string): Promise<true | null>;
 }
 

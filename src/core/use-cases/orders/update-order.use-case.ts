@@ -1,4 +1,4 @@
-import { Result } from '../../lib/result';
+import { Result } from '@core/lib/result';
 import { ValidationError } from '@common/errors';
 // import { ValueNotFoundError } from '../../../common/errors';
 

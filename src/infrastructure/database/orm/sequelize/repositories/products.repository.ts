@@ -18,26 +18,10 @@ export default class ProductsRepository
     this._model = this._db.model('Product') as ModelCtor<Product>;
   }
 
-  public async create(input: any): Promise<Product> {
-    const user = await this._model.create(input);
+  public  create(input: any): Product {
+    const user = this._model.build(input);
 
     return user;
-  }
-
-  public async save(product: Product): Promise<Product> {
-    const savedProduct = await product.save();
-
-    return savedProduct;
-  }
-
-  public async findOne(productId: string): Promise<Product | null> {
-    const foundProduct = await this._model.findOne({
-      where: { id: productId }
-    });
-
-    if (!foundProduct) return null;
-
-    return foundProduct;
   }
 
   public update(
@@ -47,6 +31,12 @@ export default class ProductsRepository
     return product.set({
       ...input
     })
+  }
+
+  public async save(product: Product): Promise<Product> {
+    const savedProduct = await product.save();
+
+    return savedProduct;
   }
 
   public async remove(id: string): Promise<true | null> {
@@ -65,5 +55,15 @@ export default class ProductsRepository
     const foundProducts = await this._model.findAll();
 
     return foundProducts;
+  }
+
+  public async findOne(productId: string): Promise<Product | null> {
+    const foundProduct = await this._model.findOne({
+      where: { id: productId }
+    });
+
+    if (!foundProduct) return null;
+
+    return foundProduct;
   }
 }

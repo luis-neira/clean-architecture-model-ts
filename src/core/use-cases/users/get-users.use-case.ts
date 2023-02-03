@@ -1,4 +1,4 @@
-import { Result } from '../../lib/result';
+import { Result } from '@core/lib/result';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import { IUsersGateway } from '../interfaces';

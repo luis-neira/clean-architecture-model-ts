@@ -18,26 +18,10 @@ export default class OrdersRepository
     this._model = this._db.model('Order') as ModelCtor<Order>;
   }
 
-  public async create(input: any): Promise<Order> {
-    const order = await this._model.create(input);
+  public create(input: any): Order {
+    const order = this._model.build(input);
 
     return order;
-  }
-
-  public async save(order: Order): Promise<Order> {
-    const savedOrder = await order.save();
-
-    return savedOrder;
-  }
-
-  public async findOne(orderId: string): Promise<Order | null> {
-    const foundOrder = await this._model.findOne({
-      where: { id: orderId }
-    });
-
-    if (!foundOrder) return null;
-
-    return foundOrder;
   }
 
   public update(
@@ -47,6 +31,12 @@ export default class OrdersRepository
     return order.set({
       ...input
     });
+  }
+
+  public async save(order: Order): Promise<Order> {
+    const savedOrder = await order.save();
+
+    return savedOrder;
   }
 
   public async remove(id: string): Promise<true | null> {
@@ -65,5 +55,15 @@ export default class OrdersRepository
     const foundProducts = await this._model.findAll();
 
     return foundProducts;
+  }
+
+  public async findOne(orderId: string): Promise<Order | null> {
+    const foundOrder = await this._model.findOne({
+      where: { id: orderId }
+    });
+
+    if (!foundOrder) return null;
+
+    return foundOrder;
   }
 }

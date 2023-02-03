@@ -18,18 +18,8 @@ export default class UsersRepository
     this._model = this._db.em.getRepository(User);
   }
 
-  public async create(input: any): Promise<User> {
-    const user = await this._model.create(input);
-
-    return user;
-  }
-
-  public async save(user: User): Promise<User> {
-    if (!!user === true) {
-      await this._model.persistAndFlush(user);
-    } else {
-      await this._model.flush();
-    }
+  public create(input: any): User {
+    const user = this._model.create(input);
 
     return user;
   }
@@ -41,6 +31,16 @@ export default class UsersRepository
     return this._model.assign(user, { ...input }, {
       mergeObjects: true
     });
+  }
+
+  public async save(user: User): Promise<User> {
+    if (!!user === true) {
+      await this._model.persistAndFlush(user);
+    } else {
+      await this._model.flush();
+    }
+
+    return user;
   }
 
   public async remove(id: string): Promise<true | null> {

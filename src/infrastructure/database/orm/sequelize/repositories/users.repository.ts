@@ -18,16 +18,10 @@ export default class UsersRepository
     this._model = this._db.model('User') as ModelCtor<User>;
   }
 
-  public async create(input: any): Promise<User> {
-    const user = await this._model.create(input);
+  public create(input: any): User {
+    const user = this._model.build(input);
 
     return user;
-  }
-
-  public async save(user: User): Promise<User> {
-    const savedUser = await user.save()
-
-    return savedUser;
   }
 
   public update(
@@ -37,6 +31,12 @@ export default class UsersRepository
     return user.set({
       ...input
     });
+  }
+
+  public async save(user: User): Promise<User> {
+    const savedUser = await user.save()
+
+    return savedUser;
   }
 
   public async remove(id: string): Promise<true | null> {

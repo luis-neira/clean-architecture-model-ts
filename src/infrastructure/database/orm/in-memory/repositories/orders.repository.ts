@@ -21,16 +21,8 @@ export default class OrdersRepository
     this._dataMapper = new OrderMapper();
   }
 
-  public async create(input: any): Promise<Order> {
+  public create(input: any): Order {
     return this._dataMapper.toDomain(input);
-  }
-
-  public async save(order: Order): Promise<Order> {
-    this._model.push(order.toJSON());
-
-    const persistedOrder = this._model[this._model.length - 1];
-
-    return this._dataMapper.toDomain(persistedOrder);
   }
 
   public update(
@@ -40,6 +32,14 @@ export default class OrdersRepository
     const updatedPojo = Object.assign({}, order.toJSON(), input);
 
     return this._dataMapper.toDomain(updatedPojo);
+  }
+
+  public async save(order: Order): Promise<Order> {
+    this._model.push(order.toJSON());
+
+    const persistedOrder = this._model[this._model.length - 1];
+
+    return this._dataMapper.toDomain(persistedOrder);
   }
 
   public async remove(id: string): Promise<true | null> {

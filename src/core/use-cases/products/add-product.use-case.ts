@@ -1,4 +1,4 @@
-import { Result } from '../../lib/result';
+import { Result } from '@core/lib/result';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import { IProductsGateway, IAddProductRequestModel } from '../interfaces';
@@ -17,7 +17,7 @@ export default class AddProductUseCase implements IUseCaseInputBoundary {
 
   async execute(requestModel: IAddProductRequestModel): Promise<void> {
     try {
-      const product = await this.productsRepository.create(requestModel);
+      const product = this.productsRepository.create(requestModel);
 
       await this.productsRepository.save(product);
 

@@ -1,4 +1,4 @@
-import { Result } from '../../lib/result';
+import { Result } from '@core/lib/result';
 import { ValidationError } from '@common/errors';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
@@ -39,7 +39,7 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
         throw invalid;
       }
 
-      const order = await this.ordersRepository.create({
+      const order = this.ordersRepository.create({
         date: data.date,
         isPaid: data.isPaid,
         meta: data.meta

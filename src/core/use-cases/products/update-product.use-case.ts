@@ -1,4 +1,4 @@
-import { Result } from '../../lib/result';
+import { Result } from '@core/lib/result';
 import { ValueNotFoundError } from '@common/errors'
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';

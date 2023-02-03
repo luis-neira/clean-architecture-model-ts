@@ -1,8 +1,4 @@
-import { Result } from '../../lib/result';
-import { Order } from '../../entities';
-import { OrderMapper } from '../../mappers/order';
-import IEntityMapper from '../../mappers/i-entity-mapper'
-import { IOrderDto } from '../../dtos/order'
+import { Result } from '@core/lib/result';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import { IOrdersGateway } from '../interfaces';
@@ -10,7 +6,6 @@ import { IOrdersGateway } from '../interfaces';
 export default class GetOrdersUseCase implements IUseCaseInputBoundary {
   private ordersRepository: IOrdersGateway;
   private presenter: IUseCaseOutputBoundary;
-  private dataMapper: IEntityMapper<Order, IOrderDto>;
 
   public constructor(
     ordersRepository: IOrdersGateway,
@@ -18,7 +13,6 @@ export default class GetOrdersUseCase implements IUseCaseInputBoundary {
   ) {
     this.ordersRepository = ordersRepository;
     this.presenter = presenter;
-    this.dataMapper = new OrderMapper();
   }
 
   public async execute(): Promise<void> {

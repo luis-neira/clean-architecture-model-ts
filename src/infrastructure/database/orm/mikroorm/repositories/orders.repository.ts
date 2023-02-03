@@ -18,10 +18,19 @@ export default class OrdersRepository
     this._model = this._db.em.getRepository(Order);
   }
 
-  public async create(input: any): Promise<Order> {
-    const order = await this._model.create(input);
+  public create(input: any): Order {
+    const order = this._model.create(input);
 
     return order;
+  }
+
+  public update(
+    order: Order,
+    input: Record<string, any>
+  ): Order {
+    return this._model.assign(order, { ...input }, {
+      mergeObjects: true
+    });
   }
 
   public async save(order: Order): Promise<Order> {
@@ -32,21 +41,6 @@ export default class OrdersRepository
     }
 
     return order;
-  }
-
-  public async findOne(orderId: string): Promise<Order | null> {
-    const foundOrder = await this._model.findOne({ id: orderId });
-
-    return foundOrder;
-  }
-
-  public update(
-    order: Order,
-    input: Record<string, any>
-  ): Order {
-    return this._model.assign(order, { ...input }, {
-      mergeObjects: true
-    });
   }
 
   public async remove(id: string): Promise<true | null> {
@@ -63,5 +57,11 @@ export default class OrdersRepository
     const foundOrders = await this._model.findAll({ populate: ['user', 'products'] });
 
     return foundOrders;
+  }
+
+  public async findOne(orderId: string): Promise<Order | null> {
+    const foundOrder = await this._model.findOne({ id: orderId });
+
+    return foundOrder;
   }
 }
