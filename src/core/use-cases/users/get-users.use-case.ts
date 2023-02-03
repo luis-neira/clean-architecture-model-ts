@@ -17,7 +17,7 @@ export default class GetUsersUseCase implements IUseCaseInputBoundary {
 
   public async execute(): Promise<void> {
     try {
-      const foundUsers = await this.usersRepository.findAll();
+      const foundUsers = await this.usersRepository.findAllUsersWithOrders();
 
       const foundUserDTOs = foundUsers.map((u) => u.toJSON());
 

@@ -58,6 +58,16 @@ export default class UsersRepository
     return true;
   }
 
+  public async findAll(): Promise<User[]> {
+    return this._model.map((u) => this._dataMapper.toDomain(u));
+  }
+
+  public async findAllUsersWithOrders(): Promise<User[]> {
+    throw new Error('Method not implemented');
+
+    // return foundUsers;
+  }
+
   public async findOne(id: string): Promise<User | null> {
     const persistedUser = this._model.find((u: User) => u.id === id);
 
@@ -66,7 +76,9 @@ export default class UsersRepository
     return this._dataMapper.toDomain(persistedUser);
   }
 
-  public async findAll(): Promise<User[]> {
-    return this._model.map((u) => this._dataMapper.toDomain(u));
+  public async findOneUserWithOrder(userId: string): Promise<User | null> {
+    throw new Error('Method not implemented');
+
+    // return foundUser;
   }
 }

@@ -25,15 +25,13 @@ export default class UsersRepository
   }
 
   public async save(user: User): Promise<User> {
-    await this._model.persistAndFlush(user);
+    if (!!user === true) {
+      await this._model.persistAndFlush(user);
+    } else {
+      await this._model.flush();
+    }
 
     return user;
-  }
-
-  public async findOne(userId: string): Promise<User | null> {
-    const foundUser = await this._model.findOne({ id: userId });
-
-    return foundUser;
   }
 
   public async update(
@@ -62,8 +60,30 @@ export default class UsersRepository
   }
 
   public async findAll(): Promise<User[]> {
+    const foundUsers = await this._model.findAll();
+
+    return foundUsers;
+  }
+
+  public async findAllUsersWithOrders(): Promise<User[]> {
     const foundUsers = await this._model.findAll({ populate: ['orders'] });
 
     return foundUsers;
+  }
+
+  public async findOne(userId: string): Promise<User | null> {
+    const foundUser = await this._model.findOne({ id: userId });
+
+    return foundUser;
+  }
+
+  public async findOneUserWithOrder(userId: string): Promise<User | null> {
+    const foundUser = await this._model.findOne({
+      id: userId
+    }, {
+      populate: ['orders']
+    });
+
+    return foundUser;
   }
 }

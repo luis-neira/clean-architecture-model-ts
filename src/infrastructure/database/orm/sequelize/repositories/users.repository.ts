@@ -30,16 +30,6 @@ export default class UsersRepository
     return savedUser;
   }
 
-  public async findOne(userId: string): Promise<User | null> {
-    const foundUser = await this._model.findOne({
-      where: { id: userId }
-    });
-
-    if (!foundUser) return null;
-
-    return foundUser;
-  }
-
   public async update(
     input: any,
     context: { id: string }
@@ -77,5 +67,27 @@ export default class UsersRepository
     const foundUsers = await this._model.findAll();
 
     return foundUsers;
+  }
+
+  public async findAllUsersWithOrders(): Promise<User[]> {
+    throw new Error('Method not implemented');
+
+    // return foundUsers;
+  }
+
+  public async findOne(userId: string): Promise<User | null> {
+    const foundUser = await this._model.findOne({
+      where: { id: userId }
+    });
+
+    if (!foundUser) return null;
+
+    return foundUser;
+  }
+
+  public async findOneUserWithOrder(userId: string): Promise<User | null> {
+    throw new Error('Method not implemented');
+
+    // return foundUser;
   }
 }

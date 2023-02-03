@@ -24,19 +24,19 @@ export default class AddImageUseCase implements IUseCaseInputBoundary {
   public async execute(requestModel: IAddImageRequestModel): Promise<void> {
     const { title, url, thumbnailUrl } = requestModel;
 
-    const image = Image.create(
-      {
-        title,
-        url,
-        thumbnailUrl
-      },
-      null
-    );
-
     try {
-      const addedImage = await this.imagesRepository.save(image);
+      const image = Image.create(
+        {
+          title,
+          url,
+          thumbnailUrl
+        },
+        null
+      );
 
-      const addedImageDto = this.dataMapper.toDTO(addedImage);
+      await this.imagesRepository.save(image);
+
+      const addedImageDto = this.dataMapper.toDTO(image);
 
       this.presenter.execute(addedImageDto);
     } catch (err) {

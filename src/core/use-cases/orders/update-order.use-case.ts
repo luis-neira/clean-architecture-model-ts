@@ -54,9 +54,9 @@ export default class UpdateOrderUseCase
       throw new ValueNotFoundError(`orderId '${id}' not found`);
     }
 
-    const savedOrder = await this.ordersRepository.save(updatedOrder);
+    await this.ordersRepository.save(updatedOrder);
 
-    this.presenter.execute(savedOrder.toJSON());
+    this.presenter.execute(updatedOrder.toJSON());
     } catch (err: any) {
       if (err.isFailure) throw err;
 

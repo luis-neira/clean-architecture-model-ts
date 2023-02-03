@@ -35,7 +35,7 @@ export default class AddOrderDeliverer extends Deliverer {
     const repositoryDictionary = {
       orders: ordersRepository,
       users: usersRepository,
-      products: productsRepository
+      products: productsRepository,
     };
 
     const createdResponder = new CreatedResponder(this.res);

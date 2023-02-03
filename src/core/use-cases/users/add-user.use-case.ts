@@ -19,9 +19,9 @@ export default class AddUserUseCase implements IUseCaseInputBoundary {
     try {
       const user = await this.usersRepository.create(requestDetails);
 
-      const addedUser = await this.usersRepository.save(user);
+      await this.usersRepository.save(user);
 
-      this.presenter.execute(addedUser.toJSON());
+      this.presenter.execute(user.toJSON());
     } catch (err: any) {
       throw Result.fail(err);
     }

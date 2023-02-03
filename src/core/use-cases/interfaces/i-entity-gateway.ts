@@ -8,7 +8,7 @@ interface IContext {
 
 interface IWrite<T> {
   create(input: any): Promise<T>;
-  save(entity: T): Promise<T>;
+  save(entity?: T | T[]): Promise<T>;
   update(input: any, context: IContext): Promise<T | null>;
   remove(id: string): Promise<true | null>;
 }
@@ -20,12 +20,20 @@ interface IRead<T> {
 
 export default interface IEntityGateway extends IWrite<any>, IRead<any> {}
 
-export type EntityGatewayDictionary = Record<string, IEntityGateway>;
-
-export interface IUsersGateway extends IWrite<IUser>, IRead<IUser> {}
+export interface IUsersGateway extends IWrite<IUser>, IRead<IUser> {
+  findAllUsersWithOrders(): Promise<IUser[]>
+  findOneUserWithOrder(id: string): Promise<IUser | null>
+}
 
 export interface IProductsGateway extends IWrite<IProduct>, IRead<IProduct> {}
 
 export interface IOrdersGateway extends IWrite<IOrder>, IRead<IOrder> {}
 
 export interface IImagesGateway extends Omit<IWrite<Image>, 'create'>, IRead<Image> {}
+
+export interface EntityGatewayDictionary {
+  users: IUsersGateway;
+  products: IProductsGateway;
+  orders: IOrdersGateway;
+  images?: IImagesGateway;
+};

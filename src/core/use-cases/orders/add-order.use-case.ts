@@ -48,9 +48,9 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
       order.user = relationsDictionary.user;
       order.products = relationsDictionary.products;
 
-      const addedOrder = await this.ordersRepository.save(order);
+      await this.ordersRepository.save(order);
 
-      this.presenter.execute(addedOrder.toJSON());
+      this.presenter.execute(order.toJSON());
     } catch (err: any) {
       if (err.isFailure) throw err;
 
