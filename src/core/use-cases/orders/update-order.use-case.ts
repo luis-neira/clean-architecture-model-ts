@@ -1,6 +1,5 @@
 import { Result } from '@core/lib/result';
-import { ValidationError } from '@common/errors';
-import { ValueNotFoundError } from '../../../common/errors';
+import { ValidationError, ValueNotFoundError } from '@common/errors';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
