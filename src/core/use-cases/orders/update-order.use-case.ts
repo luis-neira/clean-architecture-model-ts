@@ -9,7 +9,6 @@ import {
   IUpdateOrderRequestModel,
 } from '../interfaces';
 
-import { RequestModelValidator } from './request-model-validator';
 import { OrderValidator } from './order-validator';
 
 export default class UpdateOrderUseCase
@@ -17,7 +16,6 @@ export default class UpdateOrderUseCase
 {
   private ordersRepository: IOrdersGateway;
   private presenter: IUseCaseOutputBoundary;
-  private requestModelValidator: RequestModelValidator;
   private orderValidator: OrderValidator;
 
   public constructor(
@@ -26,7 +24,6 @@ export default class UpdateOrderUseCase
   ) {
     this.ordersRepository = reposByResource.orders;
     this.presenter = presenter;
-    this.requestModelValidator = new RequestModelValidator(reposByResource.products, reposByResource.users)
     this.orderValidator = new OrderValidator(reposByResource.products, reposByResource.users);
   }
 

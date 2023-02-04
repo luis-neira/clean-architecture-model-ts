@@ -8,12 +8,12 @@ import {
   IAddOrderRequestModel
 } from '../interfaces';
 
-import { RequestModelValidator } from './request-model-validator';
+import { OrderValidator } from './order-validator';
 
 export default class AddOrderUseCase implements IUseCaseInputBoundary {
   private ordersRepository: IOrdersGateway;
   private presenter: IUseCaseOutputBoundary;
-  private requestModelValidator: RequestModelValidator;
+  private orderValidator: OrderValidator;
 
   public constructor(
     reposByResource: EntityGatewayDictionary,
@@ -21,16 +21,22 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
   ) {
     this.ordersRepository = reposByResource.orders;
     this.presenter = presenter;
-    this.requestModelValidator = new RequestModelValidator(reposByResource.products, reposByResource.users)
+    this.orderValidator = new OrderValidator(reposByResource.products, reposByResource.users);
   }
 
   public async execute(orderDetails: IAddOrderRequestModel): Promise<void> {
     try {
-      const {
-        errors,
-        data,
-        relationsDictionary
-      } = await this.requestModelValidator.validate(orderDetails);
+      const [
+        productIdErrors,
+        products
+      ] = await this.orderValidator.processProductIds(orderDetails.productIds);
+  
+      const [
+        userIdErrors,
+        user
+      ] = await this.orderValidator.processUserId(orderDetails.userId);
+
+      const errors = [ ...productIdErrors, ...userIdErrors ];
 
       if (errors.length > 0) {
         const invalid = new ValidationError('Validation Errors');
@@ -39,14 +45,12 @@ export default class AddOrderUseCase implements IUseCaseInputBoundary {
         throw invalid;
       }
 
-      const order = this.ordersRepository.create({
-        date: data.date,
-        isPaid: data.isPaid,
-        meta: data.meta
+      const moddedOrderDetails = this.orderValidator.modifyOrderDetails(orderDetails, {
+        products,
+        user
       });
 
-      order.user = relationsDictionary.user;
-      order.products = relationsDictionary.products;
+      const order = this.ordersRepository.create(moddedOrderDetails);
 
       await this.ordersRepository.save(order);
 

@@ -89,22 +89,20 @@ export class OrderValidator {
       user: IUser | null
     }
   ): any {
-    const validated = {} as Record<string, any>;
+    const newProps = {} as Record<string, any>;
 
     const clonedOrderDetails = { ...orderDetails };
 
     if (processedProps.products.length > 0) {
-      validated.products = processedProps.products;
+      newProps.products = processedProps.products;
       Reflect.deleteProperty(clonedOrderDetails, 'productIds');
     }
 
     if (!!processedProps.user === true) {
-      validated.user = processedProps.user;
+      newProps.user = processedProps.user;
       Reflect.deleteProperty(clonedOrderDetails, 'userId');
     }
 
-    const input = Object.assign({}, clonedOrderDetails, validated);
-
-    return input;
+    return Object.assign({}, clonedOrderDetails, newProps);
   }
 }
