@@ -60,7 +60,19 @@ export default class OrdersRepository
     return this._dataMapper.toDomain(persistedOrder);
   }
 
+  public async findOneOrderWithProductsAndUser(id: string): Promise<Order | null> {
+    throw new Error('Method not implemented');
+
+    // return foundOrder;
+  }
+
   public async findAll(): Promise<Order[]> {
     return this._model.map((o) => this._dataMapper.toDomain(o));
+  }
+
+  public async findAllOrdersWithProductsAndUser(): Promise<Order[]> {
+    throw new Error('Method not implemented');
+
+    // return foundOrders;
   }
 }

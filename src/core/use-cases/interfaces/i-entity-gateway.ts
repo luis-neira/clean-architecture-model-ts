@@ -26,7 +26,10 @@ export interface IProductsGateway extends IWrite<IProduct>, IRead<IProduct> {
   findOneProductWithOrder(id: string): Promise<IProduct | null>
 }
 
-export interface IOrdersGateway extends IWrite<IOrder>, IRead<IOrder> {}
+export interface IOrdersGateway extends IWrite<IOrder>, IRead<IOrder> {
+  findAllOrdersWithProductsAndUser(): Promise<IOrder[]>
+  findOneOrderWithProductsAndUser(id: string): Promise<IOrder | null>
+}
 
 export interface IImagesGateway extends Omit<IWrite<Image>, 'create'>, IRead<Image> {}
 

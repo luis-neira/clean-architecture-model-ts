@@ -57,6 +57,12 @@ export default class OrdersRepository
     return foundProducts;
   }
 
+  public async findAllOrdersWithProductsAndUser(): Promise<Order[]> {
+    throw new Error('Method not implemented');
+
+    // return foundOrders;
+  }
+
   public async findOne(orderId: string): Promise<Order | null> {
     const foundOrder = await this._model.findOne({
       where: { id: orderId }
@@ -65,5 +71,11 @@ export default class OrdersRepository
     if (!foundOrder) return null;
 
     return foundOrder;
+  }
+
+  public async findOneOrderWithProductsAndUser(id: string): Promise<Order | null> {
+    throw new Error('Method not implemented');
+
+    // return foundOrder;
   }
 }

@@ -54,13 +54,25 @@ export default class OrdersRepository
   }
 
   public async findAll(): Promise<Order[]> {
+    const foundOrders = await this._model.findAll();
+
+    return foundOrders;
+  }
+
+  public async findAllOrdersWithProductsAndUser(): Promise<Order[]> {
     const foundOrders = await this._model.findAll({ populate: ['user', 'products'] });
 
     return foundOrders;
   }
 
-  public async findOne(orderId: string): Promise<Order | null> {
-    const foundOrder = await this._model.findOne({ id: orderId });
+  public async findOne(id: string): Promise<Order | null> {
+    const foundOrder = await this._model.findOne({ id });
+
+    return foundOrder;
+  }
+
+  public async findOneOrderWithProductsAndUser(id: string): Promise<Order | null> {
+    const foundOrder = await this._model.findOne({ id }, { populate: ['user', 'products'] });
 
     return foundOrder;
   }

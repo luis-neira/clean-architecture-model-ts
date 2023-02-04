@@ -4,11 +4,11 @@ import { OrdersRepositoryMirkroORM } from '../orm/mikroorm/repositories';
 
 import * as constants from '../../../config/constants';
 
-import { IEntityGateway } from '@core/use-cases/interfaces';
+import { IOrdersGateway } from '@core/use-cases/interfaces';
 import { RepositoryFactory } from './interfaces';
 
-export default class OrdersRepositoryFactory extends RepositoryFactory<IEntityGateway> {
-  public create(dbDialect: string): IEntityGateway {
+export default class OrdersRepositoryFactory extends RepositoryFactory<IOrdersGateway> {
+  public create(dbDialect: string): IOrdersGateway {
     const { dbDialects } = constants;
 
     const ordersRepositoryMakerByDialect = {
