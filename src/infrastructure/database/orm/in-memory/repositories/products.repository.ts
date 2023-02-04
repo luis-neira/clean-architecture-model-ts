@@ -60,7 +60,19 @@ export default class ProductsRepository
     return this._dataMapper.toDomain(persistedUser);
   }
 
+  public async findOneProductWithOrder(id: string): Promise<Product | null> {
+    throw new Error('Method not implemented!');
+
+    // return foundProduct;
+  }
+
   public async findAll(): Promise<Product[]> {
     return this._model.map((p) => this._dataMapper.toDomain(p));
+  }
+
+  public async findAllProductsWithOrders(): Promise<Product[]> {
+    throw new Error('Method not implemented!');
+
+    // return foundProducts;
   }
 }

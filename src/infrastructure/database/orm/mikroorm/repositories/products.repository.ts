@@ -43,12 +43,6 @@ export default class ProductsRepository
     return product;
   }
 
-  public async findOne(productId: string): Promise<Product | null> {
-    const foundProduct = await this._model.findOne({ id: productId });
-
-    return foundProduct;
-  }
-
   public async remove(id: string): Promise<true | null> {
     const foundProduct = await this._model.findOne({ id });
 
@@ -63,5 +57,23 @@ export default class ProductsRepository
     const foundProducts = await this._model.findAll();
 
     return foundProducts;
+  }
+
+  public async findAllProductsWithOrders(): Promise<Product[]> {
+    const foundProducts = await this._model.findAll({ populate: ['orders'] });
+
+    return foundProducts;
+  }
+
+  public async findOne(id: string): Promise<Product | null> {
+    const foundProduct = await this._model.findOne({ id });
+
+    return foundProduct;
+  }
+
+  public async findOneProductWithOrder(id: string): Promise<Product | null> {
+    const foundProduct = await this._model.findOne({ id }, { populate: ['orders'] });
+
+    return foundProduct;
   }
 }

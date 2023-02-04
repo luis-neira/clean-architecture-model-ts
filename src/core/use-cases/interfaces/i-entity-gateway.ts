@@ -21,7 +21,10 @@ export interface IUsersGateway extends IWrite<IUser>, IRead<IUser> {
   findOneUserWithOrder(id: string): Promise<IUser | null>
 }
 
-export interface IProductsGateway extends IWrite<IProduct>, IRead<IProduct> {}
+export interface IProductsGateway extends IWrite<IProduct>, IRead<IProduct> {
+  findAllProductsWithOrders(): Promise<IProduct[]>
+  findOneProductWithOrder(id: string): Promise<IProduct | null>
+}
 
 export interface IOrdersGateway extends IWrite<IOrder>, IRead<IOrder> {}
 
