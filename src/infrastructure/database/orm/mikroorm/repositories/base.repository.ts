@@ -1,4 +1,4 @@
-// import { MikroORM, EntityRepository, EntityName, BaseEntity } from '@mikro-orm/core';
+// import { MikroORM, EntityRepository, EntityName, AnyEntity } from '@mikro-orm/core';
 
 // import { IEntityGateway } from '@core/use-cases/interfaces';
 
@@ -13,29 +13,29 @@
 // {
 //   protected _db!: MikroORM
 
-//   private _model: EntityRepository<T>;
+//   private _model: EntityRepository<AnyEntity<T>>;
 
-//   public constructor(entity: EntityName<T>) {
+//   public constructor(entity: EntityName<AnyEntity>) {
 //     super();
 //     this._model = this._db.em.getRepository(entity);
 //   }
 
-//   public create(input: any): T {
+//   public create(input: any): AnyEntity {
 //     const user = this._model.create(input);
 
 //     return user;
 //   }
 
 //   public update(
-//     user: T,
+//     user: AnyEntity,
 //     input: Record<string, any>
-//   ): T {
+//   ): AnyEntity {
 //     return this._model.assign(user, { ...input }, {
 //       mergeObjects: true
 //     });
 //   }
 
-//   public async save(user: User): Promise<User> {
+//   public async save(user: AnyEntity): Promise<AnyEntity> {
 //     await this._model.persistAndFlush(user);
 
 //     return user;
@@ -51,13 +51,13 @@
 //     return true;
 //   }
 
-//   public async findAll(): Promise<T[]> {
+//   public async findAll(): Promise<AnyEntity[]> {
 //     const foundUsers = await this._model.findAll();
 
 //     return foundUsers;
 //   }
 
-//   public async findOne(userId: string): Promise<T | null> {
+//   public async findOne(userId: string): Promise<AnyEntity | null> {
 //     const foundUser = await this._model.findOne({ id: userId });
 
 //     return foundUser;
