@@ -34,11 +34,7 @@ export default class ProductsRepository
   }
 
   public async save(product: Product): Promise<Product> {
-    if (!!product === true) {
-      await this._model.persistAndFlush(product);
-    } else {
-      await this._model.flush();
-    }
+    await this._model.persistAndFlush(product);
 
     return product;
   }

@@ -34,11 +34,7 @@ export default class OrdersRepository
   }
 
   public async save(order: Order): Promise<Order> {
-    if (!!order === true) {
-      await this._model.persistAndFlush(order);
-    } else {
-      await this._model.flush();
-    }
+    await this._model.persistAndFlush(order);
 
     return order;
   }

@@ -34,11 +34,7 @@ export default class UsersRepository
   }
 
   public async save(user: User): Promise<User> {
-    if (!!user === true) {
-      await this._model.persistAndFlush(user);
-    } else {
-      await this._model.flush();
-    }
+    await this._model.persistAndFlush(user);
 
     return user;
   }
