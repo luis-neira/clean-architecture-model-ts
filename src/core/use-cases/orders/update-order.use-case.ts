@@ -1,6 +1,6 @@
 import { Result } from '@core/lib/result';
 import { ValidationError } from '@common/errors';
-// import { ValueNotFoundError } from '../../../common/errors';
+import { ValueNotFoundError } from '../../../common/errors';
 
 import { IUseCaseInputBoundary, IUseCaseOutputBoundary } from '../interfaces';
 import {
@@ -10,6 +10,7 @@ import {
 } from '../interfaces';
 
 import { RequestModelValidator } from './request-model-validator';
+import { OrderValidator } from './order-validator';
 
 export default class UpdateOrderUseCase
   implements IUseCaseInputBoundary
@@ -17,6 +18,7 @@ export default class UpdateOrderUseCase
   private ordersRepository: IOrdersGateway;
   private presenter: IUseCaseOutputBoundary;
   private requestModelValidator: RequestModelValidator;
+  private orderValidator: OrderValidator;
 
   public constructor(
     reposByResource: EntityGatewayDictionary,
@@ -25,6 +27,7 @@ export default class UpdateOrderUseCase
     this.ordersRepository = reposByResource.orders;
     this.presenter = presenter;
     this.requestModelValidator = new RequestModelValidator(reposByResource.products, reposByResource.users)
+    this.orderValidator = new OrderValidator(reposByResource.products, reposByResource.users);
   }
 
   public async execute({
@@ -32,11 +35,23 @@ export default class UpdateOrderUseCase
     orderDetails
   }: IUpdateOrderRequestModel): Promise<void> {
     try {
-    const {
-      errors,
-      data,
-      relationsDictionary
-    } = await this.requestModelValidator.validate(orderDetails);
+    const foundOrder = await this.ordersRepository.findOne(id);
+
+    if (foundOrder === null) {
+      throw new ValueNotFoundError(`productId '${id}' not found`);
+    }
+
+    const [
+      productIdErrors,
+      products
+    ] = await this.orderValidator.processProductIds(orderDetails.productIds);
+
+    const [
+      userIdErrors,
+      user
+    ] = await this.orderValidator.processUserId(orderDetails.userId);
+
+    const errors = [ ...productIdErrors, ...userIdErrors ];
     
     if (errors.length > 0) {
       const invalid = new ValidationError('Validation Errors');
@@ -45,20 +60,12 @@ export default class UpdateOrderUseCase
       throw invalid;
     }
 
-    const foundOrder = await this.ordersRepository.findOne(id);
+    const moddedOrderDetails = this.orderValidator.modifyOrderDetails(orderDetails, {
+      products,
+      user
+    });
 
-    for (const key in relationsDictionary) {
-      if (Object.prototype.hasOwnProperty.call(relationsDictionary, key)) {
-        const el = relationsDictionary[key as 'user' | 'products'];
-         if (el == null) {
-          Reflect.deleteProperty(relationsDictionary, key);
-         }
-      }
-    }
-
-    const input = Object.assign({}, data, relationsDictionary);
-
-    const updatedOrder = this.ordersRepository.update(foundOrder!, input);
+    const updatedOrder = this.ordersRepository.update(foundOrder, moddedOrderDetails);
 
     await this.ordersRepository.save(updatedOrder);
 

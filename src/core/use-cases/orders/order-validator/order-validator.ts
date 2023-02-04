@@ -82,7 +82,7 @@ export class OrderValidator {
     return [ returnable, null ];
   }
 
-  public buildOrderDto(
+  public modifyOrderDetails(
     orderDetails: IOrderDetails,
     processedProps: {
       products: IProduct[],
@@ -94,12 +94,12 @@ export class OrderValidator {
     const clonedOrderDetails = { ...orderDetails };
 
     if (processedProps.products.length > 0) {
-      validated.productIds = processedProps.products;
+      validated.products = processedProps.products;
       Reflect.deleteProperty(clonedOrderDetails, 'productIds');
     }
 
     if (!!processedProps.user === true) {
-      validated.userId = processedProps.user;
+      validated.user = processedProps.user;
       Reflect.deleteProperty(clonedOrderDetails, 'userId');
     }
 
