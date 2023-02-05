@@ -1,4 +1,4 @@
-// import { MikroORM, EntityRepository, EntityName } from '@mikro-orm/core';
+// import { MikroORM, EntityRepository, EntityName, EntityData } from '@mikro-orm/core';
 
 // import { IEntityGateway } from '@core/use-cases/interfaces';
 
@@ -26,9 +26,10 @@
 //     return user;
 //   }
 
+//   // Lookup what is EntityData?
 //   public update(
 //     user: T,
-//     input: object
+//     input: EntityData<T>
 //   ): T {
 //     return this._model.assign(user, { ...input }, {
 //       mergeObjects: true
