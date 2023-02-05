@@ -1,4 +1,4 @@
-import { MikroORM, EntityRepository, wrap } from '@mikro-orm/core';
+import { MikroORM, EntityRepository } from '@mikro-orm/core';
 
 import { IUsersGateway } from '@core/use-cases/interfaces';
 
