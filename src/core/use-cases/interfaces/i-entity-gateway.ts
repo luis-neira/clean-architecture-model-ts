@@ -1,8 +1,10 @@
 import { Image } from '../../entities';
 import { IUser, IProduct, IOrder } from '@core/entities/interfaces';
 
+type CoreEntityData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt' | 'toJSON'>;
+
 interface IWrite<T extends object> {
-  create(input: Omit<T, 'id' | 'createdAt' | 'updatedAt' | 'toJSON'>): T;
+  create(input: CoreEntityData<T>): T;
   update(entity: T, input: Record<string, any>): T;
   
   save(entity: T | T[]): Promise<T>;
