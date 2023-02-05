@@ -1,48 +1,48 @@
-// import { MikroORM, EntityRepository, EntityName, AnyEntity } from '@mikro-orm/core';
+// import { MikroORM, EntityRepository, EntityName } from '@mikro-orm/core';
 
 // import { IEntityGateway } from '@core/use-cases/interfaces';
 
 // import { DatabaseRepository } from '@infra/database/orm/interfaces';
-// import { User, Product, Order } from '@infra/database/orm/mikroorm/entities';
+// // import { User, Product, Order } from '@infra/database/orm/mikroorm/entities';
 
-// type EntityType = User | Product | Order;
+// // type EntityType = User | Product | Order;
 
-// export default class UsersRepository<T extends EntityType>
+// export default class MikroOrmBaseRepository<T extends object>
 //   extends DatabaseRepository
 //   implements IEntityGateway
 // {
 //   protected _db!: MikroORM
 
-//   private _model: EntityRepository<AnyEntity<T>>;
+//   protected _model: EntityRepository<T>;
 
-//   public constructor(entity: EntityName<AnyEntity>) {
+//   public constructor(entity: EntityName<T>) {
 //     super();
 //     this._model = this._db.em.getRepository(entity);
 //   }
 
-//   public create(input: any): AnyEntity {
+//   public create(input: any): T {
 //     const user = this._model.create(input);
 
 //     return user;
 //   }
 
 //   public update(
-//     user: AnyEntity,
-//     input: Record<string, any>
-//   ): AnyEntity {
+//     user: T,
+//     input: object
+//   ): T {
 //     return this._model.assign(user, { ...input }, {
 //       mergeObjects: true
 //     });
 //   }
 
-//   public async save(user: AnyEntity): Promise<AnyEntity> {
+//   public async save(user: T): Promise<T> {
 //     await this._model.persistAndFlush(user);
 
 //     return user;
 //   }
 
 //   public async remove(id: string): Promise<true | null> {
-//     const foundUser = await this._model.findOne({ id });
+//     const foundUser = await this._model.findOne({ id } as object);
 
 //     if (!foundUser) return null;
 
@@ -51,14 +51,14 @@
 //     return true;
 //   }
 
-//   public async findAll(): Promise<AnyEntity[]> {
+//   public async findAll(): Promise<T[]> {
 //     const foundUsers = await this._model.findAll();
 
 //     return foundUsers;
 //   }
 
-//   public async findOne(userId: string): Promise<AnyEntity | null> {
-//     const foundUser = await this._model.findOne({ id: userId });
+//   public async findOne(id: string): Promise<T | null> {
+//     const foundUser = await this._model.findOne({ id } as object);
 
 //     return foundUser;
 //   }
