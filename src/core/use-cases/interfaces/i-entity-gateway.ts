@@ -1,15 +1,15 @@
 import { Image } from '../../entities';
 import { IUser, IProduct, IOrder } from '@core/entities/interfaces';
 
-interface IWrite<T> {
-  create(input: Record<string, any>): T;
+interface IWrite<T extends object> {
+  create(input: Omit<T, 'id' | 'createdAt' | 'updatedAt' | 'toJSON'>): T;
   update(entity: T, input: Record<string, any>): T;
   
   save(entity: T | T[]): Promise<T>;
   remove(id: string): Promise<true | null>;
 }
 
-interface IRead<T> {
+interface IRead<T extends object> {
   findAll(): Promise<T[]>;
   findOne(id: string): Promise<T | null>;
 }
