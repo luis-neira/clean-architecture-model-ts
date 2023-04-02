@@ -1,6 +1,6 @@
-import SequelizeClient from '../orm/sequelize/client';
+import SequelizeClient from './sequelize/client';
 import MikroOrmClient from './mikroorm/client';
-import InMemoryClient from '../orm/in-memory/client';
+import InMemoryClient from './in-memory/client';
 
 import { DatabaseClient } from './interfaces';
 
