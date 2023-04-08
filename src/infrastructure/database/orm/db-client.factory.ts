@@ -9,27 +9,27 @@ import * as constants from '@config/constants';
 export default class DatabaseClientFactory {
   public constructor() {}
 
-  public makeClient(dbDialect: string): DatabaseClient {
-    const databaseClientMaker = this.selectDatabaseClientMaker(dbDialect);
+  public makeClient(dbClient: string): DatabaseClient {
+    const databaseClientMaker = this.selectDatabaseClientMaker(dbClient);
     const databaseClient = databaseClientMaker();
-    databaseClient.setDialect(dbDialect);
+    databaseClient.setDialect(dbClient);
     return databaseClient;
   }
 
-  private selectDatabaseClientMaker(dbDialect: string): () => DatabaseClient {
-    const { dbDialects } = constants;
+  private selectDatabaseClientMaker(dbClient: string): () => DatabaseClient {
+    const { dbClients } = constants;
 
-    const databaseClientByDialect = {
-      [dbDialects.MARIA_DB]: () => new SequelizeClient(),
-      [dbDialects.POSTGRES]: () => new MikroOrmClient(),
-      [dbDialects.IN_MEMORY]: () => new InMemoryClient()
+    const databaseClientByClient = {
+      [dbClients.SEQUELIZE]: () => new SequelizeClient(),
+      [dbClients.MIKRO_ORM]: () => new MikroOrmClient(),
+      [dbClients.IN_MEMORY]: () => new InMemoryClient()
     };
 
-    if (dbDialect in databaseClientByDialect) {
-      const databaseClientMaker = databaseClientByDialect[dbDialect];
+    if (dbClient in databaseClientByClient) {
+      const databaseClientMaker = databaseClientByClient[dbClient];
       return databaseClientMaker;
     }
 
-    return databaseClientByDialect[dbDialects.IN_MEMORY];
+    return databaseClientByClient[dbClients.IN_MEMORY];
   }
 }

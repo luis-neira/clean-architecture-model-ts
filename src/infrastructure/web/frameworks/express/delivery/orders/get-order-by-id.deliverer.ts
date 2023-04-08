@@ -15,7 +15,7 @@ export default class GetOrderByIdDeliverer extends Deliverer {
   public async IndexActionJSON(): Promise<void> {
     const ordersRepositoryFactory = new OrdersRepositoryFactory();
     const ordersRepository = ordersRepositoryFactory.create(
-      process.env.DB_DIALECT!
+      process.env.DB_CLIENT!
     );
 
     const okResponder = new OkResponder(this.res);

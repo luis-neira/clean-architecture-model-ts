@@ -15,7 +15,7 @@ export default class DeleteUserDeliverer extends Deliverer {
   public async IndexActionJSON(): Promise<void> {
     const usersRepositoryFactory = new UsersRepositoryFactory();
     const usersRepository = usersRepositoryFactory.create(
-      process.env.DB_DIALECT!
+      process.env.DB_CLIENT!
     );
 
     const noContentResponder = new NoContentResponder(this.res);

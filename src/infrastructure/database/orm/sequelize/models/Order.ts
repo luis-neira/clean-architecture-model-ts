@@ -3,7 +3,7 @@ import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 interface IOrderAttributes {
   id: string;
   userId: string;
-  productIds: string[];
+  // productIds: string[];
   date: Date;
   isPaid: boolean;
   meta: JSON;
@@ -17,7 +17,7 @@ class Order
 {
   public id!: string;
   public userId!: string;
-  public productIds!: string[];
+  // public productIds!: string[];
   public date!: Date;
   public isPaid!: boolean;
   public meta!: JSON;
@@ -44,10 +44,10 @@ function initOrderModel(sequelize: Sequelize) {
           notEmpty: true
         }
       },
-      productIds: {
-        type: DataTypes.JSON,
-        allowNull: false
-      },
+      // productIds: {
+      //   type: DataTypes.JSON,
+      //   allowNull: false
+      // },
       date: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -73,7 +73,7 @@ function initOrderModel(sequelize: Sequelize) {
       // Other model options go here
       sequelize: sequelize, // We need to pass the connection instance
       modelName: 'Order', // We need to choose the model name
-      tableName: 'orders',
+      tableName: 'order',
       timestamps: true
     }
   );

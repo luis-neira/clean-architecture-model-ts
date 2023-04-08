@@ -19,17 +19,17 @@ export default class UpdateOrderDeliverer extends Deliverer {
   public async IndexActionJSON(): Promise<void> {
     const usersRepositoryFactory = new UsersRepositoryFactory();
     const usersRepository = usersRepositoryFactory.create(
-      process.env.DB_DIALECT!
+      process.env.DB_CLIENT!
     );
 
     const productsRepositoryFactory = new ProductsRepositoryFactory();
     const productsRepository = productsRepositoryFactory.create(
-      process.env.DB_DIALECT!
+      process.env.DB_CLIENT!
     );
 
     const ordersRepositoryFactory = new OrdersRepositoryFactory();
     const ordersRepository = ordersRepositoryFactory.create(
-      process.env.DB_DIALECT!
+      process.env.DB_CLIENT!
     );
 
     const repositoryDictionary = {

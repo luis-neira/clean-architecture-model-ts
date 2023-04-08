@@ -14,7 +14,7 @@ export default class GetUsersDeliverer extends Deliverer {
   public async IndexActionJSON(): Promise<void> {
     const usersRepositoryFactory = new UsersRepositoryFactory();
     const usersRepository = usersRepositoryFactory.create(
-      process.env.DB_DIALECT!
+      process.env.DB_CLIENT!
     );
 
     const okResponder = new OkResponder(this.res);

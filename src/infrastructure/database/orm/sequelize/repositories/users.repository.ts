@@ -68,6 +68,10 @@ export default class UsersRepository
       where: { id: userId }
     });
 
+    const foundUsers = await this._model.findAll();
+
+    console.log({foundUsers})
+
     if (!foundUser) return null;
 
     return foundUser;

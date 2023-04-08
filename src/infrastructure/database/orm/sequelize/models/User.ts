@@ -57,7 +57,7 @@ function initUserModel(sequelize: Sequelize) {
       // Other model options go here
       sequelize: sequelize, // We need to pass the connection instance
       modelName: 'User', // We need to choose the model name
-      tableName: 'users',
+      tableName: 'user',
       timestamps: true
     }
   );

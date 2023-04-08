@@ -6,6 +6,8 @@ import errorLogger from './middlewares/error-logger';
 import notFoundHandler from './middlewares/not-found-handler';
 import mikroOrmRequestContext from './middlewares/vendors/mikroorm-request-context';
 
+import { dbClients } from '@config/constants';
+
 import { RouterMaker } from './routers/interfaces';
 
 export default class ExpressApp {
@@ -43,7 +45,7 @@ export default class ExpressApp {
 
   private setMiddleWare(): void {
     this._app.use(pinoHttp);
-    if (process.env.DB_DIALECT === 'postgres') {
+    if (process.env.DB_CLIENT === dbClients.MIKRO_ORM) {
       this._app.use(mikroOrmRequestContext);
     }
   }

@@ -15,7 +15,7 @@ export default class DeleteOrderDeliverer extends Deliverer {
   public async IndexActionJSON(): Promise<void> {
     const ordersRepositoryFactory = new OrdersRepositoryFactory();
     const ordersRepository = ordersRepositoryFactory.create(
-      process.env.DB_DIALECT!
+      process.env.DB_CLIENT!
     );
 
     const noContentResponder = new NoContentResponder(this.res);

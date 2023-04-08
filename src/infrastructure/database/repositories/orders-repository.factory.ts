@@ -8,18 +8,18 @@ import { IOrdersGateway } from '@core/use-cases/interfaces';
 import { RepositoryFactory } from './interfaces';
 
 export default class OrdersRepositoryFactory extends RepositoryFactory<IOrdersGateway> {
-  public create(dbDialect: string): IOrdersGateway {
-    const { dbDialects } = constants;
+  public create(dbClient: string): IOrdersGateway {
+    const { dbClients } = constants;
 
     const ordersRepositoryMakerByDialect = {
-      [dbDialects.MARIA_DB]: () => new OrdersRepositorySequelize(),
-      [dbDialects.POSTGRES]: () => new OrdersRepositoryMirkroORM(),
-      [dbDialects.IN_MEMORY]: () => new OrdersRepositoryInMemory()
+      [dbClients.SEQUELIZE]: () => new OrdersRepositorySequelize(),
+      [dbClients.MIKRO_ORM]: () => new OrdersRepositoryMirkroORM(),
+      [dbClients.IN_MEMORY]: () => new OrdersRepositoryInMemory()
     };
 
     const repositoryMaker = this.selectRepositoryMaker(
       ordersRepositoryMakerByDialect,
-      dbDialect
+      dbClient
     );
 
     return repositoryMaker();

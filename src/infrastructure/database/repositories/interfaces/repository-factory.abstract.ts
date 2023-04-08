@@ -1,23 +1,23 @@
 import * as constants from '@config/constants';
 
-type RepositoryMakerByDialect<T> = Record<string, () => T>;
+type RepositoryMakerByClient<T> = Record<string, () => T>;
 
 export default abstract class RepositoryFactory<T> {
   public constructor() {}
 
-  public abstract create(dbDialect: string): T;
+  public abstract create(dbClient: string): T;
 
   protected selectRepositoryMaker(
-    repositoryMakerByDialect: RepositoryMakerByDialect<T>,
-    dbDialect: string
+    repositoryMakerByClient: RepositoryMakerByClient<T>,
+    dbClient: string
   ): () => T {
-    const { dbDialects } = constants;
+    const { dbClients } = constants;
 
-    if (dbDialect in repositoryMakerByDialect) {
-      const repositoryMaker = repositoryMakerByDialect[dbDialect];
+    if (dbClient in repositoryMakerByClient) {
+      const repositoryMaker = repositoryMakerByClient[dbClient];
       return repositoryMaker;
     }
 
-    return repositoryMakerByDialect[dbDialects.IN_MEMORY];
+    return repositoryMakerByClient[dbClients.IN_MEMORY];
   }
 }

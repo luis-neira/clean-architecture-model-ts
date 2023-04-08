@@ -15,7 +15,7 @@ export default class UpdateUserDeliverer extends Deliverer {
   public async IndexActionJSON(): Promise<void> {
     const usersRepositoryFactory = new UsersRepositoryFactory();
     const usersRepository = usersRepositoryFactory.create(
-      process.env.DB_DIALECT!
+      process.env.DB_CLIENT!
     );
 
     const createdResponder = new CreatedResponder(this.res);

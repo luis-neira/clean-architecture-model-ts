@@ -83,7 +83,7 @@ function initProductModel(sequelize: Sequelize) {
       // Other model options go here
       sequelize: sequelize, // We need to pass the connection instance
       modelName: 'Product', // We need to choose the model name
-      tableName: 'products',
+      tableName: 'product',
       timestamps: true
     }
   );

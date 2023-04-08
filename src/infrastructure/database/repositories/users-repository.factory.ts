@@ -8,18 +8,18 @@ import { IUsersGateway } from '@core/use-cases/interfaces';
 import { RepositoryFactory } from './interfaces';
 
 export default class UsersRepositoryFactory extends RepositoryFactory<IUsersGateway> {
-  public create(dbDialect: string): IUsersGateway {
-    const { dbDialects } = constants;
+  public create(dbClient: string): IUsersGateway {
+    const { dbClients } = constants;
 
     const usersRepositoryMakerByDialect = {
-      [dbDialects.MARIA_DB]: () => new UsersRepositorySequelize(),
-      [dbDialects.POSTGRES]: () => new UsersRepositoryMirkroORM(),
-      [dbDialects.IN_MEMORY]: () => new UsersRepositoryInMemory()
+      [dbClients.SEQUELIZE]: () => new UsersRepositorySequelize(),
+      [dbClients.MIKRO_ORM]: () => new UsersRepositoryMirkroORM(),
+      [dbClients.IN_MEMORY]: () => new UsersRepositoryInMemory()
     };
 
     const repositoryMaker = this.selectRepositoryMaker(
       usersRepositoryMakerByDialect,
-      dbDialect
+      dbClient
     );
 
     return repositoryMaker();
