@@ -15,11 +15,11 @@ export default class GetUsersController {
 
   async processRequest(req: IHttpRequestModel): Promise<void> {
 
-    const getUserByIdUseCase = new GetUsersUseCase(
+    const getUsersUseCase = new GetUsersUseCase(
       this.usersRepository,
       this.getUsersPresenter
     );
 
-    await getUserByIdUseCase.execute();
+    await getUsersUseCase.execute();
   }
 }
