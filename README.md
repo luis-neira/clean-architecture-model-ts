@@ -20,7 +20,7 @@ This is my demo of a RESTful API implementing Robert Martin's clean architecture
 
 I tried to organize the application's files and folders according to this diagram:
 
-[![Clean Architecture - By Uncle Bob](https://bl3302files.storage.live.com/y4mW9gccE03kr2tBTyqM-5NVT6uzZK0XZJpZff4jeKZIAJXRTN72oziMhtO1B8wv1NO0nQvCv9oGe5PRlH1OdRVSxGIBF0n5txGYQVP-eQs1wpFDb8WJICZ981zO2XC3Ho5_38QQOoDtn0qMUIy_3jEWyQ8iyS9JkNPJd2VuuzWFwwBFw7BC8zUNy2q7mRJRSDa?width=668&height=491)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+![CleanArchitecture](https://github.com/user-attachments/assets/02794e75-3b7d-4d21-a9d4-ac628bf85461)
 
 # Routes
 
